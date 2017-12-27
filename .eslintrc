@@ -1,0 +1,63 @@
+{
+  "extends": "airbnb/base",
+
+  "globals": {
+    "_gaq": true,
+    "_pa": true,
+    "$": true,
+    "app": true,
+    "alert": true,
+    "canvg": true,
+    "console": true,
+    "document": true,
+    "escape": true,
+    "Image": true,
+    "WAGNER": true,
+    "module": true,
+    "require": true,
+    "Signals": true,
+    "System": true,
+    "user": true,
+    "THREE": true,
+    "TweenLite": true,
+    "TweenMax": true,
+    "TimelineMax": true,
+    "Power1": true,
+    "Power2": true,
+    "Power3": true,
+    "Power4": true,
+    "Vue": true,
+    "window": true
+  },
+  "rules": {
+    "class-methods-use-this": 0,
+    "import/no-extraneous-dependencies": 0,
+    "func-names": 0,
+    "no-case-declarations": 0,
+    "no-mixed-operators": 0,
+    "no-param-reassign": 0,
+    "no-plusplus": 0,
+    "no-underscore-dangle": 0,
+    "no-unresolved": 0,
+    "no-unused-vars": 1,
+    "no-useless-escape": 0,
+    "no-new": 0,
+    "no-new-func": 0,
+    "no-console": 0,
+    "padded-blocks": 0,
+    "id-length": 0,
+    space-in-parens: 0,
+    max-len: [1, 150, 4]
+  },
+  "settings": {
+    "import/parser": "babel-eslint",
+    # "import/resolver": { "webpack": { "config": "webpack/webpack.config.babel.js" } }
+    "import/resolver": { "babel-module": {} }
+    # "import/resolver": { "webpack": "webpack.config.babel.js" }
+  },
+  "plugins": [
+    "babel",
+    "import"
+  ],
+  "parser": "babel-eslint"
+}

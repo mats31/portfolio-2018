@@ -1,0 +1,19 @@
+// Font configuration
+// ------------------
+
+@mixin fontSmoothing() {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+}
+
+// Font faces
+// ----------
+
+$fallbackFonts: Helvetica, Arial, sans-serif;
+
+// @mixin font-bold() {
+//     font-family: 'soleil', $fallbackFonts;
+//     font-weight: 600;
+//     font-size: 1rem;
+//     @include fontSmoothing();
+// }

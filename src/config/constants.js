@@ -1,0 +1,12 @@
+const constants = {
+  EVENTS: {
+    ASSET_LOADED: 'EVENTS.ASSET_LOADED',
+    ASSETS_LOADED: 'EVENTS.ASSETS_LOADED',
+    // DOM_MOUSE_SCROLL: 'EVENTS.DOM_MOUSE_SCROLL',
+    // MOUSEWHEEL: 'EVENTS.MOUSEWHEEL',
+    // RESIZE: 'EVENTS.RESIZE',
+    // SCROLL: 'EVENTS.SCROLL',
+  },
+};
+
+module.exports = constants;
