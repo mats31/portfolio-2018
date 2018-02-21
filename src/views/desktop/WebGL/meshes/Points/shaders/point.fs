@@ -1,4 +1,5 @@
 uniform sampler2D t_mask;
+uniform float u_mask;
 
 varying vec4 vColor;
 varying vec3 vPos;
@@ -12,6 +13,7 @@ void main() {
   vec4 mask_texture = texture2D(t_mask, gl_PointCoord);
 
   vec3 color = vColor.rgb;
-  float alpha = abs( min( 1., max( 0., map( abs(vPos.z), 0., 900., 0., 1. ) ) ) - 1. ) * mask_texture.r;
+  float alpha = abs( min( 1., max( 0., map( abs(vPos.z), 0., 900., 0., 1. ) ) ) - 1. ) * min( 1., mask_texture.r + abs( u_mask - 1. ) );
+  // float alpha = abs( min( 1., max( 0., map( abs(vPos.z), 0., 900., 0., 1. ) ) ) - 1. );
   gl_FragColor = vec4(color, alpha);
 }

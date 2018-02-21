@@ -40,6 +40,7 @@ export default class Points extends THREE.Object3D {
     this._selectOffsetSpeeds = new Float32Array( this._nb );
     this._aDirection = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
     this._aSpeed = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
+    this._aRadius = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
 
     let index = 0;
     let index4 = 0;
@@ -58,14 +59,14 @@ export default class Points extends THREE.Object3D {
 
         this._aPosition.setXYZ(
           index,
-          x,
-          y,
+          x * 1.1,
+          y * 1.1,
           0,
         );
 
         this._aSelect.setX(
           index,
-          0,
+          1,
         );
         this._selectOffsetSpeeds[index] = randomFloat(0.03, 0.1);
 
@@ -79,6 +80,11 @@ export default class Points extends THREE.Object3D {
           randomFloat(0.3, 1),
         );
 
+        this._aRadius.setX(
+          index,
+          randomFloat(0, 50),
+        );
+
         index++;
         index4 += 4;
       }
@@ -88,10 +94,10 @@ export default class Points extends THREE.Object3D {
 
     this._geometry.addAttribute( 'position', this._aPosition );
 
-    console.log(this._aSelect);
     this._geometry.addAttribute( 'a_select', this._aSelect );
     this._geometry.addAttribute( 'a_direction', this._aDirection );
     this._geometry.addAttribute( 'a_speed', this._aSpeed );
+    this._geometry.addAttribute( 'a_radius', this._aRadius );
   }
 
   _setupMaterial() {
@@ -102,10 +108,11 @@ export default class Points extends THREE.Object3D {
       transparent: true,
       depthTest: false,
       depthWrite: false,
-      blending: THREE.AdditiveBlending,
+      // blending: THREE.AdditiveBlending,
       uniforms: {
         u_delta: { type: 'f', value: 0 },
         u_time: { type: 'f', value: 0 },
+        u_mask: { type: 'f', value: 0 },
         t_mask: { type: 't', value: maskTexture },
       },
       vertexShader,
@@ -126,6 +133,16 @@ export default class Points extends THREE.Object3D {
     this._selectOffsetValue = 1;
     this._selectNeedsUpdate = true;
 
+    TweenLite.killTweensOf(this._material.uniforms.u_mask);
+    TweenLite.to(
+      this._material.uniforms.u_mask,
+      1,
+      {
+        value: 0,
+        ease: 'Power4.easeOut',
+      }
+    );
+
     // clearTimeout(this._selectTimeout);
     // this._selectTimeout = setTimeout(() => {
     //   this._material.blending = 1;
@@ -136,6 +153,16 @@ export default class Points extends THREE.Object3D {
   deselect() {
     this._selectOffsetValue = 0;
     this._selectNeedsUpdate = true;
+
+    TweenLite.killTweensOf(this._material.uniforms.u_mask);
+    TweenLite.to(
+      this._material.uniforms.u_mask,
+      1,
+      {
+        value: 1,
+        ease: 'Power4.easeOut',
+      }
+    );
     // this._material.blending = 2;
   }
 
