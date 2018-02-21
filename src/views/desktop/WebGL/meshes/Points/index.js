@@ -45,9 +45,11 @@ export default class Points extends THREE.Object3D {
     let index = 0;
     let index4 = 0;
     for (let i = 0; i < height; i++) {
-      const y = ( i ) - height * 0.5;
+      const y = i - height * 0.5;
+      // const y = ( height - i ) - height * 0.5;
       for (let j = 0; j < width; j++) {
-        const x = ( j ) - width * 0.5;
+        // const x = ( j ) - width * 0.5;
+        const x = ( width - j ) - width * 0.5;
 
         this._aColor.setXYZW(
           index,
@@ -68,7 +70,7 @@ export default class Points extends THREE.Object3D {
           index,
           1,
         );
-        this._selectOffsetSpeeds[index] = randomFloat(0.03, 0.1);
+        this._selectOffsetSpeeds[index] = randomFloat(0.01, 0.07);
 
         this._aDirection.setX(
           index,
@@ -118,8 +120,6 @@ export default class Points extends THREE.Object3D {
       vertexShader,
       fragmentShader,
     });
-
-    console.log(this._material);
   }
 
   _setupMesh() {
@@ -189,7 +189,6 @@ export default class Points extends THREE.Object3D {
       }
 
       this._aSelect.needsUpdate = true;
-      console.log(1);
     }
   }
 }
