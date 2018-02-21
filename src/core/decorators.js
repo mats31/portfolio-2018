@@ -43,6 +43,10 @@ export function visible(initialValue = false) {
   return toggle('visible', 'show', 'hide', initialValue);
 }
 
+export function objectVisible(initialValue = false) {
+  return toggle('objectVisible', 'show', 'hide', initialValue);
+}
+
 export function active(initialValue) {
   return toggle('active', 'activate', 'deactivate', initialValue);
 }

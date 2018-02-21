@@ -1,35 +1,38 @@
+import raf from 'raf';
 import * as pages from 'core/pages';
 import { autobind } from 'core-decorators';
-import LoaderView from 'views/common/Loader';
-import WebGLView from 'views/desktop/WebGL';
+import HomeView from 'views/desktop/Home';
+import WebglView from 'views/desktop/WebGL';
 
 export default class DesktopAppView {
 
   // Setup ---------------------------------------------------------------------
 
   constructor() {
-    this._el = document.getElementById('application');
+    console.info('desktop application initializing');
+    this.el = document.getElementById('application');
 
     this._views = [];
-    this._loader = this._setupLoader();
     this._home = this._setupHome();
+    this._webgl = this._setupWebGL();
 
-    this._views.push(this._loader, this._home);
+    this._views.push(this._home, this._webgl);
 
     this._setupEvents();
+    this._update();
   }
 
-  _setupLoader() {
-    const view = new LoaderView({
-      parent: this._el,
+  _setupHome() {
+    const view = new HomeView({
+      parent: this.el,
     });
 
     return view;
   }
 
-  _setupHome() {
-    const view = new WebGLView({
-      parent: this._el,
+  _setupWebGL() {
+    const view = new WebglView({
+      parent: this.el,
     });
 
     return view;
@@ -49,9 +52,8 @@ export default class DesktopAppView {
   updatePage(page) {
 
     switch (page) {
-      case pages.PROJECTS:
-        this._loader.hide();
-        this._home.show();
+      case pages.HOME:
+        // this._home.show();
         break;
       default:
         this._home.hide();
@@ -69,8 +71,16 @@ export default class DesktopAppView {
   }
 
   @autobind
-  _onScrollWheel() {
-    Signals.onScrollWheel.dispatch();
+  _onScrollWheel(event) {
+    Signals.onScrollWheel.dispatch(event);
+  }
+
+  // Update --------------------------------------------------------------------
+  @autobind
+  _update() {
+    this._webgl.update();
+
+    raf(this._update);
   }
 
 }

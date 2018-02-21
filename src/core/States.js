@@ -19,6 +19,7 @@ class States {
     this.resources = {
       images: [],
       textures: [],
+      sounds: [],
       videos: [],
       models: [],
       getImage(id) {
@@ -27,6 +28,9 @@ class States {
       getTexture(id) {
         return this.textures.find( texture => texture.id === id );
       },
+      getSound(id) {
+        return this.sounds.find( sound => sound.id === id );
+      },
       getVideo(id) {
         return this.videos.find( video => video.id === id );
       },
@@ -34,6 +38,8 @@ class States {
         return this.models.find( model => model.id === id );
       },
     };
+
+    this.global = {};
   }
 }
 

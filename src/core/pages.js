@@ -1,5 +1,3 @@
-export const INTRO = 'INTRO';
+export const INTRO = 'intro';
 
-export const BLOG = 'BLOG';
-export const LAB = 'LAB';
-export const PROJECTS = 'PROJECTS';
+export const HOME = 'home';

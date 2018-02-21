@@ -10,25 +10,23 @@ export default class Router {
     this.updatePageCallback = options.updatePageCallback;
     this._assetsLoaded = false;
 
-    this.setupRouter();
-    this.setupEvents();
+    this._setupRouter();
+    this._setupEvents();
   }
 
-  setupRouter() {
+  _setupRouter() {
     const root = `${window.location.protocol}//${window.location.host}`;
     const useHash = true;
     this.navigo = new Navigo(root, useHash);
 
     this.navigo.notFound(this._onRouteNotFound);
     this.navigo.on({
-      '/': { as: pages.PROJECTS, uses: this._onRouteProjects },
-      '/projects': { as: pages.PROJECTS, uses: this._onRouteProjects },
-      '/lab': { as: pages.LAB, uses: this._onRouteLab },
-      '/blog': { as: pages.BLOG, uses: this._onRouteBlog },
+      '/': { as: pages.HOME, uses: this._onRouteHome },
+      // '/project/:id': { as: pages.PROJECT, uses: this.onRouteProject },
     });
   }
 
-  setupEvents() {
+  _setupEvents() {
     Signals.onAssetsLoaded.add(this._onAssetsLoaded);
   }
 
@@ -57,22 +55,12 @@ export default class Router {
 
   @autobind
   _onRouteNotFound() {
-    this.updatePageCallback(pages.PROJECTS);
+    this.updatePageCallback(pages.HOME);
   }
 
   @autobind
-  _onRouteProjects() {
-    this.updatePageCallback(pages.PROJECTS);
-  }
-
-  @autobind
-  _onRouteLab() {
-    this.updatePageCallback(pages.LAB);
-  }
-
-  @autobind
-  _onRouteBlog() {
-    this.updatePageCallback(pages.BLOG);
+  _onRouteHome() {
+    this.updatePageCallback(pages.HOME);
   }
 
 }

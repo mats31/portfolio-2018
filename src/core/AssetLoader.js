@@ -1,5 +1,5 @@
 import States from 'core/States';
-import OBJLoader from 'helpers/OBJLoader';
+import OBJLoader from 'helpers/3d/OBJLoader/OBJLoader';
 import resources from 'config/resources';
 
 class AssetLoader {
@@ -17,6 +17,12 @@ class AssetLoader {
       this.assetsToLoad += resources.textures.length;
       this.loadTextures();
     }
+
+    if (typeof resources.sounds !== 'undefined' && resources.sounds.length > 0) {
+      this.assetsToLoad += resources.sounds.length;
+      this.loadSounds();
+    }
+
     if (typeof resources.videos !== 'undefined' && resources.videos.length > 0) {
       this.assetsToLoad += resources.videos.length;
       this.loadVideos();
@@ -101,6 +107,41 @@ class AssetLoader {
           reject( `Une erreur est survenue lors du chargement de la texture : ${xhr}` );
         },
       );
+    });
+  }
+
+  loadSounds() {
+    const sounds = resources.sounds;
+
+    for (let i = 0; i < sounds.length; i++) {
+      this.loadSound( sounds[i] ).then( (sound) => {
+        States.resources.textures.push( sound );
+        this.assetsLoaded += 1;
+
+        const percent = (this.assetsLoaded / this.assetsToLoad) * 100;
+        Signals.onAssetLoaded.dispatch(percent);
+        if (percent === 100) Signals.onAssetsLoaded.dispatch(percent);
+      }, (err) => {
+        console.log(err);
+      });
+    }
+  }
+
+  loadSound(media) {
+    return new Promise( ( resolve, reject ) => {
+      const sound = AudioController.createSound({
+        id: media.id,
+        url: media.url,
+        useAnalyser: media.analyser,
+      });
+
+      sound.on('ready', () => {
+        resolve( { id: media.id, media: sound } );
+      });
+
+      sound.on('error', () => {
+        reject(`Une erreur est survenue lors du chargement du son : ${sound}`);
+      });
     });
   }
 

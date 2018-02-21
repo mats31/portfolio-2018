@@ -1,59 +1,84 @@
 import path from 'path';
 import webpack from 'webpack';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
+import autoprefixer from 'autoprefixer';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
-// import StatsWebpackPlugin from 'stats-webpack-plugin';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 
 export default {
-  entry: './src/main.js',
+  entry: {
+    desktop: './src/main.js',
+    mobile: './src/mobile_main.js',
+  },
   output: {
-    path: `${__dirname}/build`,
+    path: path.join(__dirname, '..', 'build'),
     filename: '[name]-[hash].min.js',
   },
   resolve: {
-    root: path.resolve( __dirname, 'src' ),
-    extensions: [
-      '',
-      '.js',
-      '.vue',
-      '.json',
-      '.styl',
+    modules: [
+      path.resolve(__dirname, '..', 'src'),
+      path.resolve(__dirname, '..', 'node_modules'),
     ],
   },
   module: {
-    postLoaders: [
-      {
-        test: /\.js$/,
-        loader: 'ify',
-      },
-    ],
     loaders: [
       {
-        test: /\.html?$/,
-        exclude: /node_modules/,
-        loader: 'html',
+        test: /\.tpl\.html$/,
+        use: [
+          {
+            loader: 'underscore-template-loader',
+            options: {
+              attributes: [],
+            },
+          },
+        ],
       },
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel',
-      },
-      {
-        test: /node_modules/,
-        loader: 'ify',
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              plugins: [
+                'syntax-dynamic-import',
+                'transform-decorators-legacy',
+              ],
+            },
+          },
+        ],
       },
       {
         test: /\.json$/,
-        loader: 'json',
+        use: [
+          {
+            loader: 'json-loader',
+          },
+        ],
       },
       {
-        test: /\.styl$/,
-        loader: ExtractTextPlugin.extract('css-loader!stylus-loader'),
+        test: /\.scss$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: { minimize: true },
+            },
+            {
+              loader: 'postcss-loader',
+              options: {
+                plugins: () => [autoprefixer],
+              },
+            },
+            { loader: 'sass-loader' },
+          ],
+        }),
       },
       {
-        test: /\.(glsl|frag|vert)$/,
+        test: /\.(glsl|frag|vert|vs|fs)$/,
         loader: 'raw-loader!glslify-loader',
         exclude: /node_modules/,
       },
@@ -65,25 +90,32 @@ export default {
   },
   plugins: [
     new HtmlWebpackPlugin({
+      filename: 'index.php',
+      inject: false,
+      template: 'src/template/index.php',
+      chunks: ['desktop', 'mobile'],
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'index_subdomain.php',
+      inject: false,
+      template: 'src/template/index_subdomain.php',
+      chunks: ['desktop', 'mobile'],
+    }),
+    new HtmlWebpackPlugin({
       filename: 'index.html',
       inject: 'body',
-      template: './src/template/index.tpl.html',
+      template: 'src/template/index.html',
+      chunks: ['desktop'],
     }),
     new webpack.ProvidePlugin({
-      Vue: 'vue',
+      THREE: 'three',
     }),
     new CopyWebpackPlugin([
       { from: 'static' },
     ],
     { ignore: ['.DS_Store', '.keep'] }),
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compress: {
-    //     warnings: false,
-    //     drop_console: true,
-    //     pure_funcs: ['console.log'],
-    //   },
-    // }),
     new ExtractTextPlugin('[name]-[hash].min.css', { allChunks: true }),
-    new CleanWebpackPlugin(['build'], { root: `${__dirname}` }),
+    new CleanWebpackPlugin(['build'], { root: path.resolve(__dirname, '..') }),
+    new UglifyJsPlugin(),
   ],
 };

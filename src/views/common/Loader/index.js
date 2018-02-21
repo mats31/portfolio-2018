@@ -1,5 +1,5 @@
 import States from 'core/States';
-import createDOM from 'utils/dom/createDOM';
+import { createDOM } from 'utils/dom';
 import { autobind } from 'core-decorators';
 import { visible } from 'core/decorators';
 import template from './loader.tpl.html';
@@ -29,8 +29,8 @@ export default class LoaderView {
   }
 
   setupEvents() {
-    // Signals.onAssetLoaded.add(this.onAssetsLoaded);
-    // Signals.onAssetsLoaded.add(this.onAssetsLoaded);
+    Signals.onAssetLoaded.add(this.onAssetsLoaded);
+    Signals.onAssetsLoaded.add(this.onAssetsLoaded);
   }
 
   // State ---------------------------------------------------------------------

@@ -1,11 +1,11 @@
 // Soleil ------
 
-// @font-face {
-//   font-family: 'soleil';
-//   src: url('/fonts/soleil-bold.eot');
-//   src: url('/fonts/soleil-bold.eot?#iefix') format('embedded-opentype'),
-//        url('/fonts/soleil-bold.woff') format('woff'),
-//        url('/fonts/soleil-bold.ttf') format('truetype'),
-//        url('/fonts/soleil-bold.svg#soleilbold') format('svg');
-//   font-weight: 600;
-// }
+@font-face {
+  font-family: 'soleil';
+  src: url('/fonts/soleil-regular.eot');
+  src: url('/fonts/soleil-regular.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/soleil-regular.woff') format('woff'),
+       url('/fonts/soleil-regular.ttf') format('truetype'),
+       url('/fonts/soleil-regular.svg#soleilregular') format('svg');
+  font-weight: 400;
+}

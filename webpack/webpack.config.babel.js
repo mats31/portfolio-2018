@@ -6,7 +6,7 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 
 const Config = {
   devtool: 'inline-source-map',
-  entry: './src/main.js',
+  entry: './src/local_main.js',
   output: {
     path: `${__dirname}/build`,
     filename: 'bundle.js',
@@ -18,12 +18,6 @@ const Config = {
     ],
   },
   module: {
-    // postLoaders: [
-    //   {
-    //     test: /\.js$/,
-    //     loader: 'ify',
-    //   },
-    // ],
     loaders: [
       {
         test: /\.tpl\.html$/,
@@ -36,14 +30,6 @@ const Config = {
           },
         ],
       },
-      // {
-      //   test: /\.html$/,
-      //   use: [{ loader: 'html-loader' }]
-      // },
-      // {
-      //   test: /node_modules/,
-      //   loader: 'ify',
-      // },
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -73,9 +59,6 @@ const Config = {
           { loader: 'style-loader' },
           {
             loader: 'css-loader',
-            options: {
-              // url: false // @TODO - CW - we don't want this
-            },
           },
           {
             loader: 'postcss-loader',
