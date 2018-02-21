@@ -8,6 +8,8 @@ export default class Canvas {
     this._width = 512;
     this._height = 512;
 
+    this._dpi = Math.min( 2, window.devicePixelRatio );
+
     this._setupCanvas();
 
     if (DEBUG) {
@@ -28,7 +30,7 @@ export default class Canvas {
   getDataImage() {
     this._ctx.clearRect(0, 0, this._width, this._height);
     this._ctx.beginPath();
-    this._ctx.drawImage(this._img, 0, 0, this._width, this._height);
+    this._ctx.drawImage(this._img, 0, 0, this._width / this._dpi, this._height / this._dpi);
     this._ctx.closePath();
 
     const imgData = this._ctx.getImageData(0, 0, this._width, this._height);
