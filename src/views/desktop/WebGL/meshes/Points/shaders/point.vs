@@ -2,14 +2,18 @@ uniform float u_delta;
 uniform float u_time;
 
 attribute vec4 a_color;
+attribute vec4 a_radialColor;
 
 attribute float a_direction;
 attribute float a_speed;
 attribute float a_select;
 attribute float a_radius;
+attribute float a_offset;
 
 varying vec4 vColor;
+varying vec4 vRadialColor;
 varying vec3 vPos;
+varying float vSpeed;
 
 mat3 quatToMatrix(vec4 q) {
   mat3 mat;
@@ -47,9 +51,12 @@ void main() {
   vec3 pos = position;
   pos.x += cos(u_delta * 0.002 * a_speed) * a_radius;
   pos.y += sin(u_delta * 0.002 * a_speed) * a_radius;
-  pos.z = mod( position.z + ( u_delta * -1. * a_speed ) + 1000., 2000. ) - 1000.;
+  pos.z = mod( position.z + ( u_delta * -1. * a_speed ) + 1000. + a_offset, 2000. ) - 1000.;
 
   vec3 stablePosition = position;
+  // stablePosition.x += cos(u_time * 0.1) * 20. + ( sin(u_time * a_speed * a_direction) * a_radialColor.r * 30. * abs( step( 1., a_radialColor.r ) - 1. ) );
+  // stablePosition.y += sin(u_time * 0.2) * 20. + ( sin(u_time * a_speed * a_direction) * a_radialColor.r * 30. * abs( step( 1., a_radialColor.r ) - 1. ) );
+  // stablePosition.z += sin(u_time * 0.5) * 20. + ( sin(u_time * a_speed * a_direction) * a_radialColor.r * 30. * abs( step( 1., a_radialColor.r ) - 1. ) );
   stablePosition.x += cos(u_time * 0.1) * 20.;
   stablePosition.y += sin(u_time * 0.2) * 20.;
   stablePosition.z += sin(u_time * 0.5) * 20.;
@@ -65,5 +72,7 @@ void main() {
   gl_Position = projectionMatrix * mvPosition;
 
   vColor = a_color;
+  vRadialColor = a_radialColor;
+  vSpeed = a_speed;
   vPos = pos;
 }

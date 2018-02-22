@@ -3,9 +3,11 @@ const ressources = {
     // { id: 'logo', url: 'images/imanebahouss-logo-red.png', description: 'logo' },
     { id: 'twitter', url: 'images/twitter.png', description: 'twitter' },
     { id: 'test', url: 'images/test.jpg' },
+    { id: 'radial_cloud', url: 'images/radial_cloud.jpg' },
   ],
   textures: [
     { id: 'particle_mask', url: 'textures/particle_mask.jpg' },
+    { id: 'scroll_pass', url: 'textures/scroll_pass.jpg' },
   ],
   sounds: [
     // { id: 'intro', url: 'audio/intro.mp3', analyser: false },

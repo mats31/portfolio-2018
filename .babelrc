@@ -1,6 +1,14 @@
 {
-  "presets": ["es2015", "stage-0"],
+  "presets": [
+    ["env",
+    {
+      "targets": {
+        "node": "current"
+      }
+    }],
+    "stage-0"],
   "plugins": [
+    "transform-decorators-legacy",
     "add-module-exports",
     ["module-resolver", {
       "root": ["./src"],

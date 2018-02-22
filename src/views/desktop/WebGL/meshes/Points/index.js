@@ -15,6 +15,7 @@ export default class Points extends THREE.Object3D {
 
     this._canvas = new Canvas();
     this._datas = this._canvas.getDataImage();
+    this._radialDatas = this._canvas.getRadialImage();
     this._nb = this._datas.length / 4;
 
     this._setupGeometry();
@@ -33,6 +34,7 @@ export default class Points extends THREE.Object3D {
     const height = 512;
 
     this._aColor = new THREE.BufferAttribute( new Float32Array( this._nb * 4 ), 4 );
+    this._aRadialColor = new THREE.BufferAttribute( new Float32Array( this._nb * 4 ), 4 );
 
     this._aPosition = new THREE.BufferAttribute( new Float32Array( this._nb * 3 ), 3 );
 
@@ -41,6 +43,7 @@ export default class Points extends THREE.Object3D {
     this._aDirection = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
     this._aSpeed = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
     this._aRadius = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
+    this._aOffset = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
 
     let index = 0;
     let index4 = 0;
@@ -59,10 +62,18 @@ export default class Points extends THREE.Object3D {
           this._datas[index4 + 3] / 255,
         );
 
+        this._aRadialColor.setXYZW(
+          index,
+          this._radialDatas[index4] / 255,
+          this._radialDatas[index4 + 1] / 255,
+          this._radialDatas[index4 + 2] / 255,
+          this._radialDatas[index4 + 3] / 255,
+        );
+
         this._aPosition.setXYZ(
           index,
-          x * 1.1,
-          y * 1.1,
+          x * 1.3,
+          y * 1.3,
           0,
         );
 
@@ -87,12 +98,18 @@ export default class Points extends THREE.Object3D {
           randomFloat(0, 50),
         );
 
+        this._aOffset.setX(
+          index,
+          randomFloat(-1000, 1000),
+        );
+
         index++;
         index4 += 4;
       }
     }
 
     this._geometry.addAttribute( 'a_color', this._aColor );
+    this._geometry.addAttribute( 'a_radialColor', this._aRadialColor );
 
     this._geometry.addAttribute( 'position', this._aPosition );
 
@@ -100,6 +117,7 @@ export default class Points extends THREE.Object3D {
     this._geometry.addAttribute( 'a_direction', this._aDirection );
     this._geometry.addAttribute( 'a_speed', this._aSpeed );
     this._geometry.addAttribute( 'a_radius', this._aRadius );
+    this._geometry.addAttribute( 'a_offset', this._aOffset );
   }
 
   _setupMaterial() {

@@ -3,12 +3,15 @@ import * as pages from 'core/pages';
 import { autobind } from 'core-decorators';
 import HomeView from 'views/desktop/Home';
 import WebglView from 'views/desktop/WebGL';
+import dat from 'dat.gui';
 
 export default class DesktopAppView {
 
   // Setup ---------------------------------------------------------------------
 
   constructor() {
+    window.GUI = new dat.GUI();
+
     console.info('desktop application initializing');
     this.el = document.getElementById('application');
 

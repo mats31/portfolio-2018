@@ -3,7 +3,9 @@ import { toggle } from 'core/decorators';
 import { createDOM } from 'utils/dom';
 import { randomFloat } from 'utils/math';
 import OrbitControls from 'helpers/3d/OrbitControls/OrbitControls'
+import PostProcessing from './PostProcessing';
 import Points from './meshes/Points'
+import DecorPoints from './meshes/DecorPoints'
 import template from './webgl.tpl.html';
 
 @toggle('scrolled', 'scroll', 'unscroll', false)
@@ -28,6 +30,8 @@ export default class WebGL {
     this._setupWebGL(window.innerWidth, window.innerHeight);
 
     this._setupPoints();
+    this._setupDecorPoints();
+    this._setupPostProcessing();
 
     this._addEvents();
   }
@@ -52,6 +56,19 @@ export default class WebGL {
     this._scene.add(this._points);
   }
 
+  _setupDecorPoints() {
+    this._decorPoints = new DecorPoints();
+    this._scene.add(this._decorPoints);
+  }
+
+  _setupPostProcessing() {
+    this._postProcessing = new PostProcessing({
+      scene: this._scene,
+      renderer: this._renderer,
+      camera: this._camera,
+    });
+  }
+
   _addEvents() {
     this._el.addEventListener('mousemove', this._onMousemove);
     Signals.onResize.add(this._onResize);
@@ -62,6 +79,8 @@ export default class WebGL {
 
   scroll() {
     this._points.deselect();
+    this._decorPoints.setDirection(this._deltaTarget);
+    this._postProcessing.animate();
 
     this._shakeCamera();
   }
@@ -113,8 +132,8 @@ export default class WebGL {
 
   @autobind
   _onScrollWheel(event) {
-    this.scroll();
     this._deltaTarget = event.deltaY;
+    this.scroll();
 
     clearTimeout(this._scrollWheelTimeout);
     this._scrollWheelTimeout = setTimeout(() => {
@@ -128,11 +147,14 @@ export default class WebGL {
   update() {
 
     const time = this._clock.getElapsedTime();
+    const delta = this._clock.getDelta();
 
     this._updateCamera();
     this._updatePoints(time);
+    this._updateDecorPoints(time);
 
-    this._renderer.render(this._scene, this._camera);
+    // this._renderer.render(this._scene, this._camera);
+    this._postProcessing.update(delta);
   }
 
   _updateCamera() {
@@ -143,6 +165,10 @@ export default class WebGL {
   _updatePoints(time) {
     this._delta += ( this._deltaTarget - this._delta ) * 0.1;
     this._points.update(time, this._delta);
+  }
+
+  _updateDecorPoints(time) {
+    this._decorPoints.update(time, this._delta);
   }
 
 }
