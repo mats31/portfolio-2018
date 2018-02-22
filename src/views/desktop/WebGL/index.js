@@ -4,8 +4,8 @@ import { createDOM } from 'utils/dom';
 import { randomFloat } from 'utils/math';
 import OrbitControls from 'helpers/3d/OrbitControls/OrbitControls'
 import PostProcessing from './PostProcessing';
-import Points from './meshes/Points'
-import DecorPoints from './meshes/DecorPoints'
+import Points from './meshes/Points';
+import DecorPoints from './meshes/DecorPoints';
 import template from './webgl.tpl.html';
 
 @toggle('scrolled', 'scroll', 'unscroll', false)
@@ -102,7 +102,9 @@ export default class WebGL {
       this._camera.position.x = randomFloat(-10, 10);
       this._camera.position.y = randomFloat(-10, 10);
 
-      intervals++
+      intervals++;
+
+      return true;
     }, 50);
   }
 
@@ -115,7 +117,7 @@ export default class WebGL {
   @autobind
   _onMousemove(event) {
     this._mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-	  this._mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    this._mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
   }
 
   @autobind
