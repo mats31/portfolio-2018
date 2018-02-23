@@ -11,6 +11,7 @@ export default class ScrollPassMaterial extends THREE.ShaderMaterial {
         t_diffuse: { type: 't', value: null },
         uFadeIn: { type: 'f', value: 0 },
         uFadeOut: { type: 'f', value: 0 },
+        uDirection: { type: 'f', value: 1 },
       },
       vertexShader,
       fragmentShader,

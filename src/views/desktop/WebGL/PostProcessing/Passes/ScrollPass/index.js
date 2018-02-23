@@ -34,11 +34,24 @@ export default class ScrollPass extends Pass {
       });
   }
 
-  animate() {
+  animate(deltaTarget) {
+    const sign = Math.sign(deltaTarget);
+
+    this.material.uniforms.uFadeIn.value = 0;
+    this.material.uniforms.uFadeOut.value = 0;
+    // this.material.uniforms.uFadeIn.value = sign > 0 ? 1 : 0;
+    // this.material.uniforms.uFadeOut.value = sign > 0 ? 1 : 0;
+    this.material.uniforms.uDirection.value = Math.sign(deltaTarget);
+    // TweenLite.killTweensof(this.material.uniforms.uFadeIn);
+    // TweenLite.killTweensof(this.material.uniforms.uFadeOut);
+
+
     TweenLite.to(
       this.material.uniforms.uFadeIn,
+      // sign > 0 ? 0.5 : 2,
       2,
       {
+        // value: sign > 0 ? 0 : 2,
         value: 2,
         ease: 'Power4.easeOut',
       },
@@ -46,9 +59,11 @@ export default class ScrollPass extends Pass {
 
     TweenLite.to(
       this.material.uniforms.uFadeOut,
+      // sign > 0 ? 0.5 : 2,
       2,
       {
         delay: 0.03,
+        // value: sign > 0 ? 0 : 2,
         value: 2,
         ease: 'Power4.easeOut',
         onComplete: () => {

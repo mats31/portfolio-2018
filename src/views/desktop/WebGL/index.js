@@ -80,7 +80,7 @@ export default class WebGL {
   scroll() {
     this._points.deselect();
     this._decorPoints.setDirection(this._deltaTarget);
-    this._postProcessing.animate();
+    this._postProcessing.animate(this._deltaTarget);
 
     this._shakeCamera();
   }

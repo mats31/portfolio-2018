@@ -17,7 +17,7 @@ export default class PostProcessing extends AbstractPostProcessing {
 
   // State ----------------------------
 
-  animate() {
-    this._scrollPass.animate();
+  animate(deltaTarget) {
+    this._scrollPass.animate(deltaTarget);
   }
 }

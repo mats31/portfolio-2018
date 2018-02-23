@@ -1,6 +1,7 @@
 uniform sampler2D t_diffuse;
 uniform float uFadeIn;
 uniform float uFadeOut;
+uniform float uDirection;
 
 varying vec2 vUv;
 
@@ -17,12 +18,15 @@ float cubicPulse( float c, float w, float x ){
 void main() {
 
     vec3 scrollColor = vec3( cubicPulse( 0.5, uFadeIn, vUv.x ) - cubicPulse( 0.5, uFadeOut, vUv.x ) );
+    // vec3 scrollColor = vec3( smoothstep( .1, 1., cubicPulse( 0.5, uFadeIn, vUv.x ) - cubicPulse( 0.5, uFadeOut, vUv.x ) ) );
 
-    vec4 diffuse = texture2D( t_diffuse, vec2(vUv.x + scrollColor.r, vUv.y) );
+    float leftDisplacement = scrollColor.r * abs( step(0.5, vUv.x) - 1. );
+    float rightDisplacement = scrollColor.r * step(0.5, vUv.x) * -1.;
+    vec4 diffuse = texture2D( t_diffuse, vec2(vUv.x + leftDisplacement + rightDisplacement, vUv.y) );
 
     vec3 color = diffuse.rgb;
     float alpha = 1.;
 
     gl_FragColor = vec4(color, alpha);
-    // gl_FragColor = scrollTexture;
+    // gl_FragColor = vec4(scrollColor, alpha);
 }
