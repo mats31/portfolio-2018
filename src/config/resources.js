@@ -2,7 +2,10 @@ const ressources = {
   images: [
     // { id: 'logo', url: 'images/imanebahouss-logo-red.png', description: 'logo' },
     { id: 'twitter', url: 'images/twitter.png', description: 'twitter' },
-    { id: 'test', url: 'images/test.jpg' },
+    { id: 'hp-preview', url: 'images/projects/hp.jpg' },
+    { id: 'nmd-preview', url: 'images/projects/nmd.jpg' },
+    { id: 'speedfactory-preview', url: 'images/projects/speedfactory.jpg' },
+    { id: 'resn-little-helper-preview', url: 'images/projects/resn-little-helper.jpg' },
     { id: 'radial_cloud', url: 'images/radial_cloud.jpg' },
   ],
   textures: [

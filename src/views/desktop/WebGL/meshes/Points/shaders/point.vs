@@ -1,7 +1,6 @@
 uniform float u_delta;
 uniform float u_time;
 
-attribute vec4 a_color;
 attribute vec4 a_radialColor;
 
 attribute float a_direction;
@@ -10,10 +9,18 @@ attribute float a_select;
 attribute float a_radius;
 attribute float a_offset;
 
-varying vec4 vColor;
 varying vec4 vRadialColor;
 varying vec3 vPos;
 varying float vSpeed;
+
+attribute vec4 a_color0;
+attribute vec4 a_color1;
+attribute vec4 a_color2;
+attribute vec4 a_color3;
+varying vec4 vColor0;
+varying vec4 vColor1;
+varying vec4 vColor2;
+varying vec4 vColor3;
 
 mat3 quatToMatrix(vec4 q) {
   mat3 mat;
@@ -71,8 +78,12 @@ void main() {
   // gl_PointSize = .2;
   gl_Position = projectionMatrix * mvPosition;
 
-  vColor = a_color;
   vRadialColor = a_radialColor;
   vSpeed = a_speed;
   vPos = pos;
+
+  vColor0 = a_color0;
+  vColor1 = a_color1;
+  vColor2 = a_color2;
+  vColor3 = a_color3;
 }

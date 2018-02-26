@@ -24,14 +24,13 @@ export default class Canvas {
   _setupCanvas() {
     this._ctx = createCanvas(this._width, this._height, true, 2);
 
-    this._img = States.resources.getImage('test').media;
     this._radialImg = States.resources.getImage('radial_cloud').media;
   }
 
-  getDataImage() {
+  getDataImage(img) {
     this._ctx.clearRect(0, 0, this._width, this._height);
     this._ctx.beginPath();
-    this._ctx.drawImage(this._img, 0, 0, this._width / this._dpi, this._height / this._dpi);
+    this._ctx.drawImage(img, 0, 0, this._width / this._dpi, this._height / this._dpi);
     this._ctx.closePath();
 
     const imgData = this._ctx.getImageData(0, 0, this._width, this._height);
@@ -70,9 +69,21 @@ export default class Canvas {
 
   // Update --------------------
   update() {
-    // this._ctx.clearRect(0, 0, this._width, this._height);
-    // this._ctx.beginPath();
-    // this._ctx.drawImage(this._img, 0, 0, this._width, this._height);
-    // this._ctx.closePath();
+    // this._updateCurrentImg();
+    // this._updateNextImg();
+  }
+
+  _updateCurrentImg() {
+    this._ctx.clearRect(0, 0, this._width, this._height);
+    this._ctx.beginPath();
+    this._ctx.drawImage(this._currentImg.img, 0, 0, this._width / this._dpi, this._height / this._dpi);
+    this._ctx.closePath();
+  }
+
+  _updateNextImg() {
+    this._ctx.clearRect(0, 0, this._width, this._height);
+    this._ctx.beginPath();
+    this._ctx.drawImage(this._nextImg.img, 0, 0, this._width / this._dpi, this._height / this._dpi);
+    this._ctx.closePath();
   }
 }

@@ -4,7 +4,7 @@ import { createDOM } from 'utils/dom';
 import { randomFloat } from 'utils/math';
 import OrbitControls from 'helpers/3d/OrbitControls/OrbitControls'
 import PostProcessing from './PostProcessing';
-import Points from './meshes/Points';
+import Project from './Project';
 import DecorPoints from './meshes/DecorPoints';
 import template from './webgl.tpl.html';
 
@@ -26,10 +26,11 @@ export default class WebGL {
 
     this._delta = 0;
     this._deltaTarget = 0;
+    this._translation = 0;
 
     this._setupWebGL(window.innerWidth, window.innerHeight);
 
-    this._setupPoints();
+    this._setupProject();
     this._setupDecorPoints();
     this._setupPostProcessing();
 
@@ -51,9 +52,9 @@ export default class WebGL {
     this._el.appendChild(this._renderer.domElement);
   }
 
-  _setupPoints() {
-    this._points = new Points();
-    this._scene.add(this._points);
+  _setupProject() {
+    this._project = new Project();
+    this._scene.add(this._project.getPoints());
   }
 
   _setupDecorPoints() {
@@ -78,7 +79,7 @@ export default class WebGL {
   // State ---------------------------------------------------------------------
 
   scroll() {
-    this._points.deselect();
+    this._project.deselect();
     this._decorPoints.setDirection(this._deltaTarget);
     this._postProcessing.animate(this._deltaTarget);
 
@@ -109,7 +110,7 @@ export default class WebGL {
   }
 
   unscroll() {
-    this._points.select();
+    this._project.select();
   }
 
   // Events --------------------------------------------------------------------
@@ -166,7 +167,8 @@ export default class WebGL {
 
   _updatePoints(time) {
     this._delta += ( this._deltaTarget - this._delta ) * 0.1;
-    this._points.update(time, this._delta);
+    this._translation += this._delta;
+    this._project.update(time, this._delta, this._translation);
   }
 
   _updateDecorPoints(time) {

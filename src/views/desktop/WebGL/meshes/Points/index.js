@@ -1,6 +1,7 @@
 import States from 'core/States';
+import projectList from 'config/project-list';
 import { selected } from 'core/decorators';
-import { randomFloat } from 'utils/math';
+import { randomFloat, modulo } from 'utils/math';
 import Canvas from './Canvas';
 import vertexShader from './shaders/point.vs';
 import fragmentShader from './shaders/point.fs';
@@ -10,13 +11,18 @@ export default class Points extends THREE.Object3D {
   constructor() {
     super();
 
+    this._colors = [];
+
     this._time = 0;
     this._selectOffsetValue = 0;
+    this._lastTranslation = 0;
+    this._currentIndex = 0;
+    this._nextIndex = 1;
 
     this._canvas = new Canvas();
-    this._datas = this._canvas.getDataImage();
+    this._setupColors();
     this._radialDatas = this._canvas.getRadialImage();
-    this._nb = this._datas.length / 4;
+    this._nb = this._colors[0].length / 4;
 
     this._setupGeometry();
     this._setupMaterial();
@@ -24,6 +30,14 @@ export default class Points extends THREE.Object3D {
 
     this._selectNeedsUpdate = false;
     this._selectTimeout = null;
+    // this._calledNext = true;
+  }
+
+  _setupColors() {
+    for (let i = 0; i < projectList.projects.length; i++) {
+      this._colors.push( this._canvas.getDataImage( States.resources.getImage(`${projectList.projects[i].id}-preview`).media ) );
+    }
+    console.log(this._colors);
   }
 
   _setupGeometry() {
@@ -33,7 +47,6 @@ export default class Points extends THREE.Object3D {
     const width = 512;
     const height = 512;
 
-    this._aColor = new THREE.BufferAttribute( new Float32Array( this._nb * 4 ), 4 );
     this._aRadialColor = new THREE.BufferAttribute( new Float32Array( this._nb * 4 ), 4 );
 
     this._aPosition = new THREE.BufferAttribute( new Float32Array( this._nb * 3 ), 3 );
@@ -45,6 +58,10 @@ export default class Points extends THREE.Object3D {
     this._aRadius = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
     this._aOffset = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
 
+    for (let k = 0; k < this._colors.length; k++) {
+      this[`aColor${k}`] = new THREE.BufferAttribute( new Float32Array( this._nb * 4 ), 4 );
+    }
+
     let index = 0;
     let index4 = 0;
     for (let i = 0; i < height; i++) {
@@ -53,14 +70,6 @@ export default class Points extends THREE.Object3D {
       for (let j = 0; j < width; j++) {
         // const x = ( j ) - width * 0.5;
         const x = ( width - j ) - width * 0.5;
-
-        this._aColor.setXYZW(
-          index,
-          this._datas[index4] / 255,
-          this._datas[index4 + 1] / 255,
-          this._datas[index4 + 2] / 255,
-          this._datas[index4 + 3] / 255,
-        );
 
         this._aRadialColor.setXYZW(
           index,
@@ -108,7 +117,33 @@ export default class Points extends THREE.Object3D {
       }
     }
 
-    this._geometry.addAttribute( 'a_color', this._aColor );
+    index = 0;
+    index4 = 0;
+    for (let k = 0; k < this._colors.length; k++) {
+
+      for (let i = 0; i < height; i++) {
+
+        for (let j = 0; j < width; j++) {
+
+          this[`aColor${k}`].setXYZW(
+            index,
+            this._colors[k][index4] / 255,
+            this._colors[k][index4 + 1] / 255,
+            this._colors[k][index4 + 2] / 255,
+            this._colors[k][index4 + 3] / 255,
+          );
+
+          index++;
+          index4 += 4;
+        }
+      }
+
+      index = 0;
+      index4 = 0;
+    }
+
+    // this._geometry.addAttribute( 'a_color', this._aColor );
+    // this._geometry.addAttribute( 'a_nextColor', this._aNextColor );
     this._geometry.addAttribute( 'a_radialColor', this._aRadialColor );
 
     this._geometry.addAttribute( 'position', this._aPosition );
@@ -118,6 +153,14 @@ export default class Points extends THREE.Object3D {
     this._geometry.addAttribute( 'a_speed', this._aSpeed );
     this._geometry.addAttribute( 'a_radius', this._aRadius );
     this._geometry.addAttribute( 'a_offset', this._aOffset );
+
+    for (let k = 0; k < this._colors.length; k++) {
+      console.log(this[`aColor${k}`]);
+      this._geometry.addAttribute( `a_color${k}`, this[`aColor${k}`] );
+    }
+
+    console.log(this);
+    console.log(this._geometry);
   }
 
   _setupMaterial() {
@@ -133,6 +176,7 @@ export default class Points extends THREE.Object3D {
         u_delta: { type: 'f', value: 0 },
         u_time: { type: 'f', value: 0 },
         u_mask: { type: 'f', value: 0 },
+        u_progress: { type: 'f', value: 0 },
         t_mask: { type: 't', value: maskTexture },
       },
       vertexShader,
@@ -186,14 +230,18 @@ export default class Points extends THREE.Object3D {
 
   // Update --------------------
 
-  update(time, delta) {
+  update(time, delta, translation) {
 
     this._time = time;
 
-    this._material.uniforms.u_delta.value += delta;
+    this._material.uniforms.u_delta.value = translation;
     this._material.uniforms.u_time.value = time;
 
+    this._updateSelectedState();
+    this._updateColor(translation);
+  }
 
+  _updateSelectedState() {
     if (this._selectNeedsUpdate) {
 
       this._selectNeedsUpdate = false;
@@ -209,4 +257,71 @@ export default class Points extends THREE.Object3D {
       this._aSelect.needsUpdate = true;
     }
   }
+
+  _updateColor(translation) {
+    // const progress = Math.abs( Math.sin( translation * 0.001 ) );
+    //
+    // if (translation > this._lastTranslation && progress > 0.95) {
+    //   this._nextItem(true, false);
+    //   this._calledNext = true;
+    // } else if (translation > this._lastTranslation && progress < 0.05) {
+    //   this._nextItem(false, true);
+    //   this._calledNext = true;
+    // }
+    //
+    // if (progress > 0.45 && progress > 0.55) {
+    //   this._calledNext = false;
+    // }
+    //
+    //
+    const progress = Math.abs( ( translation * 0.001 ) % this._colors.length );
+    this._material.uniforms.u_progress.value = progress;
+    // this._lastTranslation = translation;
+  }
+
+  // _nextItem(incrementCurrent, incrementNext) {
+  //   if (!this._calledNext) {
+  //     const width = 512;
+  //     const height = 512;
+  //
+  //     let index = 0;
+  //     let index4 = 0;
+  //
+  //     if (incrementCurrent) {
+  //       this._currentIndex = ( this._nextIndex + 1 ) % projectList.projects.length;
+  //     }
+  //
+  //     if (incrementNext) {
+  //       this._nextIndex = ( this._currentIndex + 1 ) % projectList.projects.length;
+  //     }
+  //
+  //     for (let i = 0; i < height; i++) {
+  //
+  //       for (let j = 0; j < width; j++) {
+  //
+  //         this._aColor.setXYZW(
+  //           index,
+  //           this._colors[this._currentIndex][index4] / 255,
+  //           this._colors[this._currentIndex][index4 + 1] / 255,
+  //           this._colors[this._currentIndex][index4 + 2] / 255,
+  //           this._colors[this._currentIndex][index4 + 3] / 255,
+  //         );
+  //
+  //         this._aNextColor.setXYZW(
+  //           index,
+  //           this._colors[this._nextIndex][index4] / 255,
+  //           this._colors[this._nextIndex][index4 + 1] / 255,
+  //           this._colors[this._nextIndex][index4 + 2] / 255,
+  //           this._colors[this._nextIndex][index4 + 3] / 255,
+  //         );
+  //
+  //         index++;
+  //         index4 += 4;
+  //       }
+  //     }
+  //
+  //     this._aColor.needsUpdate = true;
+  //     this._aNextColor.needsUpdate = true;
+  //   }
+  // }
 }
