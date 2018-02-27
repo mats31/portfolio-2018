@@ -1,0 +1,11 @@
+@import '~stylesheets/common/global-imports';
+
+.timeline {
+  display: none;
+  opacity: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  // transform: translate3d(-50%, -50%, 0) rotate(-30deg);
+  z-index: $zindex-1;
+}

@@ -17,6 +17,8 @@ export default class Points extends THREE.Object3D {
     this._selectOffsetValue = 0;
     this._lastTranslation = 0;
     this._currentIndex = 0;
+    this._correction = 0;
+    States.global.progress = 0;
     this._nextIndex = 1;
 
     this._canvas = new Canvas();
@@ -195,6 +197,34 @@ export default class Points extends THREE.Object3D {
     this._selectOffsetValue = 1;
     this._selectNeedsUpdate = true;
 
+    // TweenLite.killTweensOf(this);
+    //
+    // if (States.global.progress % 1 <= 0.5) {
+    //   console.log(( States.global.progress % 1 ) * -1);
+    //   TweenLite.to(
+    //     this,
+    //     1,
+    //     {
+    //       _correction: ( States.global.progress % 1 ) * -1,
+    //       onComplete: () => {
+    //         console.log(States.global.progress);
+    //       },
+    //     },
+    //   );
+    // } else {
+    //   console.log(1 - ( States.global.progress % 1 ));
+    //   TweenLite.to(
+    //     this,
+    //     1,
+    //     {
+    //       _correction: 1 - ( States.global.progress % 1 ),
+    //       onComplete: () => {
+    //         console.log(States.global.progress);
+    //       },
+    //     },
+    //   );
+    // }
+
     TweenLite.killTweensOf(this._material.uniforms.u_mask);
     TweenLite.to(
       this._material.uniforms.u_mask,
@@ -202,7 +232,7 @@ export default class Points extends THREE.Object3D {
       {
         value: 0,
         ease: 'Power4.easeOut',
-      }
+      },
     );
 
     // clearTimeout(this._selectTimeout);
@@ -223,9 +253,8 @@ export default class Points extends THREE.Object3D {
       {
         value: 1,
         ease: 'Power4.easeOut',
-      }
+      },
     );
-    // this._material.blending = 2;
   }
 
   // Update --------------------
@@ -259,69 +288,8 @@ export default class Points extends THREE.Object3D {
   }
 
   _updateColor(translation) {
-    // const progress = Math.abs( Math.sin( translation * 0.001 ) );
-    //
-    // if (translation > this._lastTranslation && progress > 0.95) {
-    //   this._nextItem(true, false);
-    //   this._calledNext = true;
-    // } else if (translation > this._lastTranslation && progress < 0.05) {
-    //   this._nextItem(false, true);
-    //   this._calledNext = true;
-    // }
-    //
-    // if (progress > 0.45 && progress > 0.55) {
-    //   this._calledNext = false;
-    // }
-    //
-    //
-    const progress = Math.abs( ( translation * 0.001 ) % this._colors.length );
-    this._material.uniforms.u_progress.value = progress;
-    // this._lastTranslation = translation;
-  }
 
-  // _nextItem(incrementCurrent, incrementNext) {
-  //   if (!this._calledNext) {
-  //     const width = 512;
-  //     const height = 512;
-  //
-  //     let index = 0;
-  //     let index4 = 0;
-  //
-  //     if (incrementCurrent) {
-  //       this._currentIndex = ( this._nextIndex + 1 ) % projectList.projects.length;
-  //     }
-  //
-  //     if (incrementNext) {
-  //       this._nextIndex = ( this._currentIndex + 1 ) % projectList.projects.length;
-  //     }
-  //
-  //     for (let i = 0; i < height; i++) {
-  //
-  //       for (let j = 0; j < width; j++) {
-  //
-  //         this._aColor.setXYZW(
-  //           index,
-  //           this._colors[this._currentIndex][index4] / 255,
-  //           this._colors[this._currentIndex][index4 + 1] / 255,
-  //           this._colors[this._currentIndex][index4 + 2] / 255,
-  //           this._colors[this._currentIndex][index4 + 3] / 255,
-  //         );
-  //
-  //         this._aNextColor.setXYZW(
-  //           index,
-  //           this._colors[this._nextIndex][index4] / 255,
-  //           this._colors[this._nextIndex][index4 + 1] / 255,
-  //           this._colors[this._nextIndex][index4 + 2] / 255,
-  //           this._colors[this._nextIndex][index4 + 3] / 255,
-  //         );
-  //
-  //         index++;
-  //         index4 += 4;
-  //       }
-  //     }
-  //
-  //     this._aColor.needsUpdate = true;
-  //     this._aNextColor.needsUpdate = true;
-  //   }
-  // }
+    States.global.progress = Math.abs( ( translation * 0.0001 ) % this._colors.length );
+    this._material.uniforms.u_progress.value = States.global.progress;
+  }
 }

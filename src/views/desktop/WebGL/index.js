@@ -71,8 +71,9 @@ export default class WebGL {
   }
 
   _addEvents() {
-    this._el.addEventListener('mousemove', this._onMousemove);
+    // this._el.addEventListener('mousemove', this._onMousemove);
     Signals.onResize.add(this._onResize);
+    // Signals.onScroll.add(this._onScroll);
     Signals.onScrollWheel.add(this._onScrollWheel);
   }
 
@@ -110,13 +111,33 @@ export default class WebGL {
   }
 
   unscroll() {
+    this._deltaTarget = 0;
+    this._delta = 0;
+    const remains = this._translation % 10000;
+    if (Math.abs(remains) <= 5000) {
+      TweenLite.to(
+        this,
+        1,
+        {
+          _translation: this._translation - remains,
+        },
+      );
+    } else {
+      TweenLite.to(
+        this,
+        1,
+        {
+          _translation: this._translation - ( 10000 - Math.abs(remains) ),
+        },
+      );
+    }
+
     this._project.select();
   }
 
   // Events --------------------------------------------------------------------
 
-  @autobind
-  _onMousemove(event) {
+  mousemove(event) {
     this._mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     this._mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
   }
@@ -134,15 +155,20 @@ export default class WebGL {
   }
 
   @autobind
+  _onScroll(event) {
+    console.log(1);
+  }
+
+  @autobind
   _onScrollWheel(event) {
+    TweenLite.killTweensOf(this, { _translation: true });
     this._deltaTarget = event.deltaY;
     this.scroll();
 
     clearTimeout(this._scrollWheelTimeout);
     this._scrollWheelTimeout = setTimeout(() => {
-      this._deltaTarget = 0;
       this.unscroll();
-    }, 250);
+    }, 50);
   }
 
   // Update --------------------------------------------------------------------
