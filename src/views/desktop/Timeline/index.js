@@ -356,7 +356,6 @@ export default class TimelineView {
   update() {
 
     if (this._needsUpdate) {
-      console.log(1);
       this._ctx.clearRect(0, 0, this._width, this._height);
       this._updateTimeline();
       this._updatePoints();
