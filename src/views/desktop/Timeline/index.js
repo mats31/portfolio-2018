@@ -2,7 +2,7 @@ import States from 'core/States';
 import projectList from 'config/project-list';
 import { createDOM } from 'utils/dom';
 import { createCanvas, createHexagone, resizeCanvas } from 'utils/canvas';
-import { map } from 'utils/math';
+import { distance2, map } from 'utils/math';
 import { autobind } from 'core-decorators';
 import { visible, toggle } from 'core/decorators';
 import template from './timeline.tpl.html';
@@ -30,6 +30,7 @@ export default class TimelineView {
     this._rotateX = 0;
     this._rotateY = 0;
     this._rotateZ = 0;
+    this._distanceToHexagone = 99999;
 
     this._width = window.innerWidth * 0.5;
     this._height = window.innerWidth * 0.5;
@@ -47,22 +48,24 @@ export default class TimelineView {
     for (let i = 0; i < projectList.projects.length; i++) {
       const radius = 0;
       const point = {
-        x: Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) ) * this._timelineRadius + this._width * 0.5,
-        y: Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) ) * this._timelineRadius + this._width * 0.5,
+        x: Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
+        y: Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
         radius,
         opacity: 0,
       };
 
       const hexagone = {
-        x: Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) ) * this._timelineRadius + this._width * 0.5,
-        y: Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) ) * this._timelineRadius + this._width * 0.5,
+        x: Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
+        y: Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
         size: 0,
+        sizeTarget: 0,
         opacity: 0,
       };
 
       this._points.push(point);
       this._hexagones.push(hexagone);
     }
+    console.log(this._points);
 
     this._pointsNeedsUpdate = false;
     this._hexagonesNeedsUpdate = false;
@@ -302,11 +305,11 @@ export default class TimelineView {
     this._endLinesRadius = this._width * 0.49;
 
     for (let i = 0; i < projectList.projects.length; i++) {
-      this._points[i].x = Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) ) * this._timelineRadius + this._width * 0.5;
-      this._points[i].y = Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) ) * this._timelineRadius + this._width * 0.5;
+      this._points[i].x = Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
+      this._points[i].y = Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
 
-      this._hexagones[i].x = Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) ) * this._timelineRadius + this._width * 0.5;
-      this._hexagones[i].y = Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) ) * this._timelineRadius + this._width * 0.5;
+      this._hexagones[i].x = Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
+      this._hexagones[i].y = Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
     }
 
     for (let i = 0; i < this._nbLines; i++) {
@@ -385,7 +388,18 @@ export default class TimelineView {
   }
 
   _updatePoints() {
+
+    const timelinePosition = {
+      x: this._timeline.x + this._timeline.radius * Math.cos(Math.PI * 2 * this._timeline.progress - Math.PI * 0.5),
+      y: this._timeline.y + this._timeline.radius * Math.sin(Math.PI * 2 * this._timeline.progress - Math.PI * 0.5),
+    };
+
+    let index = 0;
+    let distances = [];
+
     for (let i = 0; i < this._points.length; i++) {
+
+      // Points ---------------------
       const x = this._points[i].x;
       const y = this._points[i].y;
       const radius = this._points[i].radius;
@@ -395,6 +409,22 @@ export default class TimelineView {
       this._ctx.lineWidth = 1;
       this._ctx.stroke();
 
+      // Hexagones ---------------------
+
+      const currentDistance = distance2(timelinePosition, this._points[i]);
+      if (distances.length > 0 && currentDistance < distances[distances.length - 1]) {
+        index = i;
+      }
+      distances.push(currentDistance);
+
+      // if (i === index) {
+      //   this._hexagones[i].sizeTarget = 1;
+      // } else {
+      //   this._hexagones[i].sizeTarget = 0;
+      // }
+      //
+      // this._hexagones[i].size += ( this._hexagones[i].sizeTarget - this._hexagones[i].size ) * 0.1;
+
       createHexagone({
         x,
         y,
@@ -403,6 +433,17 @@ export default class TimelineView {
         rotation: Math.PI * 2 * ( i / projectList.projects.length ) + Math.PI * 0.5,
         context: this._ctx,
       });
+    }
+
+
+    for (let i = 0; i < distances.length; i++) {
+      if (i === index) {
+        this._hexagones[i].sizeTarget = 1;
+      } else {
+        this._hexagones[i].sizeTarget = 0;
+      }
+
+      this._hexagones[i].size += ( this._hexagones[i].sizeTarget - this._hexagones[i].size ) * 0.1;
     }
   }
 
