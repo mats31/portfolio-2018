@@ -2,7 +2,7 @@ import States from 'core/States';
 import projectList from 'config/project-list';
 import { createDOM } from 'utils/dom';
 import { createCanvas, createHexagone, resizeCanvas } from 'utils/canvas';
-import { distance2, map } from 'utils/math';
+import { map } from 'utils/math';
 import { autobind } from 'core-decorators';
 import { visible, toggle } from 'core/decorators';
 import template from './timeline.tpl.html';
@@ -30,7 +30,6 @@ export default class TimelineView {
     this._rotateX = 0;
     this._rotateY = 0;
     this._rotateZ = 0;
-    this._distanceToHexagone = 99999;
 
     this._width = window.innerWidth * 0.5;
     this._height = window.innerWidth * 0.5;
@@ -59,13 +58,13 @@ export default class TimelineView {
         y: Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
         size: 0,
         sizeTarget: 0,
+        globalSize: 0,
         opacity: 0,
       };
 
       this._points.push(point);
       this._hexagones.push(hexagone);
     }
-    console.log(this._points);
 
     this._pointsNeedsUpdate = false;
     this._hexagonesNeedsUpdate = false;
@@ -190,6 +189,21 @@ export default class TimelineView {
       },
     );
 
+    TweenLite.killTweensOf(this._hexagones);
+    this._hexagonesNeedsUpdate = true;
+    TweenMax.staggerTo(
+      this._hexagones,
+      1.5,
+      {
+        globalSize: 1,
+        ease: 'Power4.easeOut',
+      },
+      0.29,
+      () => {
+        this._hexagonesNeedsUpdate = false;
+      },
+    );
+
     TweenLite.killTweensOf(this._timeline);
     this._timelineNeedsUpdate = true;
     TweenMax.to(
@@ -264,6 +278,21 @@ export default class TimelineView {
       -0.1,
       () => {
         this._pointsNeedsUpdate = false;
+      },
+    );
+
+    TweenLite.killTweensOf(this._hexagones);
+    this._hexagonesNeedsUpdate = true;
+    TweenMax.staggerTo(
+      this._hexagones,
+      1,
+      {
+        globalSize: 0,
+        ease: 'Power4.easeOut',
+      },
+      -0.1,
+      () => {
+        this._hexagonesNeedsUpdate = false;
       },
     );
 
@@ -389,14 +418,6 @@ export default class TimelineView {
 
   _updatePoints() {
 
-    const timelinePosition = {
-      x: this._timeline.x + this._timeline.radius * Math.cos(Math.PI * 2 * this._timeline.progress - Math.PI * 0.5),
-      y: this._timeline.y + this._timeline.radius * Math.sin(Math.PI * 2 * this._timeline.progress - Math.PI * 0.5),
-    };
-
-    let index = 0;
-    let distances = [];
-
     for (let i = 0; i < this._points.length; i++) {
 
       // Points ---------------------
@@ -411,39 +432,23 @@ export default class TimelineView {
 
       // Hexagones ---------------------
 
-      const currentDistance = distance2(timelinePosition, this._points[i]);
-      if (distances.length > 0 && currentDistance < distances[distances.length - 1]) {
-        index = i;
-      }
-      distances.push(currentDistance);
-
-      // if (i === index) {
-      //   this._hexagones[i].sizeTarget = 1;
-      // } else {
-      //   this._hexagones[i].sizeTarget = 0;
-      // }
-      //
-      // this._hexagones[i].size += ( this._hexagones[i].sizeTarget - this._hexagones[i].size ) * 0.1;
-
-      createHexagone({
-        x,
-        y,
-        size: 10 * this._hexagones[i].size,
-        strokeColor: 'white',
-        rotation: Math.PI * 2 * ( i / projectList.projects.length ) + Math.PI * 0.5,
-        context: this._ctx,
-      });
-    }
-
-
-    for (let i = 0; i < distances.length; i++) {
-      if (i === index) {
+      const progress = this._timeline.progress % (1 - (1 / this._points.length) * 0.5);
+      if (progress >= i / this._points.length - (1 / this._points.length) * 0.5 && progress <= (1 / this._points.length) * ( i + 1 ) - (1 / this._points.length) * 0.5 ) {
         this._hexagones[i].sizeTarget = 1;
       } else {
         this._hexagones[i].sizeTarget = 0;
       }
 
-      this._hexagones[i].size += ( this._hexagones[i].sizeTarget - this._hexagones[i].size ) * 0.1;
+      this._hexagones[i].size += ( this._hexagones[i].sizeTarget - this._hexagones[i].size ) * 0.2;
+
+      createHexagone({
+        x,
+        y,
+        size: 10 * this._hexagones[i].size * this._hexagones[i].globalSize,
+        strokeColor: 'white',
+        rotation: Math.PI * 2 * ( i / projectList.projects.length ) + Math.PI * 0.5,
+        context: this._ctx,
+      });
     }
   }
 

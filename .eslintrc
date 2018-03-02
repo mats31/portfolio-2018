@@ -49,7 +49,7 @@
     "padded-blocks": 0,
     "id-length": 0,
     space-in-parens: 0,
-    max-len: [1, 150, 4]
+    max-len: 0
   },
   "settings": {
     "import/parser": "babel-eslint",
