@@ -1,10 +1,11 @@
 import States from 'core/States';
 import projectList from 'config/project-list';
-import { createDOM } from 'utils/dom';
+import { createDOM, letterParser } from 'utils/dom';
 import { createCanvas, createHexagone, resizeCanvas } from 'utils/canvas';
-import { map } from 'utils/math';
+import { distance2, map } from 'utils/math';
 import { autobind } from 'core-decorators';
 import { visible, toggle } from 'core/decorators';
+import TimelineTitle from './TimelineTitle';
 import template from './timeline.tpl.html';
 import './timeline.scss';
 
@@ -21,6 +22,10 @@ export default class TimelineView {
       createDOM(template()),
     );
 
+    this._ui = {
+      title: this._el.querySelector('.js-timeline__title'),
+    };
+
     this._scrollWheelTimeout = null;
 
     this._needsUpdate = false;
@@ -30,12 +35,13 @@ export default class TimelineView {
     this._rotateX = 0;
     this._rotateY = 0;
     this._rotateZ = 0;
+    this._currentIndex = null;
 
     this._width = window.innerWidth * 0.5;
     this._height = window.innerWidth * 0.5;
-    this._timelineRadius = this._width * 0.42;
-    this._baseLinesRadius = this._width * 0.46;
-    this._endLinesRadius = this._width * 0.49;
+    this._timelineRadius = this._width * 0.33;
+    this._baseLinesRadius = this._width * 0.37;
+    this._endLinesRadius = this._width * 0.4;
 
     this._mouse = {
       x: 0,
@@ -94,8 +100,17 @@ export default class TimelineView {
     };
     this._timelineNeedsUpdate = false;
 
+    this._setupTitle();
     this._setupCanvas();
     this._addEvents();
+  }
+
+  _setupTitle() {
+    this._title = new TimelineTitle({
+      el: this._ui.title,
+    });
+
+    this._title.updateTitle(projectList.projects[0].title);
   }
 
   _setupCanvas() {
@@ -329,9 +344,9 @@ export default class TimelineView {
   resize(vw, vh) {
     this._width = vw * 0.5;
     this._height = vw * 0.5;
-    this._timelineRadius = this._width * 0.42;
-    this._baseLinesRadius = this._width * 0.46;
-    this._endLinesRadius = this._width * 0.49;
+    this._timelineRadius = this._width * 0.33;
+    this._baseLinesRadius = this._width * 0.37;
+    this._endLinesRadius = this._width * 0.4;
 
     for (let i = 0; i < projectList.projects.length; i++) {
       this._points[i].x = Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
@@ -435,6 +450,7 @@ export default class TimelineView {
       const progress = this._timeline.progress % (1 - (1 / this._points.length) * 0.5);
       if (progress >= i / this._points.length - (1 / this._points.length) * 0.5 && progress <= (1 / this._points.length) * ( i + 1 ) - (1 / this._points.length) * 0.5 ) {
         this._hexagones[i].sizeTarget = 1;
+        this._title.updateTitle(projectList.projects[i].title);
       } else {
         this._hexagones[i].sizeTarget = 0;
       }
@@ -453,11 +469,22 @@ export default class TimelineView {
   }
 
   _updateLines() {
+
     for (let i = 0; i < this._lines.length; i++) {
+      const distanceToPoint = distance2({
+        x: this._lines[i].x1,
+        y: this._lines[i].y1,
+      }, {
+        x: this._timeline.x + this._timeline.radius * Math.cos(Math.PI * 2 * this._timeline.progress - Math.PI * 0.5),
+        y: this._timeline.y + this._timeline.radius * Math.sin(Math.PI * 2 * this._timeline.progress - Math.PI * 0.5),
+      });
+      const scaleFactor = map( Math.max(0, Math.abs(distanceToPoint - this._width) ), 100, this._width, 0, 0.8 );
+
       const x1 = this._lines[i].x1;
       const y1 = this._lines[i].y1;
-      const x2 = map(this._lines[i].size, 0, 1, this._lines[i].x1, this._lines[i].x2);
-      const y2 = map(this._lines[i].size, 0, 1, this._lines[i].y1, this._lines[i].y2);
+
+      const x2 = map(this._lines[i].size, 0, 1 - scaleFactor, this._lines[i].x1, this._lines[i].x2);
+      const y2 = map(this._lines[i].size, 0, 1 - scaleFactor, this._lines[i].y1, this._lines[i].y2);
 
       this._ctx.beginPath();
       this._ctx.moveTo(x1, y1);

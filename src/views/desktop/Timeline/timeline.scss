@@ -9,3 +9,17 @@
   // transform: translate3d(-50%, -50%, 0) rotate(-30deg);
   z-index: $zindex-1;
 }
+
+  .timeline__title{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    color: white;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+    .timeline__title .textContainer__letter {
+      display: inline-block;
+      opacity: 0;
+    }

@@ -1,11 +1,21 @@
 // Soleil ------
 
 @font-face {
-  font-family: 'soleil';
-  src: url('/fonts/soleil-regular.eot');
-  src: url('/fonts/soleil-regular.eot?#iefix') format('embedded-opentype'),
-       url('/fonts/soleil-regular.woff') format('woff'),
-       url('/fonts/soleil-regular.ttf') format('truetype'),
-       url('/fonts/soleil-regular.svg#soleilregular') format('svg');
+  font-family: 'blender';
+  src: url('/fonts/blender-bold.eot');
+  src: url('/fonts/blender-bold.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/blender-bold.woff') format('woff'),
+       url('/fonts/blender-bold.ttf') format('truetype'),
+       url('/fonts/blender-bold.svg#BlenderPro-Bold') format('svg');
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: 'roboto';
+  src: url('/fonts/roboto-regular.eot');
+  src: url('/fonts/roboto-regular.eot?#iefix') format('embedded-opentype'),
+       url('/fonts/roboto-regular.woff') format('woff'),
+       url('/fonts/roboto-regular.ttf') format('truetype'),
+       url('/fonts/roboto-regular.svg#Roboto-Regular') format('svg');
   font-weight: 400;
 }
