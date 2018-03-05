@@ -15,6 +15,7 @@ export default class TimelineTitleView {
     this._el = options.el;
 
     this._currentTitle = null;
+    this._changingTitle = false;
   }
 
   // State ---------------------------------------------------------------------
@@ -22,17 +23,21 @@ export default class TimelineTitleView {
   updateTitle(title) {
 
     if (title !== this._currentTitle) {
-      if (this._el.textContent === '') {
-        this._el.innerHTML = title;
-        letterParser(this._el);
 
+      this._changingTitle = true;
+
+      if (!this.visible()) {
+        this._parseText(title);
         this.show();
-
       } else {
-        this.hide();
+        this.hide({ updateText: true });
       }
 
       this._currentTitle = title;
+    }
+
+    if (!this._changingTitle) {
+      this.show();
     }
   }
 
@@ -46,6 +51,7 @@ export default class TimelineTitleView {
         0.25,
         {
           scale: 2,
+          opacity: 0,
         },
         {
           delay: randomFloat(0, 0.25),
@@ -55,9 +61,11 @@ export default class TimelineTitleView {
         },
       );
     }
+
+    // TweenLite.killTweensOf(this._onHideComplete);
   }
 
-  hide() {
+  hide({ updateText = false } = {}) {
     const letters = this._el.querySelectorAll('.js-textContainer__letter');
 
     for (let i = 0; i < letters.length; i++) {
@@ -70,19 +78,36 @@ export default class TimelineTitleView {
           opacity: 0,
           scale: 0,
           ease: 'Power2.easeOut',
-          onComplete: () => {
-            if (i === letters.length - 1) {
-              this._onHideComplete();
-            }
-          },
+          // onComplete: () => {
+          //   if (updateText) {
+          //     this._onHideComplete();
+          //   }
+          // },
         },
       );
     }
+
+    // TweenLite.killTweensOf(this._onHideComplete);
+    if (updateText) {
+      TweenLite.delayedCall(0.2, this._onHideComplete);
+    }
   }
 
+  @autobind
   _onHideComplete() {
-    this._el.innerHTML = this._currentTitle;
-    letterParser(this._el);
+    this._changingTitle = false;
+    this._parseText(this._currentTitle);
     this.show();
+  }
+
+  _parseText(text) {
+    this._el.innerHTML = text;
+    const element = letterParser(this._el)[0];
+
+    for (let i = 0; i < element.childNodes.length; i++) {
+      if (element.childNodes[i].textContent === ' ') {
+        element.childNodes[i].style.width = '10px';
+      }
+    }
   }
 }

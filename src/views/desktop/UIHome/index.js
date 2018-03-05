@@ -1,9 +1,11 @@
 import States from 'core/States';
+import projectList from 'config/project-list';
 import { createDOM } from 'utils/dom';
 import { autobind } from 'core-decorators';
 import { visible } from 'core/decorators';
-import template from './home.tpl.html';
-import './home.scss';
+import ProjectDescription from './ProjectDescription';
+import template from './ui_home.tpl.html';
+import './ui_home.scss';
 
 
 @visible()
@@ -17,13 +19,17 @@ export default class DesktopHomeView {
       createDOM(template()),
     );
 
-    this._addImage();
+    this._setupProjectDescription();
+
     this._setupEvents();
   }
 
-  _addImage() {
-    const image = States.resources.getImage('twitter').media;
-    this._el.appendChild(image);
+  _setupProjectDescription() {
+    this._projectDescription = new ProjectDescription({
+      parent: this._el,
+    });
+
+    this._projectDescription.updateProject(projectList.projects[0]);
   }
 
   _setupEvents() {
@@ -50,6 +56,12 @@ export default class DesktopHomeView {
   resize(vw, vh) {
     console.log('width: ', vw);
     console.log('height: ', vh);
+  }
+
+  // Update --------------------------------------------------------------------
+  update() {
+    const index = Math.floor( ( States.global.progress + (1 / projectList.projects.length) * 2 ) % projectList.projects.length );
+    this._projectDescription.updateProject(projectList.projects[index]);
   }
 
 }

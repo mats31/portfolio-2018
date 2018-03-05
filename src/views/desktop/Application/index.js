@@ -1,7 +1,7 @@
 import raf from 'raf';
 import * as pages from 'core/pages';
 import { autobind } from 'core-decorators';
-import HomeView from 'views/desktop/Home';
+import UIHomeView from 'views/desktop/UIHome';
 import TimelineView from 'views/desktop/Timeline';
 import WebglView from 'views/desktop/WebGL';
 import dat from 'dat.gui';
@@ -17,18 +17,18 @@ export default class DesktopAppView {
     this.el = document.getElementById('application');
 
     this._views = [];
-    this._home = this._setupHome();
+    this._uiHome = this._setupHome();
     this._timeline = this._setupTimeline();
     this._webgl = this._setupWebGL();
 
-    this._views.push(this._home, this._timeline, this._webgl);
+    this._views.push(this._uiHome, this._timeline, this._webgl);
 
     this._setupEvents();
     this._update();
   }
 
   _setupHome() {
-    const view = new HomeView({
+    const view = new UIHomeView({
       parent: this.el,
     });
 
@@ -67,10 +67,9 @@ export default class DesktopAppView {
 
     switch (page) {
       case pages.HOME:
-        // this._timeline.show();
+        this._uiHome.show();
         break;
       default:
-        this._home.hide();
     }
   }
 
@@ -98,6 +97,7 @@ export default class DesktopAppView {
   // Update --------------------------------------------------------------------
   @autobind
   _update() {
+    this._uiHome.update();
     this._webgl.update();
     this._timeline.update();
 

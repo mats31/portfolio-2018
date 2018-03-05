@@ -8,16 +8,28 @@ export default function (textElement) {
       newText.classList.add('js-letters__container');
       newText.classList.add('letters__container');
 
-      for (let j = 0; j < textNode.length; j++) {
-        const span = document.createElement('span');
-        span.classList.add('js-textContainer__letter');
-        span.classList.add('textContainer__letter');
-        span.innerHTML = textNode[j];
+      const words = textNode.split(' ');
 
-        newText.appendChild(span);
+      for (let j = 0; j < words.length; j++) {
+        const div = document.createElement('div');
+        div.classList.add('js-textContainer__word');
+        div.classList.add('textContainer__word');
+
+        for (let k = 0; k < words[j].length; k++) {
+          const span = document.createElement('span');
+          span.classList.add('js-textContainer__letter');
+          span.classList.add('textContainer__letter');
+          span.innerHTML = words[j][k];
+
+          div.appendChild(span);
+        }
+
+        newText.appendChild(div);
       }
 
       childNodes[i].parentNode.replaceChild(newText, childNodes[i]);
     }
   }
+
+  return childNodes;
 }

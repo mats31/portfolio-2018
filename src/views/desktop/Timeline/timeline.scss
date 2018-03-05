@@ -6,7 +6,7 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  // transform: translate3d(-50%, -50%, 0) rotate(-30deg);
+  transform: translate3d(-50%, -50%, 0);
   z-index: $zindex-1;
 }
 
@@ -19,7 +19,13 @@
     text-align: center;
   }
 
-    .timeline__title .textContainer__letter {
+    .timeline__title .textContainer__word {
       display: inline-block;
-      opacity: 0;
+      white-space: nowrap;
+      margin-right: 1rem;
     }
+
+      .timeline__title .textContainer__letter {
+        display: inline-block;
+        white-space: nowrap;
+      }

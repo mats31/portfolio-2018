@@ -110,7 +110,7 @@ export default class TimelineView {
       el: this._ui.title,
     });
 
-    this._title.updateTitle(projectList.projects[0].title);
+    // this._title.updateTitle(projectList.projects[0].title);
   }
 
   _setupCanvas() {
@@ -324,6 +324,10 @@ export default class TimelineView {
         },
       },
     );
+
+    this._title.hide({
+      updateTitle: false,
+    });
   }
 
   scroll() {
@@ -450,7 +454,9 @@ export default class TimelineView {
       const progress = this._timeline.progress % (1 - (1 / this._points.length) * 0.5);
       if (progress >= i / this._points.length - (1 / this._points.length) * 0.5 && progress <= (1 / this._points.length) * ( i + 1 ) - (1 / this._points.length) * 0.5 ) {
         this._hexagones[i].sizeTarget = 1;
-        this._title.updateTitle(projectList.projects[i].title);
+        if (this.visible()) {
+          this._title.updateTitle(projectList.projects[i].title);
+        }
       } else {
         this._hexagones[i].sizeTarget = 0;
       }
@@ -498,11 +504,11 @@ export default class TimelineView {
     this._rotateX = this._mouse.y * 30;
     this._rotateY = this._mouse.x * 30;
 
-    this._el.style.webkitTransform = `translate3d(-50%, -50%, 0) rotateX(${this._rotateX}deg) rotateY(${this._rotateY}deg) rotateZ(${this._rotateZ}deg)`;
-    this._el.style.MozTransform = `translate3d(-50%, -50%, 0) rotateX(${this._rotateX}deg) rotateY(${this._rotateY}deg) rotateZ(${this._rotateZ}deg)`;
-    this._el.style.msTransform = `translate3d(-50%, -50%, 0) rotateX(${this._rotateX}deg) rotateY(${this._rotateY}deg) rotateZ(${this._rotateZ}deg)`;
-    this._el.style.OTransform = `translate3d(-50%, -50%, 0) rotateX(${this._rotateX}deg) rotateY(${this._rotateY}deg) rotateZ(${this._rotateZ}deg)`;
-    this._el.style.transform = `translate3d(-50%, -50%, 0) rotateX(${this._rotateX}deg) rotateY(${this._rotateY}deg) rotateZ(${this._rotateZ}deg)`;
+    this._ctx.canvas.style.webkitTransform = `rotateX(${this._rotateX}deg) rotateY(${this._rotateY}deg) rotateZ(${this._rotateZ}deg)`;
+    this._ctx.canvas.style.MozTransform = `rotateX(${this._rotateX}deg) rotateY(${this._rotateY}deg) rotateZ(${this._rotateZ}deg)`;
+    this._ctx.canvas.style.msTransform = `rotateX(${this._rotateX}deg) rotateY(${this._rotateY}deg) rotateZ(${this._rotateZ}deg)`;
+    this._ctx.canvas.style.OTransform = `rotateX(${this._rotateX}deg) rotateY(${this._rotateY}deg) rotateZ(${this._rotateZ}deg)`;
+    this._ctx.canvas.style.transform = `rotateX(${this._rotateX}deg) rotateY(${this._rotateY}deg) rotateZ(${this._rotateZ}deg)`;
 
     // this._el.style.webkitTransform = `translate3d(-50%, -50%, 0) rotateZ(${this._rotateZ}deg)`;
     // this._el.style.MozTransform = `translate3d(-50%, -50%, 0) rotateZ(${this._rotateZ}deg)`;
