@@ -7,7 +7,7 @@ import './project_description.scss';
 
 
 @visible()
-export default class DesktopProjectDescriptionView {
+export default class DesktopProjectDescriptioView {
   constructor(options) {
     this._el = options.parent.appendChild(
       createDOM(template()),
@@ -22,6 +22,14 @@ export default class DesktopProjectDescriptionView {
   }
 
   // State ---------------------------------------------------------------------
+
+  show() {
+    this._el.style.display = 'block';
+  }
+
+  hide() {
+    this._el.style.display = 'none';
+  }
 
   updateProject(project) {
 

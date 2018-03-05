@@ -3,6 +3,7 @@ import * as pages from 'core/pages';
 import { autobind } from 'core-decorators';
 import UIHomeView from 'views/desktop/UIHome';
 import TimelineView from 'views/desktop/Timeline';
+import ProjectView from 'views/desktop/ProjectView';
 import WebglView from 'views/desktop/WebGL';
 import dat from 'dat.gui';
 
@@ -18,6 +19,7 @@ export default class DesktopAppView {
 
     this._views = [];
     this._uiHome = this._setupHome();
+    this._projectView = this._setupProject();
     this._timeline = this._setupTimeline();
     this._webgl = this._setupWebGL();
 
@@ -29,6 +31,14 @@ export default class DesktopAppView {
 
   _setupHome() {
     const view = new UIHomeView({
+      parent: this.el,
+    });
+
+    return view;
+  }
+
+  _setupProject() {
+    const view = new ProjectView({
       parent: this.el,
     });
 
@@ -68,9 +78,18 @@ export default class DesktopAppView {
     switch (page) {
       case pages.HOME:
         this._uiHome.show();
+        this._projectView.hide();
+        break;
+      case pages.PROJECT:
+        this._uiHome.show();
+
+        this._projectView.updateProject();
+        this._projectView.show();
         break;
       default:
     }
+
+    this._uiHome.updateState(page);
   }
 
   @autobind

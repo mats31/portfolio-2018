@@ -22,7 +22,7 @@ export default class Router {
     this.navigo.notFound(this._onRouteNotFound);
     this.navigo.on({
       '/': { as: pages.HOME, uses: this._onRouteHome },
-      // '/project/:id': { as: pages.PROJECT, uses: this.onRouteProject },
+      '/project/:id': { as: pages.PROJECT, uses: this._onRouteProject },
     });
   }
 
@@ -61,6 +61,11 @@ export default class Router {
   @autobind
   _onRouteHome() {
     this.updatePageCallback(pages.HOME);
+  }
+
+  @autobind
+  _onRouteProject() {
+    this.updatePageCallback(pages.PROJECT);
   }
 
 }

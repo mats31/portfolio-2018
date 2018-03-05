@@ -1,0 +1,45 @@
+@import '~stylesheets/common/global-imports';
+
+.project__view {
+  background: black;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-height: 100vh;
+  z-index: $zindex-1;
+  color: white;
+  display: none;
+}
+
+  .project__viewText {
+    margin: 30.8rem auto 0;
+    max-width: 70%;
+    text-align: center;
+  }
+
+    .project__viewTitle {
+      text-transform: uppercase;
+      color: black;
+      text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff, 0px 1px 0px #fff, 0px 0px 1px #fff;
+      font-size: 18.526rem;
+      line-height: 15rem;
+
+      @media screen and (max-width: 1590px) {
+        font-size: 15rem;
+      }
+
+      @media screen and (max-width: 1290px) {
+        font-size: 12rem;
+      }
+
+      @media screen and (max-width: 1040px) {
+        font-size: 9rem;
+      }
+    }
+
+    .project__viewDescription {
+      font-size: 1.3rem;
+      margin: 5rem auto 0;
+      max-width: 22%;
+    }

@@ -1,0 +1,28 @@
+.UIHome__networks{
+  display: none;
+  font-size: 1.3rem;
+  color: white;
+  position: absolute;
+  right: 5.1rem;
+  bottom: 3.7rem;
+}
+
+  .UIHome__networksLink {
+    display: inline-block;
+    margin-right: 3.5rem;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+
+    a{
+      text-decoration: none;
+      color: white;
+    }
+
+    &:last-child{
+      margin-right: 0rem;
+    }
+
+    &:hover{
+      opacity: 1;
+    }
+  }
