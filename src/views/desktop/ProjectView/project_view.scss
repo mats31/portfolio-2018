@@ -12,18 +12,59 @@
   display: none;
 }
 
+  .project__aside {
+    font-size: 1.3rem;
+  }
+
+    .project__date {
+      position: fixed;
+      left: 5.5%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+      white-space: nowrap;
+    }
+
+    .project__link {
+      position: fixed;
+      left: 94.5%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%) rotate(90deg);
+      white-space: nowrap;
+
+      a {
+        text-decoration: none;
+        color: white;
+      }
+    }
+
   .project__viewText {
-    margin: 30.8rem auto 0;
+    margin: 22rem auto 4.2rem;
     max-width: 70%;
+    padding-bottom: 6.8rem;
+    position: relative;
     text-align: center;
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 4px 4px 0 4px;
+      border-color: #ffffff transparent transparent transparent;
+      left: 50%;
+      bottom: 0;
+      margin-left: -2px;
+    }
   }
 
     .project__viewTitle {
       text-transform: uppercase;
       color: black;
-      text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff, 0px 1px 0px #fff, 0px 0px 1px #fff;
+      text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff, 0px -1px 0px #fff, 0px 1px 0px #fff;
       font-size: 18.526rem;
-      line-height: 15rem;
+      line-height: 8rem;
 
       @media screen and (max-width: 1590px) {
         font-size: 15rem;
@@ -44,7 +85,8 @@
       max-width: 22%;
     }
 
-  .project__viewImg {
+  .project__viewImg,
+  .project__viewVideo {
     display: block;
     width: 66%;
     margin: 0 auto 5rem;

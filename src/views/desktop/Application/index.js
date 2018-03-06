@@ -77,12 +77,12 @@ export default class DesktopAppView {
 
     switch (page) {
       case pages.HOME:
-        document.body.style.overflow = 'hidden';
+        // document.body.style.overflow = 'hidden';
         this._uiHome.show();
         this._projectView.hide();
         break;
       case pages.PROJECT:
-        document.body.style.overflow = 'visible';
+        // document.body.style.overflow = 'visible';
         this._uiHome.show();
 
         this._projectView.updateProject();
@@ -123,6 +123,7 @@ export default class DesktopAppView {
     this._uiHome.update();
     this._webgl.update();
     this._timeline.update();
+    this._projectView.update();
 
     raf(this._update);
   }
