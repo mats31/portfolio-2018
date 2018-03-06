@@ -44,6 +44,18 @@ export default class DesktopProjectView {
 
     this._ui.title.innerHTML = project.title;
     this._ui.description.innerHTML = project.description;
+
+    for (let i = 0; i < project.medias.length; i++) {
+      const media = project.medias[i];
+
+      if (media.type === 'image') {
+        const img = new Image();
+        img.classList.add('js-project__viewImg');
+        img.classList.add('project__viewImg');
+        img.src = media.url;
+        this._ui.mediaContainer.appendChild(img);
+      }
+    }
   }
 
   // Events --------------------------------------------------------------------

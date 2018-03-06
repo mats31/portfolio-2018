@@ -1,3 +1,4 @@
+import * as pages from 'core/pages';
 import States from 'core/States';
 import projectList from 'config/project-list';
 import { createDOM, letterParser } from 'utils/dom';
@@ -27,6 +28,7 @@ export default class TimelineView {
     };
 
     this._scrollWheelTimeout = null;
+    this._page = null;
 
     this._needsUpdate = false;
     this._firstShow = false;
@@ -126,6 +128,18 @@ export default class TimelineView {
   }
 
   // State ---------------------------------------------------------------------
+
+  updateState(page) {
+    switch (page) {
+      case pages.PROJECT:
+        this.hide();
+        break;
+      default:
+
+    }
+
+    this._page = page;
+  }
 
   show({ delay = 0 } = {}) {
     this._hideAnimationDone = false;
@@ -331,7 +345,9 @@ export default class TimelineView {
   }
 
   scroll() {
-    this.show();
+    if (this._page !== pages.PROJECT) {
+      this.show();
+    }
   }
 
   unscroll() {

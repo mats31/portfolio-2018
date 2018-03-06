@@ -1,3 +1,4 @@
+import * as pages from 'core/pages';
 import { autobind } from 'core-decorators';
 import { toggle } from 'core/decorators';
 import { createDOM } from 'utils/dom';
@@ -133,6 +134,16 @@ export default class WebGL {
     }
 
     this._project.select();
+  }
+
+  updateState(page) {
+    // switch (page) {
+    //   case pages.PROJECT:
+    //
+    //     break;
+    //   default:
+    //
+    // }
   }
 
   // Events --------------------------------------------------------------------

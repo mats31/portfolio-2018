@@ -40,6 +40,12 @@
 
     .project__viewDescription {
       font-size: 1.3rem;
-      margin: 5rem auto 0;
+      margin: 5rem auto;
       max-width: 22%;
     }
+
+  .project__viewImg {
+    display: block;
+    width: 66%;
+    margin: 0 auto 5rem;
+  }
