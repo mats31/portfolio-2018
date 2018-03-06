@@ -11,6 +11,7 @@ const ressources = {
   textures: [
     { id: 'particle_mask', url: 'textures/particle_mask.jpg' },
     { id: 'scroll_pass', url: 'textures/scroll_pass.jpg' },
+    { id: 'resn-little-helper-description', url: 'textures/resn-little-helper-description.png' },
   ],
   sounds: [
     // { id: 'intro', url: 'audio/intro.mp3', analyser: false },

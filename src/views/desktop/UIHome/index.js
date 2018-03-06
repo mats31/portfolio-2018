@@ -77,13 +77,13 @@ export default class DesktopHomeView {
         this._title.show();
         this._networks.hide();
         this._menu.hide();
-        this._projectDescription.hide();
+        // this._projectDescription.hide();
         break;
       default:
         this._menu.show();
         this._title.show();
         this._networks.show();
-        this._projectDescription.show();
+        // this._projectDescription.show();
     }
   }
 

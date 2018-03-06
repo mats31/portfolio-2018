@@ -16,7 +16,7 @@ export default class Router {
 
   _setupRouter() {
     const root = `${window.location.protocol}//${window.location.host}`;
-    const useHash = true;
+    const useHash = false;
     this.navigo = new Navigo(root, useHash);
 
     this.navigo.notFound(this._onRouteNotFound);

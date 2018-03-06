@@ -47,10 +47,20 @@ export default class DesktopProjectView {
 
   show({ delay = 0 } = {}) {
     this._el.style.display = 'block';
+
+    this._deltaY = 0;
+    this._deltaTargetY = 0;
   }
 
   hide({ delay = 0 } = {}) {
     this._el.style.display = 'none';
+
+    while (this._ui.mediaContainer.firstChild) {
+      this._ui.mediaContainer.removeChild(this._ui.mediaContainer.firstChild);
+    }
+
+    this._deltaY = 0;
+    this._deltaTargetY = 0;
   }
 
   updateProject() {

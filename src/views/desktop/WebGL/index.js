@@ -1,6 +1,8 @@
 import * as pages from 'core/pages';
+import States from 'core/States';
+import projectList from 'config/project-list';
 import { autobind } from 'core-decorators';
-import { toggle } from 'core/decorators';
+import { toggle, active } from 'core/decorators';
 import { createDOM } from 'utils/dom';
 import { randomFloat } from 'utils/math';
 import OrbitControls from 'helpers/3d/OrbitControls/OrbitControls'
@@ -9,6 +11,7 @@ import Project from './Project';
 import DecorPoints from './meshes/DecorPoints';
 import template from './webgl.tpl.html';
 
+@active()
 @toggle('scrolled', 'scroll', 'unscroll', false)
 export default class WebGL {
 
@@ -21,6 +24,7 @@ export default class WebGL {
 
     this._clock = new THREE.Clock();
     this._mouse = new THREE.Vector2();
+    this._raycaster = new THREE.Raycaster();
 
     this._scrollWheelTimeout = null;
     this._cameraInterval = null;
@@ -54,8 +58,11 @@ export default class WebGL {
   }
 
   _setupProject() {
-    this._project = new Project();
+    this._project = new Project({
+      raycaster: this._raycaster,
+    });
     this._scene.add(this._project.getPoints());
+    this._scene.add(this._project.getDescription());
   }
 
   _setupDecorPoints() {
@@ -72,13 +79,16 @@ export default class WebGL {
   }
 
   _addEvents() {
-    // this._el.addEventListener('mousemove', this._onMousemove);
+    this._el.addEventListener('click', this._onClick);
     Signals.onResize.add(this._onResize);
     // Signals.onScroll.add(this._onScroll);
     Signals.onScrollWheel.add(this._onScrollWheel);
   }
 
   // State ---------------------------------------------------------------------
+
+  activate() {}
+  deactivate() {}
 
   scroll() {
     this._project.deselect();
@@ -137,13 +147,7 @@ export default class WebGL {
   }
 
   updateState(page) {
-    // switch (page) {
-    //   case pages.PROJECT:
-    //
-    //     break;
-    //   default:
-    //
-    // }
+    this._project.updateState(page);
   }
 
   // Events --------------------------------------------------------------------
@@ -172,14 +176,24 @@ export default class WebGL {
 
   @autobind
   _onScrollWheel(event) {
-    TweenLite.killTweensOf(this, { _translation: true });
-    this._deltaTarget = event.deltaY;
-    this.scroll();
+    if (this.active()) {
+      TweenLite.killTweensOf(this, { _translation: true });
+      this._deltaTarget = event.deltaY;
+      this.scroll();
 
-    clearTimeout(this._scrollWheelTimeout);
-    this._scrollWheelTimeout = setTimeout(() => {
-      this.unscroll();
-    }, 50);
+      clearTimeout(this._scrollWheelTimeout);
+      this._scrollWheelTimeout = setTimeout(() => {
+        this.unscroll();
+      }, 50);
+    }
+  }
+
+  @autobind
+  _onClick() {
+    if (this._project.focused()) {
+      const id = projectList.projects[Math.floor(States.global.progress)].id;
+      States.router.navigateTo(pages.PROJECT, { id });
+    }
   }
 
   // Update --------------------------------------------------------------------
@@ -200,6 +214,18 @@ export default class WebGL {
   _updateCamera() {
     this._camera.rotation.x += ( this._mouse.y * 0.1 - this._camera.rotation.x ) * 0.1;
     this._camera.rotation.y += ( this._mouse.x * -0.1 - this._camera.rotation.y ) * 0.1;
+
+    this._raycaster.setFromCamera( this._mouse, this._camera );
+    const intersects = this._raycaster.intersectObjects( this._scene.children, true );
+
+    for (let i = 0; i < intersects.length; i++) {
+      this._project.focus();
+      document.body.style.cursor = 'pointer';
+      return;
+    }
+
+    document.body.style.cursor = 'inherit';
+    this._project.blur();
   }
 
   _updatePoints(time) {

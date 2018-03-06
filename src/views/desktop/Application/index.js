@@ -79,11 +79,13 @@ export default class DesktopAppView {
       case pages.HOME:
         // document.body.style.overflow = 'hidden';
         this._uiHome.show();
+        this._webgl.activate();
         this._projectView.hide();
         break;
       case pages.PROJECT:
         // document.body.style.overflow = 'visible';
         this._uiHome.show();
+        this._webgl.deactivate();
 
         this._projectView.updateProject();
         this._projectView.show();
