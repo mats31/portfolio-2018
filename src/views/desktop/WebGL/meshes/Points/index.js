@@ -29,6 +29,7 @@ export default class Points extends THREE.Object3D {
     this._setupColors();
     this._radialDatas = this._canvas.getRadialImage();
     this._nb = this._colors[0].length / 4;
+    // this._nb = ( this._colors[0].length / 4 ) / 2;
 
     this._setupGeometry();
     this._setupMaterial();
@@ -78,10 +79,10 @@ export default class Points extends THREE.Object3D {
 
     let index = 0;
     let index4 = 0;
-    for (let i = 0; i < height; i++) {
+    for (let i = 0; i < height; i += 1) {
       const y = i - height * 0.5;
       // const y = ( height - i ) - height * 0.5;
-      for (let j = 0; j < width; j++) {
+      for (let j = 0; j < width; j += 1) {
         // const x = ( j ) - width * 0.5;
         const x = ( width - j ) - width * 0.5;
 
@@ -142,9 +143,9 @@ export default class Points extends THREE.Object3D {
     index4 = 0;
     for (let k = 0; k < this._colors.length; k++) {
 
-      for (let i = 0; i < height; i++) {
+      for (let i = 0; i < height; i += 1) {
 
-        for (let j = 0; j < width; j++) {
+        for (let j = 0; j < width; j += 1) {
 
           this[`aColor${k}`].setXYZW(
             index,
