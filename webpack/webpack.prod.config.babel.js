@@ -5,6 +5,7 @@ import CopyWebpackPlugin from 'copy-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import CleanWebpackPlugin from 'clean-webpack-plugin';
+// import MinifyPlugin from 'babel-minify-webpack-plugin';
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 
 export default {
@@ -116,6 +117,7 @@ export default {
     { ignore: ['.DS_Store', '.keep'] }),
     new ExtractTextPlugin('[name]-[hash].min.css', { allChunks: true }),
     new CleanWebpackPlugin(['build'], { root: path.resolve(__dirname, '..') }),
+    // new MinifyPlugin(),
     new UglifyJsPlugin(),
   ],
 };

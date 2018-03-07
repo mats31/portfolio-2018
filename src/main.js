@@ -36,6 +36,7 @@ class Main {
   }
 
   _onLoadApplication() {
+    console.log('wesh1');
     States.router = new Router({
       updatePageCallback: this.updatePage,
     });
