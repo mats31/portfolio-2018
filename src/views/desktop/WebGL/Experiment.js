@@ -5,7 +5,7 @@ import Points from './meshes/Points';
 
 @visible()
 @focused()
-export default class Project {
+export default class Experiment {
   constructor(options) {
 
     this._raycaster = options.raycaster;
@@ -16,7 +16,7 @@ export default class Project {
 
   _setupPoints() {
     this._points = new Points({
-      type: 'project',
+      type: 'experiment',
     });
   }
 
@@ -68,10 +68,10 @@ export default class Project {
   updateState(page) {
     switch (page) {
       case pages.HOME:
-        this.show();
+        this.hide();
         break;
       case pages.EXPERIMENT:
-        this.hide();
+        this.show();
         break;
       default:
     }

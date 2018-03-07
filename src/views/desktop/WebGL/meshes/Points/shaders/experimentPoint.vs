@@ -1,8 +1,9 @@
 uniform float u_delta;
 uniform float u_time;
+uniform float uHide;
 
 attribute vec4 a_radialColor;
-
+attribute vec3 a_hidePosition;
 attribute float a_direction;
 attribute float a_speed;
 attribute float a_select;
@@ -17,10 +18,12 @@ attribute vec4 a_color0;
 attribute vec4 a_color1;
 attribute vec4 a_color2;
 attribute vec4 a_color3;
+attribute vec4 a_color4;
 varying vec4 vColor0;
 varying vec4 vColor1;
 varying vec4 vColor2;
 varying vec4 vColor3;
+varying vec4 vColor4;
 
 mat3 quatToMatrix(vec4 q) {
   mat3 mat;
@@ -68,7 +71,7 @@ void main() {
   stablePosition.y += sin(u_time * 0.2) * 20.;
   stablePosition.z += sin(u_time * 0.5) * 20.;
 
-  pos = mix(pos, stablePosition, a_select);
+  pos = mix( mix(pos, stablePosition, a_select), a_hidePosition, uHide );
 
   mat3 rotation = quatToMatrix( vec4( 0.,0.,1., sin(u_time * 0.2) * 0.01) );
 
@@ -86,4 +89,5 @@ void main() {
   vColor1 = a_color1;
   vColor2 = a_color2;
   vColor3 = a_color3;
+  vColor4 = a_color4;
 }

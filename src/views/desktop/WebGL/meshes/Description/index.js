@@ -1,13 +1,16 @@
 import States from 'core/States';
-import { visible } from 'core/decorators';
+import { autobind } from 'core-decorators';
+import { objectVisible } from 'core/decorators';
 import MaskDescription from './MaskDescription';
 import vertexShader from './shaders/description.vs';
 import fragmentShader from './shaders/description.fs';
 
-@visible()
+@objectVisible()
 export default class Description extends THREE.Object3D {
   constructor() {
     super();
+
+    this.visible = false;
 
     this._setupMaskDescription();
     this._setupGeometry();
@@ -57,11 +60,15 @@ export default class Description extends THREE.Object3D {
   // State -------------------------
 
   show() {
+    TweenLite.killTweensOf(this._onDelayedHide);
+
+    this.visible = true;
     this._mask.activate();
   }
 
   hide() {
     this._mask.deactivate();
+    TweenLite.delayedCall(1, this._onDelayedHide);
   }
 
   focus() {
@@ -70,6 +77,12 @@ export default class Description extends THREE.Object3D {
 
   blur() {
     this._mask.blur();
+  }
+
+  // Events ------------------------
+  @autobind
+  _onDelayedHide() {
+    this.visible = false;
   }
 
   // Update ------------------------

@@ -1,6 +1,7 @@
 import * as pages from 'core/pages';
 import States from 'core/States';
 import projectList from 'config/project-list';
+import experimentList from 'config/experiment-list';
 import { createDOM, letterParser } from 'utils/dom';
 import { createCanvas, createHexagone, resizeCanvas } from 'utils/canvas';
 import { distance2, map } from 'utils/math';
@@ -45,25 +46,75 @@ export default class TimelineView {
     this._baseLinesRadius = this._width * 0.37;
     this._endLinesRadius = this._width * 0.4;
 
+    this._type = null;
+
     this._mouse = {
       x: 0,
       y: 0,
     };
 
+    this._setupTitle();
+    this._setupCanvas();
+    this._addEvents();
+  }
+
+  _setupTitle() {
+    this._title = new TimelineTitle({
+      el: this._ui.title,
+    });
+
+    // this._title.updateTitle(projectList.projects[0].title);
+  }
+
+  _setupCanvas() {
+    this._ctx = createCanvas(this._width, this._height, true, 2);
+    this._ctx.strokeStyle = 'white';
+    this._el.appendChild(this._ctx.canvas);
+  }
+
+  _addEvents() {
+    // this._el.addEventListener('mousemove', this._onMousemove);
+    Signals.onResize.add(this._onResize);
+    Signals.onScrollWheel.add(this._onScrollWheel);
+  }
+
+  // State ---------------------------------------------------------------------
+
+  updateState(page) {
+    switch (page) {
+      case pages.HOME:
+        this._updateDatas('project');
+        break;
+      case pages.EXPERIMENT:
+        this._updateDatas('experiment');
+        break;
+      case pages.PROJECT:
+        this.hide();
+        break;
+      default:
+
+    }
+
+    this._page = page;
+  }
+
+  _updateDatas(type) {
+    const datas = type === 'project' ? projectList.projects : experimentList.experiments;
+
     this._points = [];
     this._hexagones = [];
-    for (let i = 0; i < projectList.projects.length; i++) {
+    for (let i = 0; i < datas.length; i++) {
       const radius = 0;
       const point = {
-        x: Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
-        y: Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
+        x: Math.cos(Math.PI * 2 * ( i / datas.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
+        y: Math.sin(Math.PI * 2 * ( i / datas.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
         radius,
         opacity: 0,
       };
 
       const hexagone = {
-        x: Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
-        y: Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
+        x: Math.cos(Math.PI * 2 * ( i / datas.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
+        y: Math.sin(Math.PI * 2 * ( i / datas.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5,
         size: 0,
         sizeTarget: 0,
         globalSize: 0,
@@ -102,43 +153,7 @@ export default class TimelineView {
     };
     this._timelineNeedsUpdate = false;
 
-    this._setupTitle();
-    this._setupCanvas();
-    this._addEvents();
-  }
-
-  _setupTitle() {
-    this._title = new TimelineTitle({
-      el: this._ui.title,
-    });
-
-    // this._title.updateTitle(projectList.projects[0].title);
-  }
-
-  _setupCanvas() {
-    this._ctx = createCanvas(this._width, this._height, true, 2);
-    this._ctx.strokeStyle = 'white';
-    this._el.appendChild(this._ctx.canvas);
-  }
-
-  _addEvents() {
-    // this._el.addEventListener('mousemove', this._onMousemove);
-    Signals.onResize.add(this._onResize);
-    Signals.onScrollWheel.add(this._onScrollWheel);
-  }
-
-  // State ---------------------------------------------------------------------
-
-  updateState(page) {
-    switch (page) {
-      case pages.PROJECT:
-        this.hide();
-        break;
-      default:
-
-    }
-
-    this._page = page;
+    this._type = type;
   }
 
   show({ delay = 0 } = {}) {
@@ -362,39 +377,43 @@ export default class TimelineView {
   }
 
   resize(vw, vh) {
-    this._width = vw * 0.5;
-    this._height = vw * 0.5;
-    this._timelineRadius = this._width * 0.33;
-    this._baseLinesRadius = this._width * 0.37;
-    this._endLinesRadius = this._width * 0.4;
+    const datas = this._type === 'project' ? projectList.projects : experimentList.experiments;
 
-    for (let i = 0; i < projectList.projects.length; i++) {
-      this._points[i].x = Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
-      this._points[i].y = Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
+    if (this._type) {
+      this._width = vw * 0.5;
+      this._height = vw * 0.5;
+      this._timelineRadius = this._width * 0.33;
+      this._baseLinesRadius = this._width * 0.37;
+      this._endLinesRadius = this._width * 0.4;
 
-      this._hexagones[i].x = Math.cos(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
-      this._hexagones[i].y = Math.sin(Math.PI * 2 * ( i / projectList.projects.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
+      for (let i = 0; i < datas.length; i++) {
+        this._points[i].x = Math.cos(Math.PI * 2 * ( i / datas.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
+        this._points[i].y = Math.sin(Math.PI * 2 * ( i / datas.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
+
+        this._hexagones[i].x = Math.cos(Math.PI * 2 * ( i / datas.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
+        this._hexagones[i].y = Math.sin(Math.PI * 2 * ( i / datas.length ) - Math.PI * 0.5 ) * this._timelineRadius + this._width * 0.5;
+      }
+
+      for (let i = 0; i < this._nbLines; i++) {
+        this._lines[i].x1 = Math.cos(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._baseLinesRadius + this._width * 0.5;
+        this._lines[i].y1 = Math.sin(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._baseLinesRadius + this._width * 0.5;
+        this._lines[i].x2 = Math.cos(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._endLinesRadius + this._width * 0.5;
+        this._lines[i].y2 = Math.sin(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._endLinesRadius + this._width * 0.5;
+      }
+
+      this._timeline = {
+        x: this._width * 0.5,
+        y: this._height * 0.5,
+        progress: 0,
+        opacity: 0,
+        radius: this._timelineRadius,
+      };
+
+      resizeCanvas(this._ctx, this._width, this._height, true, 2);
+
+      this._ctx.strokeStyle = 'white';
+      this._needsUpdate = true;
     }
-
-    for (let i = 0; i < this._nbLines; i++) {
-      this._lines[i].x1 = Math.cos(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._baseLinesRadius + this._width * 0.5;
-      this._lines[i].y1 = Math.sin(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._baseLinesRadius + this._width * 0.5;
-      this._lines[i].x2 = Math.cos(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._endLinesRadius + this._width * 0.5;
-      this._lines[i].y2 = Math.sin(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._endLinesRadius + this._width * 0.5;
-    }
-
-    this._timeline = {
-      x: this._width * 0.5,
-      y: this._height * 0.5,
-      progress: 0,
-      opacity: 0,
-      radius: this._timelineRadius,
-    };
-
-    resizeCanvas(this._ctx, this._width, this._height, true, 2);
-
-    this._ctx.strokeStyle = 'white';
-    this._needsUpdate = true;
   }
 
   mousemove(event) {
@@ -438,7 +457,8 @@ export default class TimelineView {
   }
 
   _updateTimeline() {
-    this._timeline.progress = States.global.progress / projectList.projects.length;
+    const datas = this._type === 'project' ? projectList.projects : experimentList.experiments;
+    this._timeline.progress = States.global.progress / datas.length;
     const x = this._timeline.x;
     const y = this._timeline.y;
     const radius = this._timeline.radius;
@@ -452,6 +472,7 @@ export default class TimelineView {
   }
 
   _updatePoints() {
+    const datas = this._type === 'project' ? projectList.projects : experimentList.experiments;
 
     for (let i = 0; i < this._points.length; i++) {
 
@@ -471,7 +492,7 @@ export default class TimelineView {
       if (progress >= i / this._points.length - (1 / this._points.length) * 0.5 && progress <= (1 / this._points.length) * ( i + 1 ) - (1 / this._points.length) * 0.5 ) {
         this._hexagones[i].sizeTarget = 1;
         if (this.visible()) {
-          this._title.updateTitle(projectList.projects[i].title);
+          this._title.updateTitle(datas[i].title);
         }
       } else {
         this._hexagones[i].sizeTarget = 0;
@@ -484,7 +505,7 @@ export default class TimelineView {
         y,
         size: 10 * this._hexagones[i].size * this._hexagones[i].globalSize,
         strokeColor: 'white',
-        rotation: Math.PI * 2 * ( i / projectList.projects.length ) + Math.PI * 0.5,
+        rotation: Math.PI * 2 * ( i / datas.length ) + Math.PI * 0.5,
         context: this._ctx,
       });
     }

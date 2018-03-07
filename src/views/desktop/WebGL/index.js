@@ -8,6 +8,7 @@ import { randomFloat } from 'utils/math';
 import OrbitControls from 'helpers/3d/OrbitControls/OrbitControls'
 import PostProcessing from './PostProcessing';
 import Project from './Project';
+import Experiment from './Experiment';
 import DecorPoints from './meshes/DecorPoints';
 import template from './webgl.tpl.html';
 
@@ -36,6 +37,7 @@ export default class WebGL {
     this._setupWebGL(window.innerWidth, window.innerHeight);
 
     this._setupProject();
+    this._setupExperiment();
     this._setupDecorPoints();
     this._setupPostProcessing();
 
@@ -61,8 +63,18 @@ export default class WebGL {
     this._project = new Project({
       raycaster: this._raycaster,
     });
+
     this._scene.add(this._project.getPoints());
     this._scene.add(this._project.getDescription());
+  }
+
+  _setupExperiment() {
+    this._experiment = new Experiment({
+      raycaster: this._raycaster,
+    });
+
+    this._scene.add(this._experiment.getPoints());
+    this._scene.add(this._experiment.getDescription());
   }
 
   _setupDecorPoints() {
@@ -88,10 +100,18 @@ export default class WebGL {
   // State ---------------------------------------------------------------------
 
   activate() {}
+
   deactivate() {}
 
   scroll() {
-    this._project.deselect();
+    if (this._project.visible()) {
+      this._project.deselect();
+    }
+
+    if (this._experiment.visible()) {
+      this._experiment.deselect();
+    }
+
     this._decorPoints.setDirection(this._deltaTarget);
     this._postProcessing.animate(this._deltaTarget);
 
@@ -143,11 +163,18 @@ export default class WebGL {
       );
     }
 
-    this._project.select();
+    if (this._project.visible()) {
+      this._project.select();
+    }
+
+    if (this._experiment.visible()) {
+      this._experiment.select();
+    }
   }
 
   updateState(page) {
     this._project.updateState(page);
+    this._experiment.updateState(page);
   }
 
   // Events --------------------------------------------------------------------
@@ -219,19 +246,41 @@ export default class WebGL {
     const intersects = this._raycaster.intersectObjects( this._scene.children, true );
 
     for (let i = 0; i < intersects.length; i++) {
-      this._project.focus();
+
+      if (this._project.visible()) {
+        this._project.focus();
+      }
+
+      if (this._experiment.visible()) {
+        this._experiment.focus();
+      }
+
       document.body.style.cursor = 'pointer';
       return;
     }
 
     document.body.style.cursor = 'inherit';
-    this._project.blur();
+
+    if (this._project.visible()) {
+      this._project.blur();
+    }
+
+    if (this._experiment.visible()) {
+      this._experiment.blur();
+    }
   }
 
   _updatePoints(time) {
     this._delta += ( this._deltaTarget - this._delta ) * 0.1;
     this._translation += this._delta;
-    this._project.update(time, this._delta, this._translation);
+
+    if (this._project.visible()) {
+      this._project.update(time, this._delta, this._translation);
+    }
+
+    if (this._experiment.visible()) {
+      this._experiment.update(time, this._delta, this._translation);
+    }
   }
 
   _updateDecorPoints(time) {

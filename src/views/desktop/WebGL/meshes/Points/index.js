@@ -1,14 +1,17 @@
 import States from 'core/States';
 import projectList from 'config/project-list';
+import experimentList from 'config/experiment-list';
 import { selected } from 'core/decorators';
-import { randomFloat, modulo } from 'utils/math';
+import { randomFloat } from 'utils/math';
 import Canvas from './Canvas';
-import vertexShader from './shaders/point.vs';
-import fragmentShader from './shaders/point.fs';
+import projectVertexShader from './shaders/projectPoint.vs';
+import projectFragmentShader from './shaders/projectPoint.fs';
+import experimentVertexShader from './shaders/experimentPoint.vs';
+import experimentFragmentShader from './shaders/experimentPoint.fs';
 
 @selected()
 export default class Points extends THREE.Object3D {
-  constructor() {
+  constructor(options) {
     super();
 
     this._colors = [];
@@ -21,6 +24,7 @@ export default class Points extends THREE.Object3D {
     States.global.progress = 0;
     this._nextIndex = 1;
 
+    this._type = options.type;
     this._canvas = new Canvas();
     this._setupColors();
     this._radialDatas = this._canvas.getRadialImage();
@@ -32,14 +36,21 @@ export default class Points extends THREE.Object3D {
 
     this._selectNeedsUpdate = false;
     this._selectTimeout = null;
+    this.visible = false;
     // this._calledNext = true;
   }
 
   _setupColors() {
-    for (let i = 0; i < projectList.projects.length; i++) {
-      this._colors.push( this._canvas.getDataImage( States.resources.getImage(`${projectList.projects[i].id}-preview`).media ) );
+
+    if (this._type === 'project') {
+      for (let i = 0; i < projectList.projects.length; i++) {
+        this._colors.push( this._canvas.getDataImage( States.resources.getImage(`${projectList.projects[i].id}-preview`).media ) );
+      }
+    } else {
+      for (let i = 0; i < experimentList.experiments.length; i++) {
+        this._colors.push( this._canvas.getDataImage( States.resources.getImage(`${experimentList.experiments[i].id}-preview`).media ) );
+      }
     }
-    console.log(this._colors);
   }
 
   _setupGeometry() {
@@ -52,6 +63,7 @@ export default class Points extends THREE.Object3D {
     this._aRadialColor = new THREE.BufferAttribute( new Float32Array( this._nb * 4 ), 4 );
 
     this._aPosition = new THREE.BufferAttribute( new Float32Array( this._nb * 3 ), 3 );
+    this._aHidePosition = new THREE.BufferAttribute( new Float32Array( this._nb * 3 ), 3 );
 
     this._aSelect = new THREE.BufferAttribute( new Float32Array( this._nb * 1 ), 1 );
     this._selectOffsetSpeeds = new Float32Array( this._nb );
@@ -86,6 +98,13 @@ export default class Points extends THREE.Object3D {
           x * 1.3,
           y * 1.3,
           0,
+        );
+
+        this._aHidePosition.setXYZ(
+          index,
+          randomFloat(-1000, 1000),
+          randomFloat(-1000, 1000),
+          randomFloat(1100, 1300),
         );
 
         this._aSelect.setX(
@@ -149,6 +168,7 @@ export default class Points extends THREE.Object3D {
     this._geometry.addAttribute( 'a_radialColor', this._aRadialColor );
 
     this._geometry.addAttribute( 'position', this._aPosition );
+    this._geometry.addAttribute( 'a_hidePosition', this._aHidePosition );
 
     this._geometry.addAttribute( 'a_select', this._aSelect );
     this._geometry.addAttribute( 'a_direction', this._aDirection );
@@ -157,12 +177,8 @@ export default class Points extends THREE.Object3D {
     this._geometry.addAttribute( 'a_offset', this._aOffset );
 
     for (let k = 0; k < this._colors.length; k++) {
-      console.log(this[`aColor${k}`]);
       this._geometry.addAttribute( `a_color${k}`, this[`aColor${k}`] );
     }
-
-    console.log(this);
-    console.log(this._geometry);
   }
 
   _setupMaterial() {
@@ -179,10 +195,11 @@ export default class Points extends THREE.Object3D {
         u_time: { type: 'f', value: 0 },
         u_mask: { type: 'f', value: 0 },
         u_progress: { type: 'f', value: 0 },
+        uHide: { type: 'f', value: 1 },
         t_mask: { type: 't', value: maskTexture },
       },
-      vertexShader,
-      fragmentShader,
+      vertexShader: this.type === 'project' ? projectVertexShader : experimentVertexShader,
+      fragmentShader: this.type === 'project' ? projectFragmentShader : experimentFragmentShader,
     });
   }
 
@@ -253,6 +270,35 @@ export default class Points extends THREE.Object3D {
       {
         value: 1,
         ease: 'Power4.easeOut',
+      },
+    );
+  }
+
+  show() {
+    this.visible = true;
+
+    TweenLite.killTweensOf(this._material.uniforms.uHide);
+    TweenLite.to(
+      this._material.uniforms.uHide,
+      2,
+      {
+        value: 0,
+        ease: 'Power4.easeOut',
+      },
+    );
+  }
+
+  hide() {
+    TweenLite.killTweensOf(this._material.uniforms.uHide);
+    TweenLite.to(
+      this._material.uniforms.uHide,
+      2,
+      {
+        value: 1,
+        ease: 'Power4.easeOut',
+        onComplete: () => {
+          this.visible = false;
+        },
       },
     );
   }
