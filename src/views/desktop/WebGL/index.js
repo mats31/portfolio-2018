@@ -1,6 +1,7 @@
 import * as pages from 'core/pages';
 import States from 'core/States';
 import projectList from 'config/project-list';
+import experimentList from 'config/experiment-list';
 import { autobind } from 'core-decorators';
 import { toggle, active } from 'core/decorators';
 import { createDOM } from 'utils/dom';
@@ -29,6 +30,11 @@ export default class WebGL {
 
     this._scrollWheelTimeout = null;
     this._cameraInterval = null;
+
+    this._animatedScrollTimeout = false;
+    this._animateScrollTimeout = false;
+
+    this._type = 'project';
 
     this._delta = 0;
     this._deltaTarget = 0;
@@ -113,9 +119,19 @@ export default class WebGL {
     }
 
     this._decorPoints.setDirection(this._deltaTarget);
-    this._postProcessing.animate(this._deltaTarget);
 
-    this._shakeCamera();
+    if (!this._animatedScrollTimeout) {
+      this._postProcessing.animate(this._deltaTarget);
+
+      this._shakeCamera();
+    }
+
+    this._animatedScrollTimeout = true;
+    clearTimeout(this._animateScrollTimeout);
+    this._animateScrollTimeout = setTimeout(() => {
+      this._animatedScrollTimeout = false;
+      this._animateScrollTimeout = false;
+    }, 1500);
   }
 
   _shakeCamera() {
@@ -145,7 +161,9 @@ export default class WebGL {
     this._deltaTarget = 0;
     this._delta = 0;
     const remains = this._translation % 10000;
+    // console.log(remains);
     if (Math.abs(remains) <= 5000) {
+      // console.log('nike ta mere 1');
       TweenLite.to(
         this,
         1,
@@ -154,11 +172,17 @@ export default class WebGL {
         },
       );
     } else {
+      // console.log('nike ta mere 2');
+      // console.log(this._translation);
+      // console.log(this._translation - ( 10000 - Math.abs(remains) ));
       TweenLite.to(
         this,
         1,
         {
           _translation: this._translation - ( 10000 - Math.abs(remains) ),
+          onComplete: () => {
+            // console.log(this._translation);
+          },
         },
       );
     }
@@ -175,6 +199,12 @@ export default class WebGL {
   updateState(page) {
     this._project.updateState(page);
     this._experiment.updateState(page);
+
+    if (page = pages.HOME) {
+      this._type = 'project'
+    } else {
+      this._type = 'experiment'
+    }
   }
 
   // Events --------------------------------------------------------------------
@@ -205,13 +235,13 @@ export default class WebGL {
   _onScrollWheel(event) {
     if (this.active()) {
       TweenLite.killTweensOf(this, { _translation: true });
-      this._deltaTarget = event.deltaY;
+      this._deltaTarget = Math.min( 150, Math.max( -150, event.deltaY ) );
       this.scroll();
 
       clearTimeout(this._scrollWheelTimeout);
       this._scrollWheelTimeout = setTimeout(() => {
         this.unscroll();
-      }, 50);
+      }, 500);
     }
   }
 
@@ -221,21 +251,28 @@ export default class WebGL {
       const id = projectList.projects[Math.floor(States.global.progress)].id;
       States.router.navigateTo(pages.PROJECT, { id });
     }
+
+    if (this._experiment.focused()) {
+      window.open(experimentList.experiments[Math.floor(States.global.progress)].url, '_blank');
+    }
   }
 
   // Update --------------------------------------------------------------------
 
   update() {
 
-    const time = this._clock.getElapsedTime();
-    const delta = this._clock.getDelta();
+    if (this.active()) {
 
-    this._updateCamera();
-    this._updatePoints(time);
-    this._updateDecorPoints(time);
+      const time = this._clock.getElapsedTime();
+      const delta = this._clock.getDelta();
 
-    // this._renderer.render(this._scene, this._camera);
-    this._postProcessing.update(delta);
+      this._updateCamera();
+      this._updatePoints(time);
+      this._updateDecorPoints(time);
+
+      // this._renderer.render(this._scene, this._camera);
+      this._postProcessing.update(delta);
+    }
   }
 
   _updateCamera() {
@@ -273,6 +310,9 @@ export default class WebGL {
   _updatePoints(time) {
     this._delta += ( this._deltaTarget - this._delta ) * 0.1;
     this._translation += this._delta;
+    if (this._translation > 0) {
+      this._translation = this._type === 'project' ? -10000 * projectList.projects.length : -10000 * experimentList.experiments.length;
+    }
 
     if (this._project.visible()) {
       this._project.update(time, this._delta, this._translation);

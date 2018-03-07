@@ -10,6 +10,7 @@
   z-index: $zindex-1;
   color: white;
   display: none;
+  opacity: 0;
 }
 
   .project__aside {
@@ -91,3 +92,8 @@
     width: 66%;
     margin: 0 auto 5rem;
   }
+
+.project__medias {
+  display: none;
+  opacity: 0;
+}

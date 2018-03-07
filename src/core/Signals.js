@@ -12,6 +12,7 @@ class Signals {
     // General
     this.onResize = new Signal();
     this.onScroll = new Signal();
+    this.onApplicationStart = new Signal();
   }
 }
 

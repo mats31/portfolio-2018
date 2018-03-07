@@ -29,7 +29,7 @@ export default class Points extends THREE.Object3D {
     this._setupColors();
     this._radialDatas = this._canvas.getRadialImage();
     this._nb = this._colors[0].length / 4;
-    // this._nb = ( this._colors[0].length / 4 ) / 2;
+    // this._nb = ( this._colors[0].length / 4 ) / 16;
 
     this._setupGeometry();
     this._setupMaterial();
@@ -103,9 +103,9 @@ export default class Points extends THREE.Object3D {
 
         this._aHidePosition.setXYZ(
           index,
-          randomFloat(-1000, 1000),
-          randomFloat(-1000, 1000),
-          randomFloat(1100, 1300),
+          randomFloat(-2000, 2000),
+          randomFloat(-2000, 2000),
+          randomFloat(1150, 1200),
         );
 
         this._aSelect.setX(
@@ -138,6 +138,9 @@ export default class Points extends THREE.Object3D {
         index4 += 4;
       }
     }
+
+    // console.log(index);
+    // console.log(this._nb);
 
     index = 0;
     index4 = 0;
@@ -199,8 +202,8 @@ export default class Points extends THREE.Object3D {
         uHide: { type: 'f', value: 1 },
         t_mask: { type: 't', value: maskTexture },
       },
-      vertexShader: this.type === 'project' ? projectVertexShader : experimentVertexShader,
-      fragmentShader: this.type === 'project' ? projectFragmentShader : experimentFragmentShader,
+      vertexShader: this._type === 'project' ? projectVertexShader : experimentVertexShader,
+      fragmentShader: this._type === 'project' ? projectFragmentShader : experimentFragmentShader,
     });
   }
 
@@ -283,6 +286,7 @@ export default class Points extends THREE.Object3D {
       this._material.uniforms.uHide,
       2,
       {
+        delay: 0.35,
         value: 0,
         ease: 'Power4.easeOut',
       },

@@ -52,6 +52,7 @@ class Main {
     });
 
     States.router.navigo.resolve();
+    this._application.start();
   }
 
   // Events --------------------------------------------------------------------

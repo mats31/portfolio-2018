@@ -3,12 +3,13 @@ import projectList from 'config/project-list';
 import { createDOM } from 'utils/dom';
 import { map, randomFloat } from 'utils/math';
 import { autobind } from 'core-decorators';
-import { visible } from 'core/decorators';
+import { visible, active } from 'core/decorators';
 import template from './project_view.tpl.html';
 import './project_view.scss';
 
 
 @visible()
+@active()
 export default class DesktopProjectView {
 
   // Setup ---------------------------------------------------------------------
@@ -47,20 +48,36 @@ export default class DesktopProjectView {
 
   show({ delay = 0 } = {}) {
     this._el.style.display = 'block';
+    TweenLite.to(
+      this._el,
+      0.6,
+      {
+        opacity: 1,
+        ease: 'Power2.easeOut',
+      },
+    );
 
     this._deltaY = 0;
     this._deltaTargetY = 0;
   }
 
   hide({ delay = 0 } = {}) {
-    this._el.style.display = 'none';
+    TweenLite.to(
+      this._el,
+      0.6,
+      {
+        // delay: 0.4,
+        opacity: 0,
+        ease: 'Power2.easeOut',
+        onComplete: () => {
+          this._el.style.display = 'none';
+        },
+      },
+    );
 
-    while (this._ui.mediaContainer.firstChild) {
-      this._ui.mediaContainer.removeChild(this._ui.mediaContainer.firstChild);
-    }
+    console.log('hide');
 
-    this._deltaY = 0;
-    this._deltaTargetY = 0;
+    this.deactivate();
   }
 
   updateProject() {
@@ -85,6 +102,8 @@ export default class DesktopProjectView {
         img.classList.add('js-project__viewImg');
         img.classList.add('js-project__viewMedia');
         img.classList.add('project__viewImg');
+        img.onload = this.activate.bind(this);
+
         img.src = media.url;
 
         this._ui.mediaContainer.appendChild(img);
@@ -105,6 +124,48 @@ export default class DesktopProjectView {
     this._ui.medias = this._ui.mediaContainer.querySelectorAll('.js-project__viewMedia');
   }
 
+  activate() {
+    this._ui.mediaContainer.style.display = 'block';
+    TweenLite.fromTo(
+      this._ui.mediaContainer,
+      0.6,
+      {
+        y: 200,
+        opacity: 0,
+      },
+      {
+        delay: 0,
+        y: 0,
+        opacity: 1,
+        ease: 'Power4.easeOut',
+      },
+    );
+  }
+
+  deactivate() {
+    console.log('deactivate');
+    TweenLite.to(
+      this._ui.mediaContainer,
+      0.6,
+      {
+        delay: 0,
+        y: 200,
+        opacity: 0,
+        ease: 'Power4.easeOut',
+        onComplete: () => {
+          while (this._ui.mediaContainer.firstChild) {
+            this._ui.mediaContainer.removeChild(this._ui.mediaContainer.firstChild);
+          }
+
+          this._deltaY = 0;
+          this._deltaTargetY = 0;
+
+          this._ui.mediaContainer.style.display = 'none';
+        },
+      },
+    );
+  }
+
   // Events --------------------------------------------------------------------
 
   @autobind
@@ -118,9 +179,15 @@ export default class DesktopProjectView {
 
   @autobind
   _onScrollWheel(event) {
+    // const lastMediaRect = this._ui.medias[this._ui.medias.length - 1].getBoundingClientRect();
+
     const mediaContainerRect = this._ui.mediaContainer.getBoundingClientRect();
     const height = mediaContainerRect.height;
     this._deltaTargetY -= event.deltaY * 0.5;
+    // if (lastMediaRect.top + lastMediaRect.height * 0.5 < window.innerHeight * 0.5) {
+    //   this._deltaTargetY += event.deltaY * 0.5;
+    // }
+
     this._deltaTargetY = Math.max( -height, Math.min( 0, this._deltaTargetY ) );
 
     this._needsUpdate = true;

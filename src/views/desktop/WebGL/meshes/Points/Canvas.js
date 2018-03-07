@@ -76,14 +76,14 @@ export default class Canvas {
   _updateCurrentImg() {
     this._ctx.clearRect(0, 0, this._width, this._height);
     this._ctx.beginPath();
-    this._ctx.drawImage(this._currentImg.img, 0, 0, this._width / this._dpi, this._height / this._dpi);
+    this._ctx.drawImage(this._currentImg.img, 0, 0, this._width / this._dpi, this._height / this._dpi, 0, 0, this._width / this._dpi, this._height / this._dpi);
     this._ctx.closePath();
   }
 
   _updateNextImg() {
     this._ctx.clearRect(0, 0, this._width, this._height);
     this._ctx.beginPath();
-    this._ctx.drawImage(this._nextImg.img, 0, 0, this._width / this._dpi, this._height / this._dpi);
+    this._ctx.drawImage(this._nextImg.img, 0, 0, this._width / this._dpi, this._height / this._dpi, 0, 0, this._width / this._dpi, this._height / this._dpi);
     this._ctx.closePath();
   }
 }

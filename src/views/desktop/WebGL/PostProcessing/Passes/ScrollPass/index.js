@@ -66,10 +66,10 @@ export default class ScrollPass extends Pass {
         // value: sign > 0 ? 0 : 2,
         value: 2,
         ease: 'Power4.easeOut',
-        onComplete: () => {
-          this.material.uniforms.uFadeIn.value = 0;
-          this.material.uniforms.uFadeOut.value = 0;
-        },
+        // onComplete: () => {
+        //   this.material.uniforms.uFadeIn.value = 0;
+        //   this.material.uniforms.uFadeOut.value = 0;
+        // },
       },
     );
   }

@@ -8,6 +8,7 @@ import ProjectDescription from './ProjectDescription';
 import Title from './Title';
 import Menu from './Menu';
 import Networks from './Networks';
+import Scroll from './Scroll';
 import template from './ui_home.tpl.html';
 import './ui_home.scss';
 
@@ -27,6 +28,7 @@ export default class DesktopHomeView {
     this._setupTitle();
     this._setupMenu();
     this._setupNetworks();
+    this._setupScroll();
 
     this._setupEvents();
   }
@@ -57,6 +59,12 @@ export default class DesktopHomeView {
     });
   }
 
+  _setupScroll() {
+    this._scroll = new Scroll({
+      parent: this._el,
+    });
+  }
+
   _setupEvents() {
     Signals.onResize.add(this._onResize);
   }
@@ -77,14 +85,18 @@ export default class DesktopHomeView {
         this._title.show();
         this._networks.hide();
         this._menu.hide();
+        this._scroll.hide();
         // this._projectDescription.hide();
         break;
       default:
         this._menu.show();
         this._title.show();
         this._networks.show();
+        this._scroll.show();
         // this._projectDescription.show();
     }
+
+    this._menu.updateState(page);
   }
 
   // Events --------------------------------------------------------------------

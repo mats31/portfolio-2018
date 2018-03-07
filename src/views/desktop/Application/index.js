@@ -71,6 +71,12 @@ export default class DesktopAppView {
     this._onResize();
   }
 
+  // State ---------------------------------------------------------------------
+
+  start() {
+    Signals.onApplicationStart.dispatch();
+  }
+
   // Events --------------------------------------------------------------------
 
   updatePage(page) {
@@ -82,8 +88,14 @@ export default class DesktopAppView {
         this._webgl.activate();
         this._projectView.hide();
         break;
+      case pages.EXPERIMENT:
+        // document.body.style.overflow = 'hidden';
+        this._uiHome.show();
+        this._webgl.activate();
+        this._projectView.hide();
+        break;
       case pages.PROJECT:
-        // document.body.style.overflow = 'visible';
+        document.body.style.cursor = 'inherit';
         this._uiHome.show();
         this._webgl.deactivate();
 

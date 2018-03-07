@@ -6,13 +6,14 @@ import { createDOM, letterParser } from 'utils/dom';
 import { createCanvas, createHexagone, resizeCanvas } from 'utils/canvas';
 import { distance2, map } from 'utils/math';
 import { autobind } from 'core-decorators';
-import { visible, toggle } from 'core/decorators';
+import { visible, toggle, active } from 'core/decorators';
 import TimelineTitle from './TimelineTitle';
 import template from './timeline.tpl.html';
 import './timeline.scss';
 
 
 @visible()
+@active()
 @toggle('scrolled', 'scroll', 'unscroll', false)
 export default class TimelineView {
 
@@ -84,11 +85,14 @@ export default class TimelineView {
     switch (page) {
       case pages.HOME:
         this._updateDatas('project');
+        this.activate();
         break;
       case pages.EXPERIMENT:
         this._updateDatas('experiment');
+        this.activate();
         break;
       case pages.PROJECT:
+        this.deactivate();
         this.hide();
         break;
       default:
@@ -261,6 +265,8 @@ export default class TimelineView {
         },
       },
     );
+
+    this._title.show();
   }
 
   hide({ delay = 0 } = {}) {
@@ -434,14 +440,14 @@ export default class TimelineView {
     clearTimeout(this._scrollWheelTimeout);
     this._scrollWheelTimeout = setTimeout(() => {
       this.unscroll();
-    }, 100);
+    }, 500);
   }
 
   // Update --------------------------------------------------------------------
 
   update() {
 
-    if (this._needsUpdate) {
+    if (this._needsUpdate && this.active()) {
       this._ctx.clearRect(0, 0, this._width, this._height);
       this._updateTimeline();
       this._updatePoints();
@@ -467,7 +473,7 @@ export default class TimelineView {
     this._ctx.beginPath();
     this._ctx.arc(x, y, radius, startProgress, endProgress);
     this._ctx.strokeStyle = `rgba(255, 255, 255, ${0.5 * this._timeline.opacity})`;
-    this._ctx.lineWidth = 1;
+    this._ctx.lineWidth = 2;
     this._ctx.stroke();
   }
 
@@ -483,7 +489,7 @@ export default class TimelineView {
       this._ctx.beginPath();
       this._ctx.arc(x, y, radius, 0, Math.PI * 2);
       this._ctx.strokeStyle = 'white';
-      this._ctx.lineWidth = 1;
+      this._ctx.lineWidth = 2;
       this._ctx.stroke();
 
       // Hexagones ---------------------

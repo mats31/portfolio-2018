@@ -1,0 +1,28 @@
+@import '~stylesheets/common/global-imports';
+
+.scroll {
+  position: absolute;
+  left: 50%;
+  top: 90vh;
+  transform: translate(-50%, 0);
+  color: white;
+  @include font-body();
+  font-size: 1.2rem;
+  animation: highlight 3s infinite;
+  opacity: 0;
+  display: none;
+}
+
+@keyframes highlight {
+  0% {
+    color: rgba(255, 255, 255, 1);
+  }
+
+  50% {
+    color: rgba(255, 255, 255, 0);
+  }
+
+  100% {
+    color: rgba(255, 255, 255, 1);
+  }
+}
