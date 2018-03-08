@@ -20,8 +20,17 @@ void main() {
     vec3 scrollColor = vec3( cubicPulse( 0.5, uFadeIn, vUv.x ) - cubicPulse( 0.5, uFadeOut, vUv.x ) );
     // vec3 scrollColor = vec3( smoothstep( .1, 1., cubicPulse( 0.5, uFadeIn, vUv.x ) - cubicPulse( 0.5, uFadeOut, vUv.x ) ) );
 
+    // float leftDisplacement = scrollColor.r * abs( step(0.5, vUv.x) - 1. ) * abs( step( 0.5, vUv.x ) * abs(step( 0.5, vUv.x ) - 1.) -1. ;
     float leftDisplacement = scrollColor.r * abs( step(0.5, vUv.x) - 1. );
+    // float rightDisplacement = scrollColor.r * step(0.5, vUv.x) * -1. * abs( step( 0.5, vUv.x ) * abs(step( 0.5, vUv.x ) - 1.) -1. ;
     float rightDisplacement = scrollColor.r * step(0.5, vUv.x) * -1.;
+
+    if(vUv.x == 0.5)
+    {
+        leftDisplacement = 0.;
+        rightDisplacement = 0.;
+    }
+
     vec4 diffuse = texture2D( t_diffuse, vec2(vUv.x + leftDisplacement + rightDisplacement, vUv.y) );
 
     vec3 color = diffuse.rgb;

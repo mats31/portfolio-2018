@@ -36,12 +36,12 @@ class Main {
   }
 
   _onLoadApplication() {
-    console.log('wesh1');
     States.router = new Router({
       updatePageCallback: this.updatePage,
     });
 
     States.router.navigo.resolve();
+    this._application.start();
   }
 
   // Events --------------------------------------------------------------------
@@ -52,8 +52,8 @@ class Main {
 
   @autobind
   updatePage(page) {
-    if (this.application) {
-      this.application.updatePage(page);
+    if (this._application) {
+      this._application.updatePage(page);
     }
   }
 }

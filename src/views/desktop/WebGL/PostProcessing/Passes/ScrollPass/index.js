@@ -36,6 +36,8 @@ export default class ScrollPass extends Pass {
 
   animate(deltaTarget) {
     const sign = Math.sign(deltaTarget);
+    // this.material.uniforms.t_diffuse.value.minFilter = THREE.LinearFilter;
+    // this.material.uniforms.t_diffuse.value.magFilter = THREE.LinearFilter;
 
     this.material.uniforms.uFadeIn.value = 0;
     this.material.uniforms.uFadeOut.value = 0;
