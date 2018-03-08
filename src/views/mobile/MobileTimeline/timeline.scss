@@ -1,0 +1,31 @@
+@import '~stylesheets/common/global-imports';
+
+.timeline {
+  display: none;
+  opacity: 0;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  z-index: $zindex-1;
+}
+
+  .timeline__title{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    color: white;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+    .timeline__title .textContainer__word {
+      display: inline-block;
+      white-space: nowrap;
+      margin-right: 1rem;
+    }
+
+      .timeline__title .textContainer__letter {
+        display: inline-block;
+        white-space: nowrap;
+      }

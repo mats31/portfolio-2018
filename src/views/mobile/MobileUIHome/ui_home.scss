@@ -1,0 +1,8 @@
+@import '~stylesheets/common/global-imports';
+
+.UIHome {
+  display: none;
+  z-index: $zindex-2;
+  position: absolute;
+  width: 100%;
+}

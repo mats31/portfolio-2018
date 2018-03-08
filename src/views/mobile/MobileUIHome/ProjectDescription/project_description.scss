@@ -1,0 +1,14 @@
+@import '~stylesheets/common/global-imports';
+
+.UIHome__projectDescription{
+  position: absolute;
+  left: 60%;
+  top: 60vh;
+  @include font-body();
+  color: white;
+  display: none;
+}
+
+  .UIHome__projectDescriptionSubtitle {
+    font-size: 2rem;
+  }

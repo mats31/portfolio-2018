@@ -1,0 +1,22 @@
+.UIHome__menu {
+  display: none;
+  font-size: 1.3rem;
+  color: white;
+  position: absolute;
+  left: 5.3rem;
+  top: calc(100vh - 5.1rem);
+}
+  .UIHome__menuItem {
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+
+    &:hover {
+      opacity: 0.75;
+    }
+
+    &.is-active {
+      cursor: inherit;
+      opacity: 1;
+    }
+  }

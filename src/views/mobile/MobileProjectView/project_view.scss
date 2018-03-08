@@ -1,0 +1,99 @@
+@import '~stylesheets/common/global-imports';
+
+.project__view {
+  background: black;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  min-height: 100vh;
+  z-index: $zindex-1;
+  color: white;
+  display: none;
+  opacity: 0;
+}
+
+  .project__aside {
+    font-size: 1.3rem;
+  }
+
+    .project__date {
+      position: fixed;
+      left: 5.5%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%) rotate(-90deg);
+      white-space: nowrap;
+    }
+
+    .project__link {
+      position: fixed;
+      left: 94.5%;
+      top: 50%;
+      transform: translateX(-50%) translateY(-50%) rotate(90deg);
+      white-space: nowrap;
+
+      a {
+        text-decoration: none;
+        color: white;
+      }
+    }
+
+  .project__viewText {
+    margin: 22rem auto 4.2rem;
+    max-width: 70%;
+    padding-bottom: 6.8rem;
+    position: relative;
+    text-align: center;
+
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 4px 4px 0 4px;
+      border-color: #ffffff transparent transparent transparent;
+      left: 50%;
+      bottom: 0;
+      margin-left: -2px;
+    }
+  }
+
+    .project__viewTitle {
+      text-transform: uppercase;
+      color: black;
+      text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff, 0px -1px 0px #fff, 0px 1px 0px #fff;
+      font-size: 18.526rem;
+      line-height: 8rem;
+
+      @media screen and (max-width: 1590px) {
+        font-size: 15rem;
+      }
+
+      @media screen and (max-width: 1290px) {
+        font-size: 12rem;
+      }
+
+      @media screen and (max-width: 1040px) {
+        font-size: 9rem;
+      }
+    }
+
+    .project__viewDescription {
+      font-size: 1.3rem;
+      margin: 5rem auto;
+      max-width: 22%;
+    }
+
+  .project__viewImg,
+  .project__viewVideo {
+    display: block;
+    width: 66%;
+    margin: 0 auto 5rem;
+  }
+
+.project__medias {
+  display: none;
+  opacity: 0;
+}
