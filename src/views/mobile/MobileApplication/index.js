@@ -20,7 +20,7 @@ export default class MobileAppView {
     this._views = [];
     // this._uiHome = this._setupHome();
     // this._projectView = this._setupProject();
-    // this._timeline = this._setupTimeline();
+    this._timeline = this._setupTimeline();
     this._webgl = this._setupWebGL();
 
     // this._views.push(this._uiHome, this._timeline, this._webgl);
@@ -103,7 +103,7 @@ export default class MobileAppView {
     }
 
     this._webgl.updateState(page);
-    // this._timeline.updateState(page);
+    this._timeline.updateState(page);
     // this._uiHome.updateState(page);
   }
 
@@ -134,7 +134,7 @@ export default class MobileAppView {
   _update() {
     // this._uiHome.update();
     this._webgl.update();
-    // this._timeline.update();
+    this._timeline.update();
     // this._projectView.update();
 
     raf(this._update);
