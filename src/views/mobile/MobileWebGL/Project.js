@@ -1,7 +1,7 @@
 import * as pages from 'core/pages';
 import { visible, focused } from 'core/decorators';
 import Description from './meshes/Description';
-import Points from './meshes/Points';
+import MobilePoints from './meshes/MobilePoints';
 
 @visible()
 @focused()
@@ -15,7 +15,7 @@ export default class Project {
   }
 
   _setupPoints() {
-    this._points = new Points({
+    this._points = new MobilePoints({
       type: 'project',
     });
   }

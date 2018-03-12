@@ -5,10 +5,12 @@
 @import "mobile/mobile-fonts";
 @import "common/variables";
 
-html.mobile {
+html {
   font-size: 62.5%;
+  overflow: hidden;
 
   body {
+    overflow: hidden;
     // min-width: 95rem;
   }
 

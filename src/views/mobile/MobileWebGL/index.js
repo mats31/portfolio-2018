@@ -5,7 +5,7 @@ import experimentList from 'config/experiment-list';
 import { autobind } from 'core-decorators';
 import { toggle, active } from 'core/decorators';
 import { createDOM } from 'utils/dom';
-import { map, randomFloat } from 'utils/math';
+import { angle2, distance2, map, randomFloat } from 'utils/math';
 import OrbitControls from 'helpers/3d/OrbitControls/OrbitControls'
 import PostProcessing from './PostProcessing';
 import Project from './Project';
@@ -98,6 +98,9 @@ export default class MobileWebGL {
 
   _addEvents() {
     this._el.addEventListener('click', this._onClick);
+    this._el.addEventListener('touchstart', this._onTouchstart);
+    this._el.addEventListener('touchmove', this._onTouchmove);
+    this._el.addEventListener('touchend', this._onTouchend);
     Signals.onResize.add(this._onResize);
     // Signals.onScroll.add(this._onScroll);
     Signals.onScrollWheel.add(this._onScrollWheel);
@@ -269,12 +272,57 @@ export default class MobileWebGL {
   _onClick() {
     if (this._project.focused()) {
       const id = projectList.projects[Math.floor(States.global.progress)].id;
-      States.router.navigateTo(pages.PROJECT, { id });
+      // States.router.navigateTo(pages.PROJECT, { id });
     }
 
     if (this._experiment.focused()) {
       window.open(experimentList.experiments[Math.floor(States.global.progress)].url, '_blank');
     }
+  }
+
+  @autobind
+  _onTouchstart(event) {
+
+    this._p1 = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+    const p2 = { x: window.screen.width * 0.5, y: window.screen.height * 0.5 };
+    let angle = angle2(this._p1, p2, true);
+
+    if (angle < 0) {
+      angle *= -2;
+    }
+
+    angle = ( angle - 90 ) % 360;
+
+    this._translation = angle / 360;
+    this._angle = angle;
+  }
+
+  @autobind
+  _onTouchmove(event) {
+    this.scroll();
+
+    const p2 = { x: window.screen.width * 0.5, y: window.screen.height * 0.5 };
+    let angle = angle2(this._p1, p2, true);
+
+    if (angle < 0) {
+      angle = 360 + angle;
+    }
+
+    angle = ( angle - 90 ) % 360;
+
+    const factor = angle - this._angle >= 0 ? 1 : -1;
+
+    this._deltaTarget = distance2(this._p1, { x: event.touches[0].clientX, y: event.touches[0].clientY }) * factor;
+
+    this._p1 = { x: event.touches[0].clientX, y: event.touches[0].clientY };
+
+    this._translation = angle / 360;
+    this._angle = angle;
+  }
+
+  @autobind
+  _onTouchend() {
+    this.unscroll();
   }
 
   // Update --------------------------------------------------------------------
@@ -326,11 +374,12 @@ export default class MobileWebGL {
   }
 
   _updatePoints(time) {
-    this._delta += ( this._deltaTarget - this._delta ) * 0.1;
-    this._translation += this._delta;
-    if (this._translation > 0) {
-      this._translation = this._type === 'project' ? -10000 * projectList.projects.length : -10000 * experimentList.experiments.length;
-    }
+    // this._delta += ( this._deltaTarget - this._delta ) * 0.1;
+    this._delta += this._deltaTarget * 3;
+    // this._translation += this._delta;
+    // if (this._translation > 0) {
+    //   this._translation = this._type === 'project' ? -10000 * projectList.projects.length : -10000 * experimentList.experiments.length;
+    // }
 
     if (this._project.visible()) {
       this._project.update(time, this._delta, this._translation);

@@ -62,7 +62,9 @@ export default class MobileAppView {
   }
 
   _setupEvents() {
+    window.addEventListener('touchstart', this._onTouchstart);
     window.addEventListener('touchmove', this._onTouchmove);
+    window.addEventListener('touchend', this._onTouchend);
     window.addEventListener('resize', this._onResize);
     window.addEventListener('deviceorientation', this._onDeviceorientation);
     window.addEventListener('devicemotion', this._onDevicemotion);
@@ -108,10 +110,20 @@ export default class MobileAppView {
   }
 
   @autobind
+  _onTouchstart(event) {
+    this._timeline.touchstart(event);
+  }
+
+  @autobind
   _onTouchmove(event) {
     event.preventDefault();
-    // this._timeline.touchmove(event);
+    this._timeline.touchmove(event);
     // this._webgl.touchmove(event);
+  }
+
+  @autobind
+  _onTouchend(event) {
+    this._timeline.touchend(event);
   }
 
   @autobind

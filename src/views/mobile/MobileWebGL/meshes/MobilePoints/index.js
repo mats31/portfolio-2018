@@ -10,7 +10,7 @@ import experimentVertexShader from './shaders/experimentPoint.vs';
 import experimentFragmentShader from './shaders/experimentPoint.fs';
 
 @selected()
-export default class Points extends THREE.Object3D {
+export default class MobilePoints extends THREE.Object3D {
   constructor(options) {
     super();
 
@@ -314,7 +314,7 @@ export default class Points extends THREE.Object3D {
 
     this._time = time;
 
-    this._material.uniforms.u_delta.value = translation;
+    this._material.uniforms.u_delta.value = delta;
     this._material.uniforms.u_time.value = time;
 
     this._updateSelectedState();
@@ -340,7 +340,7 @@ export default class Points extends THREE.Object3D {
 
   _updateColor(translation) {
 
-    States.global.progress = Math.abs( ( translation * 0.0001 ) % this._colors.length );
+    States.global.progress = translation * this._colors.length;
     this._material.uniforms.u_progress.value = States.global.progress;
   }
 }
