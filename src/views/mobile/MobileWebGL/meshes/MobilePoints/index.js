@@ -341,6 +341,7 @@ export default class MobilePoints extends THREE.Object3D {
   _updateColor(translation) {
 
     States.global.progress = translation * this._colors.length;
+    // console.log(translation);
     this._material.uniforms.u_progress.value = States.global.progress;
   }
 }

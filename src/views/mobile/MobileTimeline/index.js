@@ -383,9 +383,9 @@ export default class TimelineView {
   touchstart(event) {
     this._touched = true;
 
-    this._touchTimeout = setTimeout(() => {
-      this.show();
-    }, 300);
+    // this._touchTimeout = setTimeout(() => {
+    this.show();
+    // }, 300);
   }
 
   touchmove(event) {

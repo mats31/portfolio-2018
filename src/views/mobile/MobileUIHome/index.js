@@ -24,11 +24,11 @@ export default class DesktopHomeView {
       createDOM(template()),
     );
 
-    this._setupProjectDescription();
-    this._setupTitle();
+    // this._setupProjectDescription();
+    // this._setupTitle();
     this._setupMenu();
-    this._setupNetworks();
-    this._setupScroll();
+    // this._setupNetworks();
+    // this._setupScroll();
 
     this._setupEvents();
   }
@@ -82,17 +82,17 @@ export default class DesktopHomeView {
   updateState(page) {
     switch (page) {
       case pages.PROJECT:
-        this._title.show();
-        this._networks.hide();
+        // this._title.show();
+        // this._networks.hide();
         this._menu.hide();
-        this._scroll.hide();
+        // this._scroll.hide();
         // this._projectDescription.hide();
         break;
       default:
         this._menu.show();
-        this._title.show();
-        this._networks.show();
-        this._scroll.show();
+        // this._title.show();
+        // this._networks.show();
+        // this._scroll.show();
         // this._projectDescription.show();
     }
 
@@ -113,8 +113,8 @@ export default class DesktopHomeView {
 
   // Update --------------------------------------------------------------------
   update() {
-    const index = Math.floor( ( States.global.progress + (1 / projectList.projects.length) * 2 ) % projectList.projects.length );
-    this._projectDescription.updateProject(projectList.projects[index]);
+    // const index = Math.floor( ( States.global.progress + (1 / projectList.projects.length) * 2 ) % projectList.projects.length );
+    // this._projectDescription.updateProject(projectList.projects[index]);
   }
 
 }

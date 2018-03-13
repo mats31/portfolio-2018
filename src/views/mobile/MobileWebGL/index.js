@@ -33,11 +33,14 @@ export default class MobileWebGL {
 
     this._animatedScrollTimeout = false;
     this._animateScrollTimeout = false;
+    this._dragged = true;
 
     this._type = 'project';
 
+    this._angle = 0;
     this._delta = 0;
     this._deltaTarget = 0;
+    this._finalDelta = 0;
     this._translation = 0;
 
     this._setupWebGL(window.innerWidth, window.innerHeight);
@@ -98,12 +101,18 @@ export default class MobileWebGL {
 
   _addEvents() {
     this._el.addEventListener('click', this._onClick);
-    this._el.addEventListener('touchstart', this._onTouchstart);
-    this._el.addEventListener('touchmove', this._onTouchmove);
-    this._el.addEventListener('touchend', this._onTouchend);
+    // this._el.addEventListener('touchstart', this._onTouchstart);
+    // this._el.addEventListener('touchmove', this._onTouchmove);
+    // this._el.addEventListener('touchend', this._onTouchend);
     Signals.onResize.add(this._onResize);
     // Signals.onScroll.add(this._onScroll);
     Signals.onScrollWheel.add(this._onScrollWheel);
+  }
+
+  // Getters -------------------------------------------------------------------
+
+  getElement() {
+    return this._el;
   }
 
   // State ---------------------------------------------------------------------
@@ -163,32 +172,22 @@ export default class MobileWebGL {
   unscroll() {
     this._deltaTarget = 0;
     this._delta = 0;
-    const remains = this._translation % 10000;
-    // console.log(remains);
-    if (Math.abs(remains) <= 5000) {
-      // console.log('nike ta mere 1');
-      TweenLite.to(
-        this,
-        1,
-        {
-          _translation: this._translation - remains,
-        },
-      );
+    let target = 0;
+
+    if (this._project.visible()) {
+      target = Math.round(this._translation * projectList.projects.length) / projectList.projects.length;
     } else {
-      // console.log('nike ta mere 2');
-      // console.log(this._translation);
-      // console.log(this._translation - ( 10000 - Math.abs(remains) ));
-      TweenLite.to(
-        this,
-        1,
-        {
-          _translation: this._translation - ( 10000 - Math.abs(remains) ),
-          onComplete: () => {
-            // console.log(this._translation);
-          },
-        },
-      );
+      target = Math.round(this._translation * experimentList.experiments.length) / experimentList.experiments.length;
     }
+
+    TweenLite.killTweensOf(this._translation);
+    TweenLite.to(
+      this,
+      1,
+      {
+        _translation: target,
+      },
+    );
 
     if (this._project.visible()) {
       this._project.select();
@@ -203,7 +202,10 @@ export default class MobileWebGL {
     this._project.updateState(page);
     this._experiment.updateState(page);
 
-    if (page = pages.HOME) {
+    this._translation = 0;
+    this._angle = 0;
+
+    if (page === pages.HOME) {
       this._type = 'project'
     } else {
       this._type = 'experiment'
@@ -230,11 +232,6 @@ export default class MobileWebGL {
     //   this._camera.rotation.y += event.acceleration.x * 0.01;
     // }
     // // this._camera.rotation.x += event.accelerationIncludingGravity.z * 0.0001;
-  }
-
-  touchmove(event) {
-    this._mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    this._mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
   }
 
   @autobind
@@ -268,38 +265,48 @@ export default class MobileWebGL {
     }
   }
 
-  @autobind
-  _onClick() {
-    if (this._project.focused()) {
-      const id = projectList.projects[Math.floor(States.global.progress)].id;
-      // States.router.navigateTo(pages.PROJECT, { id });
-    }
+  // @autobind
+  // _onClick() {
+  //   if (this._project.focused()) {
+  //     const id = projectList.projects[Math.round(States.global.progress) * projectList.projects.length].id;
+  //     console.log(Math.round(States.global.progress) * projectList.projects.length);
+  //     States.router.navigateTo(pages.PROJECT, { id });
+  //   }
+  //
+  //   if (this._experiment.focused()) {
+  //     window.open(experimentList.experiments[Math.floor(States.global.progress)].url, '_blank');
+  //   }
+  // }
 
-    if (this._experiment.focused()) {
-      window.open(experimentList.experiments[Math.floor(States.global.progress)].url, '_blank');
-    }
-  }
+  // @autobind
+  touchstart(event) {
 
-  @autobind
-  _onTouchstart(event) {
+    this._mouse.x = ( event.touches[0].clientX / window.innerWidth ) * 2 - 1;
+    this._mouse.y = -( event.touches[0].clientY / window.innerHeight ) * 2 + 1;
+    this.scroll();
 
     this._p1 = { x: event.touches[0].clientX, y: event.touches[0].clientY };
-    const p2 = { x: window.screen.width * 0.5, y: window.screen.height * 0.5 };
-    let angle = angle2(this._p1, p2, true);
+    // const p2 = { x: window.screen.width * 0.5, y: window.screen.height * 0.5 };
+    // let angle = angle2(this._p1, p2, true);
 
-    if (angle < 0) {
-      angle *= -2;
-    }
+    // if (angle < 0) {
+    //   angle = 360 + angle;
+    // }
 
-    angle = ( angle - 90 ) % 360;
+    // angle = ( angle - 90 ) % 360;
 
-    this._translation = angle / 360;
-    this._angle = angle;
+    // if (angle < 0) {
+    //   angle = map( angle, -90, 0, 270, 360);
+    // }
+
+    // this._angle = angle;
   }
 
-  @autobind
-  _onTouchmove(event) {
-    this.scroll();
+  // @autobind
+  touchmove(event) {
+    this._dragged = true;
+    this._mouse.x = ( event.touches[0].clientX / window.innerWidth ) * 2 - 1;
+    this._mouse.y = -( event.touches[0].clientY / window.innerHeight ) * 2 + 1;
 
     const p2 = { x: window.screen.width * 0.5, y: window.screen.height * 0.5 };
     let angle = angle2(this._p1, p2, true);
@@ -310,19 +317,38 @@ export default class MobileWebGL {
 
     angle = ( angle - 90 ) % 360;
 
+    if (angle < 0) {
+      angle = map( angle, -90, 0, 270, 360);
+    }
+
     const factor = angle - this._angle >= 0 ? 1 : -1;
 
     this._deltaTarget = distance2(this._p1, { x: event.touches[0].clientX, y: event.touches[0].clientY }) * factor;
 
     this._p1 = { x: event.touches[0].clientX, y: event.touches[0].clientY };
 
-    this._translation = angle / 360;
     this._angle = angle;
   }
 
-  @autobind
-  _onTouchend() {
+  // @autobind
+  touchend() {
+    console.log('webgl touchend');
     this.unscroll();
+
+    if (!this._dragged) {
+      console.log(this._project.focused());
+      if (this._project.focused() && this._project.visible()) {
+        console.log(Math.round(States.global.progress));
+        const id = projectList.projects[Math.round(States.global.progress)].id;
+        States.router.navigateTo(pages.PROJECT, { id });
+      }
+
+      if (this._experiment.focused() && this._experiment.visible()) {
+        window.open(experimentList.experiments[Math.floor(States.global.progress)].url, '_blank');
+      }
+    }
+
+    this._dragged = false;
   }
 
   // Update --------------------------------------------------------------------
@@ -375,23 +401,29 @@ export default class MobileWebGL {
 
   _updatePoints(time) {
     // this._delta += ( this._deltaTarget - this._delta ) * 0.1;
-    this._delta += this._deltaTarget * 3;
+    // this._delta += this._deltaTarget * 3;
+    this._delta += ( this._deltaTarget * 4 - this._delta ) * 0.1;
+    this._finalDelta += this._delta;
+    if (this.scrolled()) {
+      this._translation = this._angle / 360;
+    }
+    // this._translation += ( (this._angle / 360) - this._translation ) * 0.1;
     // this._translation += this._delta;
     // if (this._translation > 0) {
     //   this._translation = this._type === 'project' ? -10000 * projectList.projects.length : -10000 * experimentList.experiments.length;
     // }
 
     if (this._project.visible()) {
-      this._project.update(time, this._delta, this._translation);
+      this._project.update(time, this._finalDelta, this._translation);
     }
 
     if (this._experiment.visible()) {
-      this._experiment.update(time, this._delta, this._translation);
+      this._experiment.update(time, this._finalDelta, this._translation);
     }
   }
 
   _updateDecorPoints(time) {
-    this._decorPoints.update(time, this._delta);
+    this._decorPoints.update(time, this._finalDelta);
   }
 
 }

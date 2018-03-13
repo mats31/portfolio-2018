@@ -3,8 +3,10 @@
   font-size: 1.3rem;
   color: white;
   position: absolute;
-  left: 5.3rem;
-  top: calc(100vh - 5.1rem);
+  width: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  top: calc(100vh - 15rem);
 }
   .UIHome__menuItem {
     cursor: pointer;
@@ -19,4 +21,14 @@
       cursor: inherit;
       opacity: 1;
     }
+  }
+
+  .UIHome__menuWork {
+    position: absolute;
+    left: 0;
+  }
+
+  .UIHome__menuExperiments {
+    position: absolute;
+    right: 0;
   }

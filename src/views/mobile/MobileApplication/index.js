@@ -18,8 +18,8 @@ export default class MobileAppView {
     this.el = document.getElementById('application');
 
     this._views = [];
-    // this._uiHome = this._setupHome();
-    // this._projectView = this._setupProject();
+    this._uiHome = this._setupHome();
+    this._projectView = this._setupProject();
     this._timeline = this._setupTimeline();
     this._webgl = this._setupWebGL();
 
@@ -62,9 +62,9 @@ export default class MobileAppView {
   }
 
   _setupEvents() {
-    window.addEventListener('touchstart', this._onTouchstart);
-    window.addEventListener('touchmove', this._onTouchmove);
-    window.addEventListener('touchend', this._onTouchend);
+    this._webgl.getElement().addEventListener('touchstart', this._onTouchstart);
+    this._webgl.getElement().addEventListener('touchmove', this._onTouchmove);
+    this._webgl.getElement().addEventListener('touchend', this._onTouchend);
     window.addEventListener('resize', this._onResize);
     window.addEventListener('deviceorientation', this._onDeviceorientation);
     window.addEventListener('devicemotion', this._onDevicemotion);
@@ -82,48 +82,61 @@ export default class MobileAppView {
 
     switch (page) {
       case pages.HOME:
-        // document.body.style.overflow = 'hidden';
-        // this._uiHome.show();
+        window.addEventListener('touchmove', this._onWindowTouchmove);
+        document.body.style.overflow = 'hidden';
+        this._uiHome.show();
         this._webgl.activate();
-        // this._projectView.hide();
+        this._projectView.hide();
         break;
       case pages.EXPERIMENT:
-        // document.body.style.overflow = 'hidden';
-        // this._uiHome.show();
+        window.addEventListener('touchmove', this._onWindowTouchmove);
+        document.body.style.overflow = 'hidden';
+        this._uiHome.show();
         this._webgl.activate();
-        // this._projectView.hide();
+        this._projectView.hide();
         break;
       case pages.PROJECT:
-        // document.body.style.cursor = 'inherit';
-        // this._uiHome.show();
+        window.removeEventListener('touchmove', this._onWindowTouchmove);
+        document.body.style.overflow = 'visible';
+        this._uiHome.show();
         this._webgl.deactivate();
 
-        // this._projectView.updateProject();
-        // this._projectView.show();
+        this._projectView.updateProject();
+        this._projectView.show();
         break;
       default:
     }
 
     this._webgl.updateState(page);
     this._timeline.updateState(page);
-    // this._uiHome.updateState(page);
+    this._uiHome.updateState(page);
+  }
+
+  @autobind
+  _onWindowTouchmove(event) {
+    event.preventDefault();
   }
 
   @autobind
   _onTouchstart(event) {
+    console.log('touchstart');
     this._timeline.touchstart(event);
+    this._webgl.touchstart(event);
   }
 
   @autobind
   _onTouchmove(event) {
+    console.log('touchmove');
     event.preventDefault();
     this._timeline.touchmove(event);
-    // this._webgl.touchmove(event);
+    this._webgl.touchmove(event);
   }
 
   @autobind
   _onTouchend(event) {
+    console.log('touchend');
     this._timeline.touchend(event);
+    this._webgl.touchend(event);
   }
 
   @autobind
@@ -147,7 +160,7 @@ export default class MobileAppView {
     // this._uiHome.update();
     this._webgl.update();
     this._timeline.update();
-    // this._projectView.update();
+    this._projectView.update();
 
     raf(this._update);
   }
