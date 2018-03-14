@@ -279,8 +279,11 @@ export default class TimelineView {
       this._el,
       0.9,
       {
-        opacity: 1,
+        opacity: 0,
         ease: 'Power2.easeOut',
+        onUpdate: () => {
+          this._needsUpdate = true;
+        },
         onComplete: () => {
           this._hideAnimationDone = true;
           this._el.style.display = 'none';
@@ -412,8 +415,8 @@ export default class TimelineView {
     const datas = this._type === 'project' ? projectList.projects : experimentList.experiments;
 
     if (this._type) {
-      this._width = vw * 0.5;
-      this._height = vw * 0.5;
+      this._width = window.innerWidth;
+      this._height = window.innerWidth;
       this._timelineRadius = this._width * 0.33;
       this._baseLinesRadius = this._width * 0.37;
       this._endLinesRadius = this._width * 0.4;

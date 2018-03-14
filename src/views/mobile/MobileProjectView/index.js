@@ -41,7 +41,8 @@ export default class DesktopProjectView {
 
   _setupEvents() {
     Signals.onResize.add(this._onResize);
-    Signals.onScrollWheel.add(this._onScrollWheel);
+    Signals.onScroll.add(this._onScroll);
+    // Signals.onScrollWheel.add(this._onScrollWheel);
   }
 
   // State ---------------------------------------------------------------------
@@ -110,6 +111,8 @@ export default class DesktopProjectView {
       } else {
         const video = document.createElement('video');
         video.loop = true;
+        video.muted = true;
+        video.setAttribute('playsinline', true);
         video.classList.add('js-project__viewVideo');
         video.classList.add('js-project__viewMedia');
         video.classList.add('project__viewVideo');
@@ -118,7 +121,7 @@ export default class DesktopProjectView {
         this._ui.mediaContainer.appendChild(video);
       }
 
-      this._rotations.push({ x: randomFloat(-1, 1), y: randomFloat(-1, 1) });
+      this._rotations.push({ x: randomFloat(-1.5, 1.5), y: randomFloat(-1.5, 1.5) });
     }
 
     this._ui.medias = this._ui.mediaContainer.querySelectorAll('.js-project__viewMedia');
@@ -178,18 +181,7 @@ export default class DesktopProjectView {
   }
 
   @autobind
-  _onScrollWheel(event) {
-    // const lastMediaRect = this._ui.medias[this._ui.medias.length - 1].getBoundingClientRect();
-
-    const mediaContainerRect = this._ui.mediaContainer.getBoundingClientRect();
-    const height = mediaContainerRect.height;
-    this._deltaTargetY -= event.deltaY * 0.5;
-    // if (lastMediaRect.top + lastMediaRect.height * 0.5 < window.innerHeight * 0.5) {
-    //   this._deltaTargetY += event.deltaY * 0.5;
-    // }
-
-    this._deltaTargetY = Math.max( -height, Math.min( 0, this._deltaTargetY ) );
-
+  _onScroll() {
     this._needsUpdate = true;
   }
 
@@ -216,7 +208,7 @@ export default class DesktopProjectView {
     for (let i = 0; i < this._ui.medias.length; i++) {
       this._ui.medias[i].style.transform = 'perspective(500px) translate3d(0, 0, 0)';
       const mediaRect = this._ui.medias[i].getBoundingClientRect();
-      const minValue = -400;
+      const minValue = -200;
       const maxValue = 0;
       const opacity = i === this._ui.medias.length - 1 ? 1 : Math.abs( map( Math.max( minValue, Math.min( maxValue, mediaRect.top ) ), minValue, maxValue, 0, 1) );
       const translate = i === this._ui.medias.length - 1 ? 0 : Math.abs( opacity - 1 ) * -300;

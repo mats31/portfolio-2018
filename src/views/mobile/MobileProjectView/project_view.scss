@@ -64,26 +64,14 @@
       text-transform: uppercase;
       color: black;
       text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff, 0px -1px 0px #fff, 0px 1px 0px #fff;
-      font-size: 18.526rem;
-      line-height: 8rem;
-
-      @media screen and (max-width: 1590px) {
-        font-size: 15rem;
-      }
-
-      @media screen and (max-width: 1290px) {
-        font-size: 12rem;
-      }
-
-      @media screen and (max-width: 1040px) {
-        font-size: 9rem;
-      }
+      font-size: 3rem;
+      line-height: 4rem;
     }
 
     .project__viewDescription {
       font-size: 1.3rem;
       margin: 5rem auto;
-      max-width: 22%;
+      max-width: 82%;
     }
 
   .project__viewImg,

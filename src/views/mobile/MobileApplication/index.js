@@ -66,6 +66,7 @@ export default class MobileAppView {
     this._webgl.getElement().addEventListener('touchmove', this._onTouchmove);
     this._webgl.getElement().addEventListener('touchend', this._onTouchend);
     window.addEventListener('resize', this._onResize);
+    window.addEventListener('scroll', this._onScroll);
     window.addEventListener('deviceorientation', this._onDeviceorientation);
     window.addEventListener('devicemotion', this._onDevicemotion);
 
@@ -97,8 +98,9 @@ export default class MobileAppView {
         break;
       case pages.PROJECT:
         window.removeEventListener('touchmove', this._onWindowTouchmove);
-        document.body.style.overflow = 'visible';
+        document.body.style.overflow = 'hidden visible';
         this._uiHome.show();
+        this._timeline.hide();
         this._webgl.deactivate();
 
         this._projectView.updateProject();
@@ -142,6 +144,11 @@ export default class MobileAppView {
   @autobind
   _onResize() {
     Signals.onResize.dispatch( window.innerWidth, window.innerHeight );
+  }
+
+  @autobind
+  _onScroll() {
+    Signals.onScroll.dispatch();
   }
 
   @autobind
