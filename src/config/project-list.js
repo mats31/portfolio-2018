@@ -72,6 +72,24 @@ const projectList = {
         { type: 'video', url: 'videos/test.mp4' },
       ],
     },
+    {
+      id: 'tsuki8',
+      title: 'Tsuki 8',
+      subtitle: 'Tsuki 8\'s subtitle',
+      description: 'Tsuki 8\'s description',
+      date: 'Makio&Floz 2016',
+      link: 'View website',
+      url: 'http://tsuki8.makioandfloz.com/',
+      medias: [
+        { type: 'image', url: 'images/projects/resn-little-helper-media-1.jpg' },
+        { type: 'image', url: 'images/projects/resn-little-helper-media-2.jpg' },
+        { type: 'image', url: 'images/projects/resn-little-helper-media-3.jpg' },
+        { type: 'image', url: 'images/projects/resn-little-helper-media-4.jpg' },
+        { type: 'image', url: 'images/projects/resn-little-helper-media-5.jpg' },
+        { type: 'image', url: 'images/projects/resn-little-helper-media-6.jpg' },
+        { type: 'video', url: 'videos/test.mp4' },
+      ],
+    },
   ],
 
   getProject(id) {

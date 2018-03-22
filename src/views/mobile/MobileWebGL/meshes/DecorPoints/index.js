@@ -92,7 +92,7 @@ export default class DecorPoints extends THREE.Object3D {
 
   update(time, delta) {
     this._material.uniforms.u_time.value += ( time - this._time ) * this._direction;
-    this._material.uniforms.u_delta.value -= delta;
+    this._material.uniforms.u_delta.value += ( -delta - this._material.uniforms.u_delta.value ) * 0.05;
 
     this._time = time;
   }

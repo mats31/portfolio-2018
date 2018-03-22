@@ -4,13 +4,14 @@ const ressources = {
     { id: 'twitter', url: 'images/twitter.png', description: 'twitter' },
 
     { id: 'hp-preview', url: 'images/projects/hp.jpg' },
-    { id: 'nmd-preview', url: 'images/projects/nmd.jpg' },
-    { id: 'speedfactory-preview', url: 'images/projects/speedfactory.jpg' },
+    { id: 'nmd-preview', url: 'images/projects/nmd.png' },
+    { id: 'speedfactory-preview', url: 'images/projects/speedfactory.png' },
     { id: 'resn-little-helper-preview', url: 'images/projects/resn-little-helper.jpg' },
+    { id: 'tsuki8-preview', url: 'images/projects/tsuki8.jpg' },
 
     { id: 'devx-experiment-2018-preview', url: 'images/experiments/devx-experiment-2018-preview.jpg' },
     { id: 'christmas-experiment-2017-preview', url: 'images/experiments/christmas-experiment-2017-preview.jpg' },
-    { id: 'devx-experiment-2017-preview', url: 'images/experiments/devx-experiment-2017-preview.jpg' },
+    { id: 'devx-experiment-2017-preview', url: 'images/experiments/devx-experiment-2017-preview.png' },
     { id: 'christmas-experiment-2016-preview', url: 'images/experiments/christmas-experiment-2016-preview.jpg' },
     { id: 'rasengan-preview', url: 'images/experiments/rasengan-preview.jpg' },
 

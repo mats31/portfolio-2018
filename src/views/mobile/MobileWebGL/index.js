@@ -202,8 +202,11 @@ export default class MobileWebGL {
     this._project.updateState(page);
     this._experiment.updateState(page);
 
-    this._translation = 0;
     this._angle = 0;
+    this._delta = 0;
+    this._deltaTarget = 0;
+    this._finalDelta = 0;
+    this._translation = 0;
 
     if (page === pages.HOME) {
       this._type = 'project'

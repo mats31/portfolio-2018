@@ -309,7 +309,7 @@ export default class WebGL {
 
   _updatePoints(time) {
     this._delta += ( this._deltaTarget - this._delta ) * 0.1;
-    this._translation += this._delta;
+    this._translation -= this._delta * 2;
     if (this._translation > 0) {
       this._translation = this._type === 'project' ? -10000 * projectList.projects.length : -10000 * experimentList.experiments.length;
     }

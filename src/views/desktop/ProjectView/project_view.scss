@@ -67,16 +67,19 @@
       font-size: 18.526rem;
       line-height: 8rem;
 
-      @media screen and (max-width: 1590px) {
+      @media screen and (min-width: 1291px) {
         font-size: 15rem;
+        line-height: 15rem;
       }
 
       @media screen and (max-width: 1290px) {
         font-size: 12rem;
+        line-height: 12rem;
       }
 
       @media screen and (max-width: 1040px) {
         font-size: 9rem;
+        line-height: 9rem;
       }
     }
 
