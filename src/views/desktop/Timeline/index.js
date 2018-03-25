@@ -365,15 +365,9 @@ export default class TimelineView {
     });
   }
 
-  scroll() {
-    if (this._page !== pages.PROJECT) {
-      this.show();
-    }
-  }
+  scroll() {}
 
-  unscroll() {
-    this.hide();
-  }
+  unscroll() {}
 
   // Events --------------------------------------------------------------------
 
@@ -429,17 +423,40 @@ export default class TimelineView {
 
     this._mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     this._mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
+
+    if (event.target.parentNode !== this._el && !this.scrolled()) {
+      this.hide();
+      console.log('first hide');
+    }
   }
 
   @autobind
   _onScrollWheel() {
     this.scroll();
+    if (this._page !== pages.PROJECT) {
+      this.show();
+    }
 
     this._needsUpdate = true;
 
     clearTimeout(this._scrollWheelTimeout);
     this._scrollWheelTimeout = setTimeout(() => {
       this.unscroll();
+
+      if (this._mouse.x < ( window.innerWidth * 0.5 - this._width * 0.5 ) / window.innerWidth * 2 - 1 ||
+          this._mouse.x > ( window.innerWidth * 0.5 + this._width * 0.5 ) / window.innerWidth * 2 - 1 ||
+          this._mouse.y < ( window.innerHeight * 0.5 - this._height * 0.5 ) / window.innerHeight * 2 - 1 ||
+          this._mouse.y > ( window.innerHeight * 0.5 + this._height * 0.5 ) / window.innerHeight * 2 - 1
+      ) {
+        console.log('second hide');
+        console.log(this._mouse);
+        console.log( (window.innerWidth * 0.5 - this._width * 0.5) / window.innerWidth * 2 - 1 );
+        console.log( (window.innerWidth * 0.5 + this._width * 0.5) / window.innerWidth * 2 - 1 );
+        console.log( (window.innerHeight * 0.5 - this._height * 0.5) / window.innerHeight * 2 - 1 );
+        console.log( (window.innerHeight * 0.5 + this._height * 0.5) / window.innerHeight * 2 - 1 );
+        this.hide();
+      }
+
     }, 500);
   }
 
