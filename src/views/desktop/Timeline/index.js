@@ -54,6 +54,11 @@ export default class TimelineView {
       y: 0,
     };
 
+    this._relativeMouse = {
+      x: 0,
+      y: 0,
+    };
+
     this._setupTitle();
     this._setupCanvas();
     this._addEvents();
@@ -424,6 +429,11 @@ export default class TimelineView {
     this._mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     this._mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
 
+    if (event.target.parentNode === this._el) {
+      this._relativeMouse.x = event.offsetX;
+      this._relativeMouse.y = event.offsetY;
+    }
+
     if (event.target.parentNode !== this._el && !this.scrolled()) {
       this.hide();
       console.log('first hide');
@@ -448,12 +458,12 @@ export default class TimelineView {
           this._mouse.y < ( window.innerHeight * 0.5 - this._height * 0.5 ) / window.innerHeight * 2 - 1 ||
           this._mouse.y > ( window.innerHeight * 0.5 + this._height * 0.5 ) / window.innerHeight * 2 - 1
       ) {
-        console.log('second hide');
-        console.log(this._mouse);
-        console.log( (window.innerWidth * 0.5 - this._width * 0.5) / window.innerWidth * 2 - 1 );
-        console.log( (window.innerWidth * 0.5 + this._width * 0.5) / window.innerWidth * 2 - 1 );
-        console.log( (window.innerHeight * 0.5 - this._height * 0.5) / window.innerHeight * 2 - 1 );
-        console.log( (window.innerHeight * 0.5 + this._height * 0.5) / window.innerHeight * 2 - 1 );
+        // console.log('second hide');
+        // console.log(this._mouse);
+        // console.log( (window.innerWidth * 0.5 - this._width * 0.5) / window.innerWidth * 2 - 1 );
+        // console.log( (window.innerWidth * 0.5 + this._width * 0.5) / window.innerWidth * 2 - 1 );
+        // console.log( (window.innerHeight * 0.5 - this._height * 0.5) / window.innerHeight * 2 - 1 );
+        // console.log( (window.innerHeight * 0.5 + this._height * 0.5) / window.innerHeight * 2 - 1 );
         this.hide();
       }
 
@@ -519,6 +529,10 @@ export default class TimelineView {
         }
       } else {
         this._hexagones[i].sizeTarget = 0;
+      }
+
+      if (distance2(this._points[i], this._relativeMouse) < 20) {
+        this._hexagones[i].sizeTarget = 1;
       }
 
       this._hexagones[i].size += ( this._hexagones[i].sizeTarget - this._hexagones[i].size ) * 0.2;
