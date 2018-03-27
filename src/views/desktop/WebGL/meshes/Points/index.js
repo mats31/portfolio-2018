@@ -112,7 +112,7 @@ export default class Points extends THREE.Object3D {
           index,
           1,
         );
-        this._selectOffsetSpeeds[index] = randomFloat(0.01, 0.07);
+        this._selectOffsetSpeeds[index] = randomFloat(0.055, 0.1);
 
         this._aDirection.setX(
           index,
@@ -284,9 +284,9 @@ export default class Points extends THREE.Object3D {
     TweenLite.killTweensOf(this._material.uniforms.uHide);
     TweenLite.to(
       this._material.uniforms.uHide,
-      2,
+      3,
       {
-        delay: 0.35,
+        delay: 0.4,
         value: 0,
         ease: 'Power4.easeOut',
       },
@@ -297,7 +297,7 @@ export default class Points extends THREE.Object3D {
     TweenLite.killTweensOf(this._material.uniforms.uHide);
     TweenLite.to(
       this._material.uniforms.uHide,
-      2,
+      3,
       {
         value: 1,
         ease: 'Power4.easeOut',

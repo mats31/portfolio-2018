@@ -13,6 +13,9 @@ class Signals {
     this.onResize = new Signal();
     this.onScroll = new Signal();
     this.onApplicationStart = new Signal();
+
+    // Timeline
+    this.onTimelineProjectHover = new Signal();
   }
 }
 

@@ -33,12 +33,14 @@ export default class WebGL {
 
     this._animatedScrollTimeout = false;
     this._animateScrollTimeout = false;
+    this._timelineProjectHover = false;
 
     this._type = 'project';
 
     this._delta = 0;
     this._deltaTarget = 0;
     this._translation = 0;
+    this._timelineProjectHoverIndex = 9999;
 
     this._setupWebGL(window.innerWidth, window.innerHeight);
 
@@ -101,6 +103,7 @@ export default class WebGL {
     Signals.onResize.add(this._onResize);
     // Signals.onScroll.add(this._onScroll);
     Signals.onScrollWheel.add(this._onScrollWheel);
+    Signals.onTimelineProjectHover.add(this._onTimelineProjectHover);
   }
 
   // State ---------------------------------------------------------------------
@@ -160,10 +163,10 @@ export default class WebGL {
   unscroll() {
     this._deltaTarget = 0;
     this._delta = 0;
+    this._timelineProjectHover = false;
     const remains = this._translation % 10000;
-    // console.log(remains);
+    TweenLite.killTweensOf(this, { _translation: true });
     if (Math.abs(remains) <= 5000) {
-      // console.log('nike ta mere 1');
       TweenLite.to(
         this,
         1,
@@ -172,17 +175,11 @@ export default class WebGL {
         },
       );
     } else {
-      // console.log('nike ta mere 2');
-      // console.log(this._translation);
-      // console.log(this._translation - ( 10000 - Math.abs(remains) ));
       TweenLite.to(
         this,
         1,
         {
           _translation: this._translation - ( 10000 - Math.abs(remains) ),
-          onComplete: () => {
-            // console.log(this._translation);
-          },
         },
       );
     }
@@ -233,7 +230,8 @@ export default class WebGL {
 
   @autobind
   _onScrollWheel(event) {
-    if (this.active()) {
+    if (this.active() && !this._timelineProjectHover) {
+
       TweenLite.killTweensOf(this, { _translation: true });
       this._deltaTarget = Math.min( 150, Math.max( -150, event.deltaY ) );
       this.scroll();
@@ -255,6 +253,46 @@ export default class WebGL {
     if (this._experiment.focused()) {
       window.open(experimentList.experiments[Math.floor(States.global.progress)].url, '_blank');
     }
+  }
+
+  @autobind
+  _onTimelineProjectHover(i) {
+
+    if (i !== this._timelineProjectHoverIndex) {
+      this._timelineProjectHover = true;
+      this.scroll();
+      clearTimeout(this._scrollWheelTimeout);
+
+      const target = i * -10000;
+      const distance = Math.abs( this._translation - target );
+      let delay = 1.2;
+
+      if (distance > 20000) {
+        delay = 1.5;
+      } else if (distance > 10000) {
+        delay = 1.8;
+      }
+
+      TweenLite.killTweensOf(this, { _translation: true });
+      TweenLite.to(
+        this,
+        delay,
+        {
+          _translation: target,
+          ease: 'Power4.easeOut',
+        },
+      );
+
+      TweenLite.killTweensOf(this._onDelayedTimelineProjectHover);
+      TweenLite.delayedCall(delay - 0.3, this._onDelayedTimelineProjectHover);
+    }
+
+    this._timelineProjectHoverIndex = i;
+  }
+
+  @autobind
+  _onDelayedTimelineProjectHover() {
+    this.unscroll();
   }
 
   // Update --------------------------------------------------------------------
@@ -310,9 +348,22 @@ export default class WebGL {
   _updatePoints(time) {
     this._delta += ( this._deltaTarget - this._delta ) * 0.1;
     this._translation -= this._delta * 2;
-    if (this._translation > 0) {
-      this._translation = this._type === 'project' ? -10000 * projectList.projects.length : -10000 * experimentList.experiments.length;
+
+    if (this._type === 'project') {
+      if (this._translation > 0) {
+        this._translation = -10000 * projectList.projects.length;
+      } else if (this._translation < -10000 * projectList.projects.length) {
+        this._translation = 0;
+      }
+    } else if (this._translation > 0) {
+      this._translation = -10000 * experimentList.experiments.length;
+    } else if (this._translation < -10000 * experimentList.experiments.length) {
+      this._translation = 0;
     }
+
+    // if (this._translation > 0) {
+    //   this._translation = this._type === 'project' ? -10000 * projectList.projects.length : -10000 * experimentList.experiments.length;
+    // }
 
     if (this._project.visible()) {
       this._project.update(time, this._delta, this._translation);
