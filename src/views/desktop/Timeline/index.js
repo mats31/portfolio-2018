@@ -447,7 +447,6 @@ export default class TimelineView {
 
     if (event.target.parentNode !== this._el && !this.scrolled()) {
       this.hide();
-      console.log('first hide');
     }
   }
 

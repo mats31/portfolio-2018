@@ -1,1 +1,24 @@
-.UIHome__list {}
+@import '~stylesheets/common/global-imports';
+
+.UIHome__list {
+    position: absolute;
+    right: 0;
+    top: 0;
+    // background: rgba(0, 255, 0, 0.2);
+
+    .UIHome__item {
+      color: white;
+      font-size: 2rem;
+      text-align: right;
+      position: absolute;
+    }
+
+    canvas {
+        // background: rgba(255, 0, 0, 0.2);
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translate3d(0, -50%, 0);
+        pointer-events: none;
+    }
+}

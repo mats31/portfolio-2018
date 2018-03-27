@@ -93,19 +93,20 @@ export default class DesktopHomeView {
         this._title.show();
         this._networks.hide();
         this._menu.hide();
-        this._list.hide();
+        if (this._list) this._list.hide();
         this._scroll.hide();
         // this._projectDescription.hide();
         break;
       default:
         this._menu.show();
-        this._list.show();
+        if (this._list) this._list.show();
         this._title.show();
         this._networks.show();
         this._scroll.show();
         // this._projectDescription.show();
     }
 
+    this._list.updateState(page);
     this._menu.updateState(page);
   }
 
@@ -125,6 +126,8 @@ export default class DesktopHomeView {
   update() {
     const index = Math.floor( ( States.global.progress + (1 / projectList.projects.length) * 2 ) % projectList.projects.length );
     this._projectDescription.updateProject(projectList.projects[index]);
+
+    if (this._list) this._list.update();
   }
 
 }
