@@ -6,6 +6,7 @@ import { autobind } from 'core-decorators';
 import { visible } from 'core/decorators';
 import ProjectDescription from './ProjectDescription';
 import Title from './Title';
+import List from './List';
 import Menu from './Menu';
 import Networks from './Networks';
 import Scroll from './Scroll';
@@ -27,6 +28,7 @@ export default class DesktopHomeView {
     this._setupProjectDescription();
     this._setupTitle();
     this._setupMenu();
+    this._setupList();
     this._setupNetworks();
     this._setupScroll();
 
@@ -49,6 +51,12 @@ export default class DesktopHomeView {
 
   _setupMenu() {
     this._menu = new Menu({
+      parent: this._el,
+    });
+  }
+
+  _setupList() {
+    this._list = new List({
       parent: this._el,
     });
   }
@@ -85,11 +93,13 @@ export default class DesktopHomeView {
         this._title.show();
         this._networks.hide();
         this._menu.hide();
+        this._list.hide();
         this._scroll.hide();
         // this._projectDescription.hide();
         break;
       default:
         this._menu.show();
+        this._list.show();
         this._title.show();
         this._networks.show();
         this._scroll.show();
