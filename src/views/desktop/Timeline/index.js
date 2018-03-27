@@ -437,13 +437,13 @@ export default class TimelineView {
       this._relativeMouse.y = event.offsetY;
     }
 
-    if (this._mouse.x < ( window.innerWidth * 0.5 - this._width * 0.5 ) / window.innerWidth * 2 - 1 ||
-        this._mouse.x > ( window.innerWidth * 0.5 + this._width * 0.5 ) / window.innerWidth * 2 - 1 ||
-        this._mouse.y < ( window.innerHeight * 0.5 - this._height * 0.5 ) / window.innerHeight * 2 - 1 ||
-        this._mouse.y > ( window.innerHeight * 0.5 + this._height * 0.5 ) / window.innerHeight * 2 - 1
-    ) {
-      this.hide();
-    }
+    // if (this._mouse.x < ( window.innerWidth * 0.5 - this._width * 0.5 ) / window.innerWidth * 2 - 1 ||
+    //     this._mouse.x > ( window.innerWidth * 0.5 + this._width * 0.5 ) / window.innerWidth * 2 - 1 ||
+    //     this._mouse.y < ( window.innerHeight * 0.5 - this._height * 0.5 ) / window.innerHeight * 2 - 1 ||
+    //     this._mouse.y > ( window.innerHeight * 0.5 + this._height * 0.5 ) / window.innerHeight * 2 - 1
+    // ) {
+    //   this.hide();
+    // }
 
     if (event.target.parentNode !== this._el && !this.scrolled()) {
       this.hide();
@@ -545,7 +545,7 @@ export default class TimelineView {
         this._hexagones[i].sizeTarget = 0;
       }
 
-      if (distance2(this._points[i], this._relativeMouse) < 50) {
+      if (distance2(this._points[i], this._relativeMouse) < 50 && this.visible()) {
         this._hexagones[i].sizeTarget = 1;
         Signals.onTimelineProjectHover.dispatch(i);
       }

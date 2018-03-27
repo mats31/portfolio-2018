@@ -40,6 +40,7 @@ export default class WebGL {
     this._delta = 0;
     this._deltaTarget = 0;
     this._translation = 0;
+    this._currentIndex = 0;
     this._timelineProjectHoverIndex = 9999;
 
     this._setupWebGL(window.innerWidth, window.innerHeight);
@@ -236,6 +237,14 @@ export default class WebGL {
       this._deltaTarget = Math.min( 150, Math.max( -150, event.deltaY ) );
       this.scroll();
 
+      // if (this._type === 'project') {
+      //   this._currentIndex = Math.floor( Math.abs(this._translation / ( projectList.projects.length * 10000 ) ) * projectList.projects.length );
+      // } else {
+      //   this._currentIndex = Math.floor( Math.abs(this._translation / ( experimentList.experiments.length * 10000 ) ) * experimentList.experiments.length );
+      // }
+      //
+      // console.log(this._currentIndex);
+
       clearTimeout(this._scrollWheelTimeout);
       this._scrollWheelTimeout = setTimeout(() => {
         this.unscroll();
@@ -258,7 +267,13 @@ export default class WebGL {
   @autobind
   _onTimelineProjectHover(i) {
 
-    if (i !== this._timelineProjectHoverIndex) {
+    if (this._type === 'project') {
+      this._currentIndex = Math.floor( Math.abs(this._translation / ( projectList.projects.length * 10000 ) ) * projectList.projects.length + 0.01);
+    } else {
+      this._currentIndex = Math.floor( Math.abs(this._translation / ( experimentList.experiments.length * 10000 ) ) * experimentList.experiments.length + 0.01);
+    }
+
+    if (i !== this._currentIndex) {
       this._timelineProjectHover = true;
       this.scroll();
       clearTimeout(this._scrollWheelTimeout);
