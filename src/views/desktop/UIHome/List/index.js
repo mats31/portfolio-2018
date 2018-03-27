@@ -24,7 +24,7 @@ export default class DesktopListView {
     this._lines = [];
     this._items = [];
 
-    this._nbLines = 50;
+    this._nbLines = 75;
     this._width = 50;
     this._height = this._nbLines * 10;
 
@@ -56,6 +56,7 @@ export default class DesktopListView {
         height: 1,
         progressWidth: 0,
         progressExtraWidth: 0,
+        currentExtraWidth: 0,
       };
 
       this._lines.push(line);
@@ -83,19 +84,33 @@ export default class DesktopListView {
   }
 
   focus() {
+    this._focusAnimationDone = false;
+
     TweenLite.killTweensOf(this._lines);
     this._linesNeedsUpdate = true;
     TweenMax.staggerTo(
       this._lines,
-      1,
+      0.7,
       {
         progressWidth: 1,
         ease: 'Power4.easeOut',
       },
-      0.01,
+      0.005,
       () => {
         this._linesNeedsUpdate = false;
+        this._focusAnimationDone = true;
       },
+    );
+
+    TweenLite.killTweensOf(this._items);
+    TweenMax.staggerTo(
+      this._items,
+      1,
+      {
+        autoAlpha: 0.5,
+        ease: 'Power2.easeOut',
+      },
+      0.1,
     );
   }
 
@@ -104,16 +119,28 @@ export default class DesktopListView {
     this._linesNeedsUpdate = true;
     TweenMax.staggerTo(
       this._lines,
-      1,
+      0.7,
       {
         progressWidth: 0,
         progressExtraWidth: 0,
+        currentExtraWidth: 0,
         ease: 'Power4.easeOut',
       },
-      -0.01,
+      -0.005,
       () => {
         this._linesNeedsUpdate = false;
       },
+    );
+
+    TweenLite.killTweensOf(this._items);
+    TweenMax.staggerTo(
+      this._items,
+      1,
+      {
+        autoAlpha: 0,
+        ease: 'Power2.easeOut',
+      },
+      -0.1,
     );
   }
 
@@ -182,7 +209,7 @@ export default class DesktopListView {
   }
 
   resize() {
-    this._height = this._nbLines * window.innerHeight * 0.015;
+    this._height = this._nbLines * window.innerHeight * 0.01;
 
     const width = window.innerWidth * 0.02;
     const extraWidth = window.innerWidth * 0.03;
@@ -190,7 +217,7 @@ export default class DesktopListView {
     const x = this._width;
 
     for (let i = 0; i < this._nbLines; i++) {
-      const y = i * window.innerHeight * 0.015;
+      const y = i * window.innerHeight * 0.01;
 
       this._lines[i].x = x;
       this._lines[i].y = y;
@@ -200,11 +227,16 @@ export default class DesktopListView {
     }
 
     resizeCanvas(this._ctx, this._width, this._height, true, 2);
-    this._el.style.width = `${window.innerWidth * 0.2}px`;
-    this._el.style.height = `${window.innerHeight}px`;
+    this._elWidth = window.innerWidth * 0.2;
+    this._elHeight = window.innerHeight;
+    this._el.style.width = `${this._elWidth}px`;
+    this._el.style.height = `${this._elHeight}px`;
 
+    const customHeight = this._height - window.innerHeight * 0.028;
     for (let i = 0; i < this._items.length; i++) {
-      const top = ( i / ( this._items.length - 1 ) ) * this._height + ( window.innerHeight - this._height ) * 0.5;
+      const top = ( i / ( this._items.length - 1 ) ) * customHeight + ( window.innerHeight - this._height ) * 0.5;
+      const right = this._width;
+      this._items[i].style.right = `${right}px`;
       this._items[i].style.top = `${top}px`;
     }
   }
@@ -223,15 +255,17 @@ export default class DesktopListView {
   _updateLines() {
     for (let i = 0; i < this._lines.length; i++) {
 
-      if (this.focused()) {
+      if (this.focused() && this._focusAnimationDone) {
         const relativeLinePointX = window.innerWidth - this._lines[i].x;
         const relativeLinePointy = this._lines[i].y + ( window.innerHeight - this._height ) * 0.5;
 
         const linePoint = { x: relativeLinePointX, y: relativeLinePointy };
-        this._lines[i].progressExtraWidth = map( Math.min(this._width, distance2( this._mouse, linePoint ) ), 0, this._width, 1, 0 );
+        this._lines[i].progressExtraWidth = map( Math.min(this._elWidth, distance2( this._mouse, linePoint ) ), 0, this._elWidth, 1, 0 );
       }
 
-      const width = this._lines[i].width * this._lines[i].progressWidth + this._lines[i].extraWidth * this._lines[i].progressExtraWidth;
+      this._lines[i].currentExtraWidth += ( this._lines[i].progressExtraWidth - this._lines[i].currentExtraWidth ) * 0.1;
+
+      const width = this._lines[i].width * this._lines[i].progressWidth + this._lines[i].extraWidth * this._lines[i].currentExtraWidth;
       const x = this._lines[i].x - width;
       const y = this._lines[i].y;
       const height = this._lines[i].height;

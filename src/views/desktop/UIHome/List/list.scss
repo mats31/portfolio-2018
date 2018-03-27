@@ -6,11 +6,50 @@
     top: 0;
     // background: rgba(0, 255, 0, 0.2);
 
+    .UIHome__listLabel {
+      color: white;
+      font-size: 2rem;
+      margin-top: 7rem;
+      margin-right: 4rem;
+      text-align: right;
+      position: relative;
+      transition: opacity 0.5s;
+      opacity: 0.5;
+
+      &::before {
+        content: '';
+        display: block;
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        border: 1px solid white;
+        position: absolute;
+        top: 0.6rem;
+        right: 4.1rem;
+        transition: background 0.5s;
+        background: rgba(255, 255, 255, 0);
+      }
+    }
+
+    &:hover .UIHome__listLabel{
+      opacity: 1;
+
+      &::before {
+        background: rgba(255, 255, 255, 1);
+      }
+    }
+
     .UIHome__item {
       color: white;
       font-size: 2rem;
       text-align: right;
       position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      line-height: 0.9;
+      &:hover {
+        opacity: 1 !important;
+      }
     }
 
     canvas {
