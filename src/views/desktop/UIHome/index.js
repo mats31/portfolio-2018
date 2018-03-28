@@ -88,6 +88,8 @@ export default class DesktopHomeView {
   }
 
   updateState(page) {
+    this._list.updateState(page);
+
     switch (page) {
       case pages.PROJECT:
         this._title.show();
@@ -106,7 +108,6 @@ export default class DesktopHomeView {
         // this._projectDescription.show();
     }
 
-    this._list.updateState(page);
     this._menu.updateState(page);
   }
 

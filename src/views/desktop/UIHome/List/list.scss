@@ -4,60 +4,44 @@
     position: absolute;
     right: 0;
     top: 0;
+    cursor: auto;
     // background: rgba(0, 255, 0, 0.2);
+    @include font-about();
 
     .UIHome__listLabel {
       color: white;
+      cursor: pointer;
       font-size: 2rem;
-      margin-top: 7rem;
-      margin-right: 4rem;
+      // margin-top: 7rem;
+      // margin-right: 4rem;
       text-align: right;
-      position: relative;
-      transition: opacity 0.5s;
+      position: absolute;
       opacity: 0.5;
 
-      &::before {
-        content: '';
-        display: block;
-        width: 1rem;
-        height: 1rem;
-        border-radius: 50%;
-        border: 1px solid white;
-        position: absolute;
-        top: 0.6rem;
-        right: 4.1rem;
-        transition: background 0.5s;
-        background: rgba(255, 255, 255, 0);
-      }
-    }
-
-    &:hover .UIHome__listLabel{
-      opacity: 1;
-
-      &::before {
-        background: rgba(255, 255, 255, 1);
-      }
+      right: 5.3rem;
+      top: 6rem;
+      pointer-events: auto;
     }
 
     .UIHome__item {
       color: white;
-      font-size: 2rem;
+      font-size: 1.5rem;
       text-align: right;
       position: absolute;
       opacity: 0;
       cursor: pointer;
       line-height: 0.9;
-      &:hover {
-        opacity: 1 !important;
-      }
+      white-space: nowrap;
+      text-transform: uppercase;
+      transform: translateY(-50%);
     }
 
     canvas {
         // background: rgba(255, 0, 0, 0.2);
         position: absolute;
-        top: 50%;
+        top: 6.6rem;
         right: 0;
-        transform: translate3d(0, -50%, 0);
+        // transform: translate3d(0, -50%, 0);
         pointer-events: none;
     }
 }
