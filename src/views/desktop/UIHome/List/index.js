@@ -32,6 +32,7 @@ export default class DesktopListView {
     this.needsUpdate = false;
     this._linesNeedsUpdate = false;
     this._pointsNeedsUpdate = false;
+    this._itemsNeedsUpdate = false;
 
     this._ui = {
       itemContainer: this._el.querySelector('.js-UIHome__itemContainer'),
@@ -150,9 +151,9 @@ export default class DesktopListView {
     this._linesNeedsUpdate = true;
     TweenMax.staggerTo(
       this._lines,
-      0.9,
+      0.5,
       {
-        delay: 0.4,
+        delay: 0.3,
         progressWidth: 1,
         ease: 'Power4.easeOut',
       },
@@ -180,6 +181,7 @@ export default class DesktopListView {
     );
 
     TweenLite.killTweensOf(this._itemsAnim);
+    this._itemsNeedsUpdate = true;
     TweenMax.staggerTo(
       this._itemsAnim,
       1,
@@ -188,83 +190,14 @@ export default class DesktopListView {
         ease: 'Power2.easeOut',
       },
       0.1,
+      () => {
+        this._itemsNeedsUpdate = false;
+      },
     );
   }
 
   blur() {
     this._el.style.pointerEvents = 'none';
-
-    TweenLite.killTweensOf(this._lines);
-    this._linesNeedsUpdate = true;
-    TweenMax.staggerTo(
-      this._lines,
-      0.7,
-      {
-        progressWidth: 0,
-        progressExtraWidth: 0,
-        currentExtraWidth: 0,
-        ease: 'Power4.easeOut',
-      },
-      -0.005,
-      () => {
-        this._linesNeedsUpdate = false;
-      },
-    );
-
-    TweenLite.killTweensOf(this._points);
-    this._pointsNeedsUpdate = true;
-    TweenMax.staggerTo(
-      this._points,
-      0.7,
-      {
-        progressRadius: 0,
-        ease: 'Power4.easeOut',
-      },
-      0.005,
-      () => {
-        this._pointsNeedsUpdate = false;
-      },
-    );
-
-    TweenLite.killTweensOf(this._mainLine);
-    this._mainLine.needsUpdate = true;
-    TweenMax.to(
-      this._mainLine,
-      0.6,
-      {
-        progressHeight: 0,
-        ease: 'Power4.easeOut',
-        onComplete: () => {
-          this._mainLine.needsUpdate = false;
-        },
-      },
-    );
-
-    TweenLite.killTweensOf(this._firstPoint);
-    this._firstPoint.needsUpdate = true;
-    TweenMax.to(
-      this._firstPoint,
-      1,
-      {
-        progressFill: 0,
-        ease: 'Power4.easeOut',
-        onComplete: () => {
-          this._firstPoint.needsUpdate = false;
-        },
-      },
-    );
-
-    TweenLite.killTweensOf(this._itemsAnim);
-    TweenMax.staggerTo(
-      this._itemsAnim,
-      1,
-      {
-        baseAlpha: 0,
-        extraAlpha: 0,
-        ease: 'Power2.easeOut',
-      },
-      -0.1,
-    );
 
     TweenLite.killTweensOf(this._ui.listLabel);
     TweenLite.to(
@@ -275,6 +208,167 @@ export default class DesktopListView {
         ease: 'Power2.easeOut',
       },
     );
+
+    TweenLite.killTweensOf(this._itemsAnim);
+    this._itemsNeedsUpdate = true;
+    TweenMax.staggerTo(
+      this._itemsAnim,
+      0.4,
+      {
+        baseAlpha: 0,
+        extraAlpha: 0,
+        currentAlpha: 0,
+        ease: 'Power2.easeOut',
+      },
+      -0.1,
+      () => {
+        this._itemsNeedsUpdate = false;
+      },
+    );
+
+    TweenLite.killTweensOf(this._points);
+    this._pointsNeedsUpdate = true;
+    TweenMax.staggerTo(
+      this._points,
+      0.4,
+      {
+        progressRadius: 0,
+        ease: 'Power4.easeOut',
+      },
+      -0.1,
+      () => {
+        this._pointsNeedsUpdate = false;
+      },
+    );
+
+    TweenLite.killTweensOf(this._lines);
+    this._linesNeedsUpdate = true;
+    TweenMax.staggerTo(
+      this._lines,
+      0.3,
+      {
+        progressWidth: 0,
+        progressExtraWidth: 0,
+        currentExtraWidth: 0,
+        ease: 'Power4.easeOut',
+      },
+      -0.01,
+      () => {
+        this._linesNeedsUpdate = false;
+      },
+    );
+
+    TweenLite.killTweensOf(this._mainLine);
+    this._mainLine.needsUpdate = true;
+    TweenMax.to(
+      this._mainLine,
+      0.8,
+      {
+        delay: 0.2,
+        progressHeight: 0,
+        ease: 'Expo.easeOut',
+        onComplete: () => {
+          this._mainLine.needsUpdate = false;
+        },
+      },
+    );
+
+    TweenLite.killTweensOf(this._firstPoint);
+    this._firstPoint.needsUpdate = true;
+    TweenLite.to(
+      this._firstPoint,
+      0.4,
+      {
+        delay: 0.85,
+        progressFill: 0,
+        ease: 'Power4.easeOut',
+        onComplete: () => {
+          this._firstPoint.needsUpdate = false;
+        },
+      },
+    );
+
+    // TweenLite.killTweensOf(this._lines);
+    // this._linesNeedsUpdate = true;
+    // TweenMax.staggerTo(
+    //   this._lines,
+    //   0.7,
+    //   {
+    //     progressWidth: 0,
+    //     progressExtraWidth: 0,
+    //     currentExtraWidth: 0,
+    //     ease: 'Power4.easeOut',
+    //   },
+    //   -0.005,
+    //   () => {
+    //     this._linesNeedsUpdate = false;
+    //   },
+    // );
+    //
+    // TweenLite.killTweensOf(this._points);
+    // this._pointsNeedsUpdate = true;
+    // TweenMax.staggerTo(
+    //   this._points,
+    //   0.7,
+    //   {
+    //     progressRadius: 0,
+    //     ease: 'Power4.easeOut',
+    //   },
+    //   0.005,
+    //   () => {
+    //     this._pointsNeedsUpdate = false;
+    //   },
+    // );
+    //
+    // TweenLite.killTweensOf(this._mainLine);
+    // this._mainLine.needsUpdate = true;
+    // TweenMax.to(
+    //   this._mainLine,
+    //   0.6,
+    //   {
+    //     progressHeight: 0,
+    //     ease: 'Power4.easeOut',
+    //     onComplete: () => {
+    //       this._mainLine.needsUpdate = false;
+    //     },
+    //   },
+    // );
+    //
+    // TweenLite.killTweensOf(this._firstPoint);
+    // this._firstPoint.needsUpdate = true;
+    // TweenMax.to(
+    //   this._firstPoint,
+    //   1,
+    //   {
+    //     progressFill: 0,
+    //     ease: 'Power4.easeOut',
+    //     onComplete: () => {
+    //       this._firstPoint.needsUpdate = false;
+    //     },
+    //   },
+    // );
+    //
+    // TweenLite.killTweensOf(this._itemsAnim);
+    // TweenMax.staggerTo(
+    //   this._itemsAnim,
+    //   1,
+    //   {
+    //     baseAlpha: 0,
+    //     extraAlpha: 0,
+    //     ease: 'Power2.easeOut',
+    //   },
+    //   -0.1,
+    // );
+    //
+    // TweenLite.killTweensOf(this._ui.listLabel);
+    // TweenLite.to(
+    //   this._ui.listLabel,
+    //   0.5,
+    //   {
+    //     opacity: 0.5,
+    //     ease: 'Power2.easeOut',
+    //   },
+    // );
   }
 
   updateState(page) {
@@ -401,8 +495,8 @@ export default class DesktopListView {
     }
 
     this._mainLine.x = this._width * 0.1;
-    this._mainLine.y = this._basePointRadius * 2;
-    this._mainLine.height = this._height - this._basePointRadius - this._basePointRadius * 2;
+    this._mainLine.y = this._basePointRadius * 4;
+    this._mainLine.height = this._height - this._basePointRadius - this._basePointRadius * 4;
     this._mainLine.width = 1;
 
     this._firstPoint.x = this._width * 0.1;
@@ -447,7 +541,7 @@ export default class DesktopListView {
       this._updateTitles();
     }
 
-    this.needsUpdate = this._linesNeedsUpdate || this._mainLine.needsUpdate || this._firstPoint.needsUpdate || this._pointsNeedsUpdate;
+    this.needsUpdate = this._linesNeedsUpdate || this._mainLine.needsUpdate || this._firstPoint.needsUpdate || this._pointsNeedsUpdate || this._itemsNeedsUpdate;
   }
 
   _updateLines() {
@@ -528,7 +622,7 @@ export default class DesktopListView {
       const relativePointY = this._items[i].getBoundingClientRect().top + this._items[i].offsetHeight * 0.5;
       const distance = Math.abs( this._mouse.y - relativePointY );
       const scale = map( Math.min(window.innerHeight * 0.2, distance ), 0, window.innerHeight * 0.2, 1.3, 1 );
-      if (this._focusAnimationDone && this.focused()) {
+      if (this.focused()) {
         this._itemsAnim[i].extraAlpha = map( Math.min(window.innerHeight * 0.3, distance ), 0, window.innerHeight * 0.3, 0.8, 0 );
       }
 
