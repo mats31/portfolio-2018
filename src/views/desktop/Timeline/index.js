@@ -33,6 +33,7 @@ export default class TimelineView {
     this._page = null;
 
     this._needsUpdate = false;
+    this._updateTimelineNeedsUpdate = false;
     this._firstShow = false;
     this._startScroll = false;
     this._hideAnimationDone = true;
@@ -459,12 +460,17 @@ export default class TimelineView {
     }
 
     this._startScroll = true;
-    this._needsUpdate = true;
+    this._updateTimelineNeedsUpdate = true;
 
     clearTimeout(this._scrollWheelTimeout);
     this._scrollWheelTimeout = setTimeout(() => {
       this.unscroll();
       this._startScroll = false;
+
+      clearTimeout(this._updateTimelineTimeout);
+      this._updateTimelineTimeout = setTimeout(() => {
+        this._updateTimelineNeedsUpdate = false;
+      }, 2000);
 
       if (this._mouse.x < ( window.innerWidth * 0.5 - this._width * 0.5 ) / window.innerWidth * 2 - 1 ||
           this._mouse.x > ( window.innerWidth * 0.5 + this._width * 0.5 ) / window.innerWidth * 2 - 1 ||
@@ -499,7 +505,8 @@ export default class TimelineView {
                         this._hexagonesNeedsUpdate ||
                         this._linesNeedsUpdate ||
                         this._timelineNeedsUpdate ||
-                        this._orientationNeedsUpdate;
+                        this._orientationNeedsUpdate ||
+                        this._updateTimelineNeedsUpdate;
   }
 
   _updateTimeline() {

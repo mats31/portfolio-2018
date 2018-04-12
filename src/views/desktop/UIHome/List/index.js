@@ -287,92 +287,12 @@ export default class DesktopListView {
         },
       },
     );
-
-    // TweenLite.killTweensOf(this._lines);
-    // this._linesNeedsUpdate = true;
-    // TweenMax.staggerTo(
-    //   this._lines,
-    //   0.7,
-    //   {
-    //     progressWidth: 0,
-    //     progressExtraWidth: 0,
-    //     currentExtraWidth: 0,
-    //     ease: 'Power4.easeOut',
-    //   },
-    //   -0.005,
-    //   () => {
-    //     this._linesNeedsUpdate = false;
-    //   },
-    // );
-    //
-    // TweenLite.killTweensOf(this._points);
-    // this._pointsNeedsUpdate = true;
-    // TweenMax.staggerTo(
-    //   this._points,
-    //   0.7,
-    //   {
-    //     progressRadius: 0,
-    //     ease: 'Power4.easeOut',
-    //   },
-    //   0.005,
-    //   () => {
-    //     this._pointsNeedsUpdate = false;
-    //   },
-    // );
-    //
-    // TweenLite.killTweensOf(this._mainLine);
-    // this._mainLine.needsUpdate = true;
-    // TweenMax.to(
-    //   this._mainLine,
-    //   0.6,
-    //   {
-    //     progressHeight: 0,
-    //     ease: 'Power4.easeOut',
-    //     onComplete: () => {
-    //       this._mainLine.needsUpdate = false;
-    //     },
-    //   },
-    // );
-    //
-    // TweenLite.killTweensOf(this._firstPoint);
-    // this._firstPoint.needsUpdate = true;
-    // TweenMax.to(
-    //   this._firstPoint,
-    //   1,
-    //   {
-    //     progressFill: 0,
-    //     ease: 'Power4.easeOut',
-    //     onComplete: () => {
-    //       this._firstPoint.needsUpdate = false;
-    //     },
-    //   },
-    // );
-    //
-    // TweenLite.killTweensOf(this._itemsAnim);
-    // TweenMax.staggerTo(
-    //   this._itemsAnim,
-    //   1,
-    //   {
-    //     baseAlpha: 0,
-    //     extraAlpha: 0,
-    //     ease: 'Power2.easeOut',
-    //   },
-    //   -0.1,
-    // );
-    //
-    // TweenLite.killTweensOf(this._ui.listLabel);
-    // TweenLite.to(
-    //   this._ui.listLabel,
-    //   0.5,
-    //   {
-    //     opacity: 0.5,
-    //     ease: 'Power2.easeOut',
-    //   },
-    // );
   }
 
   updateState(page) {
-    this._fillContent(page);
+    if (page === pages.HOME || page === pages.EXPERIMENT) {
+      this._fillContent(page);
+    }
   }
 
   _fillContent(page) {
@@ -393,12 +313,16 @@ export default class DesktopListView {
         div.classList.add('js-UIHome__item');
         div.classList.add('UIHome__item');
         div.innerHTML = project.title;
+        div.setAttribute('data-id', project.id);
         this._items.push(div);
         this._itemsAnim.push({
           baseAlpha: 0,
           extraAlpha: 0,
           currentAlpha: 0,
         });
+
+        div.addEventListener('click', this._onProjectItemClick);
+
         this._ui.itemContainer.appendChild(div);
 
         const point = {
@@ -420,12 +344,16 @@ export default class DesktopListView {
         div.classList.add('js-UIHome__item');
         div.classList.add('UIHome__item');
         div.innerHTML = experiment.title;
+        div.setAttribute('data-id', experiment.id);
         this._items.push(div);
         this._itemsAnim.push({
           baseAlpha: 0,
           extraAlpha: 0,
           currentAlpha: 0,
         });
+
+        div.addEventListener('click', this._onExperimentItemClick);
+
         this._ui.itemContainer.appendChild(div);
 
         const point = {
@@ -443,6 +371,24 @@ export default class DesktopListView {
   }
 
   // Events ------------------------------------
+
+  @autobind
+  _onProjectItemClick(event) {
+    for (let i = 0; i < projectList.projects.length; i++) {
+      if (projectList.projects[i].id === event.target.getAttribute('data-id')) {
+        States.router.navigateTo(pages.PROJECT, { id: projectList.projects[i].id });
+      }
+    }
+  }
+
+  @autobind
+  _onExperimentItemClick(event) {
+    for (let i = 0; i < experimentList.experiments.length; i++) {
+      if (experimentList.experiments[i].id === event.target.getAttribute('data-id')) {
+        window.open(experimentList.experiments[i].url, '_blank');
+      }
+    }
+  }
 
   @autobind
   _onListMouseenter() {
@@ -471,6 +417,11 @@ export default class DesktopListView {
     this._elWidth = window.innerWidth * 0.3;
     this._elHeight = window.innerHeight;
     this._canvasTop = this._ctx.canvas.getBoundingClientRect().top;
+
+    console.log('so coman');
+    console.log(this._elWidth);
+    console.log(this._elHeight);
+    console.log(this._canvasTop);
 
     const heightMargin = window.innerHeight * 0.1;
     this._height = this._elHeight * 0.5 + heightMargin;
