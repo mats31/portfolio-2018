@@ -22,7 +22,7 @@ export default class Experiment {
 
   _setupDescription() {
     this._description = new Description();
-    this._description.position.set(200, -100, 300);
+    this._description.position.set(-200, -100, 300);
   }
 
   // Getters / Setters --------------------

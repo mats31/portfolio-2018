@@ -82,6 +82,7 @@ export default class TimelineView {
 
   _addEvents() {
     // this._el.addEventListener('mousemove', this._onMousemove);
+    // this._el.addEventListener('click', this._onClick);
     Signals.onResize.add(this._onResize);
     Signals.onScrollWheel.add(this._onScrollWheel);
   }
@@ -489,6 +490,16 @@ export default class TimelineView {
     }, 500);
   }
 
+  @autobind
+  _onClick() {
+    // console.log('dafuk');
+    // if (this._type === 'project') {
+    //   States.router.navigateTo(pages.PROJECT, { id: projectList.projects[Math.floor(this._timeline.progress)].id });
+    // } else {
+    //   States.router.navigateTo(pages.EXPERIMENT, { id: experimentList.experiments[Math.floor(this._timeline.progress)].id });
+    // }
+  }
+
   // Update --------------------------------------------------------------------
 
   update() {
@@ -551,7 +562,7 @@ export default class TimelineView {
         this._hexagones[i].sizeTarget = 0;
       }
 
-      if (distance2(this._points[i], this._relativeMouse) < 50 && this.visible()) {
+      if (distance2(this._points[i], this._relativeMouse) < 30 && this.visible()) {
         this._hexagones[i].sizeTarget = 1;
         Signals.onTimelineProjectHover.dispatch(i);
       }
