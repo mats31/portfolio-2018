@@ -8,15 +8,19 @@
   top: 50%;
   transform: translate3d(-50%, -50%, 0);
   z-index: $zindex-1;
+  cursor: auto;
 }
 
   .timeline__title{
+    cursor: pointer;
     position: absolute;
     left: 50%;
     top: 50%;
     color: white;
     transform: translate(-50%, -50%);
     text-align: center;
+    z-index: $zindex-1;
+    font-size: 3rem;
   }
 
     .timeline__title .textContainer__word {

@@ -175,22 +175,25 @@ export default class DesktopProjectView {
 
   resize(vw, vh) {
     this._vh = vh;
+    this._deltaTargetY = 0;
+    this._deltaY = 0;
+    this._needsUpdate = true;
   }
 
   @autobind
   _onScrollWheel(event) {
-    // const lastMediaRect = this._ui.medias[this._ui.medias.length - 1].getBoundingClientRect();
+    if (this._ui.medias.length > 0) {
+      const lastMediaHeight = this._ui.medias[this._ui.medias.length - 1].offsetHeight;
+      const mediaContainerRect = this._ui.mediaContainer.getBoundingClientRect();
+      const height = mediaContainerRect.height;
+      const max = height + ( this._el.offsetHeight - height ) - window.innerHeight * 0.5 - lastMediaHeight * 0.5;
 
-    const mediaContainerRect = this._ui.mediaContainer.getBoundingClientRect();
-    const height = mediaContainerRect.height;
-    this._deltaTargetY -= event.deltaY * 0.5;
-    // if (lastMediaRect.top + lastMediaRect.height * 0.5 < window.innerHeight * 0.5) {
-    //   this._deltaTargetY += event.deltaY * 0.5;
-    // }
+      this._deltaTargetY -= event.deltaY * 0.5;
+      this._deltaTargetY = Math.max( -max, Math.min( 0, this._deltaTargetY ) );
 
-    this._deltaTargetY = Math.max( -height, Math.min( 0, this._deltaTargetY ) );
 
-    this._needsUpdate = true;
+      this._needsUpdate = true;
+    }
   }
 
   // Update --------------------------------------------------------------------
@@ -214,10 +217,10 @@ export default class DesktopProjectView {
 
   _updateMedias() {
     for (let i = 0; i < this._ui.medias.length; i++) {
-      this._ui.medias[i].style.transform = 'perspective(500px) translate3d(0, 0, 0)';
+      this._ui.medias[i].style.transform = 'perspective(500px) translate3d(0, 0, 0) rotate3d(0, 0, 0, 0deg)';
       const mediaRect = this._ui.medias[i].getBoundingClientRect();
-      const minValue = -400;
-      const maxValue = 0;
+      const minValue = -600;
+      const maxValue = -200;
       const opacity = i === this._ui.medias.length - 1 ? 1 : Math.abs( map( Math.max( minValue, Math.min( maxValue, mediaRect.top ) ), minValue, maxValue, 0, 1) );
       const translate = i === this._ui.medias.length - 1 ? 0 : Math.abs( opacity - 1 ) * -300;
       const rotation = i === this._ui.medias.length - 1 ? 0 : Math.abs( opacity - 1 ) * 60;

@@ -1,3 +1,4 @@
+import * as pages from 'core/pages';
 import States from 'core/States';
 import projectList from 'config/project-list';
 import { letterParser } from 'utils/dom';
@@ -5,8 +6,6 @@ import { createCanvas, createHexagone, resizeCanvas } from 'utils/canvas';
 import { randomFloat } from 'utils/math';
 import { autobind } from 'core-decorators';
 import { visible, toggle } from 'core/decorators';
-import template from './timeline.tpl.html';
-import './timeline.scss';
 
 
 @visible()
@@ -19,6 +18,10 @@ export default class TimelineTitleView {
   }
 
   // State ---------------------------------------------------------------------
+
+  updateType(type) {
+    this._type = type;
+  }
 
   updateTitle(title) {
 
@@ -110,4 +113,6 @@ export default class TimelineTitleView {
       }
     }
   }
+
+  // Events ---------------------------------------------------------------------
 }

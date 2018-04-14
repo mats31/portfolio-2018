@@ -42,6 +42,7 @@ export default class TimelineView {
     this._rotateY = 0;
     this._rotateZ = 0;
     this._currentIndex = null;
+    this._hoverIndex = null;
 
     this._width = window.innerWidth * 0.5;
     this._height = window.innerWidth * 0.5;
@@ -83,6 +84,8 @@ export default class TimelineView {
   _addEvents() {
     // this._el.addEventListener('mousemove', this._onMousemove);
     // this._el.addEventListener('click', this._onClick);
+    this._el.addEventListener('click', this._onClick);
+    this._ui.title.addEventListener('click', this._onTitleClick);
     Signals.onResize.add(this._onResize);
     Signals.onScrollWheel.add(this._onScrollWheel);
   }
@@ -167,12 +170,22 @@ export default class TimelineView {
     };
     this._timelineNeedsUpdate = false;
 
+    this._previewTimeline = {
+      x: this._width * 0.5,
+      y: this._height * 0.5,
+      progress: 1,
+    };
+    this._previewTimelineNeedsUpdate = false;
+
+    this._title.updateType(type);
     this._type = type;
   }
 
   show({ delay = 0 } = {}) {
     this._hideAnimationDone = false;
     this._el.style.display = 'block';
+
+    this._previewTimeline.progress = 1;
 
     TweenLite.killTweensOf(this._el);
     TweenLite.to(
@@ -279,100 +292,138 @@ export default class TimelineView {
     this._title.show();
   }
 
-  hide({ delay = 0 } = {}) {
+  hide({ delay = 0, animations = true } = {}) {
 
-    TweenLite.killTweensOf(this._el);
-    TweenLite.to(
-      this._el,
-      0.9,
-      {
-        opacity: 1,
-        ease: 'Power2.easeOut',
-        onComplete: () => {
-          this._hideAnimationDone = true;
-          this._el.style.display = 'none';
-          this._pointsNeedsUpdate = false;
+    if (animations) {
+      TweenLite.killTweensOf(this._el);
+      TweenLite.to(
+        this._el,
+        0.9,
+        {
+          opacity: 1,
+          ease: 'Power2.easeOut',
+          onComplete: () => {
+            this._hideAnimationDone = true;
+            this._el.style.display = 'none';
+            this._pointsNeedsUpdate = false;
+            this._linesNeedsUpdate = false;
+          },
+        },
+      );
+
+      TweenLite.killTweensOf(this);
+      this._orientationNeedsUpdate = true;
+      TweenLite.to(
+        this,
+        1.75,
+        {
+          _rotateZ: -50,
+          ease: 'Power4.easeOut',
+          onComplete: () => {
+            this._orientationNeedsUpdate = false;
+          },
+        },
+      );
+
+      TweenLite.killTweensOf(this._lines);
+      this._linesNeedsUpdate = true;
+      TweenMax.staggerTo(
+        this._lines,
+        0.5,
+        {
+          size: 0,
+          ease: 'Power4.easeOut',
+        },
+        -0.0025,
+        () => {
           this._linesNeedsUpdate = false;
         },
-      },
-    );
+      );
 
-    TweenLite.killTweensOf(this);
-    this._orientationNeedsUpdate = true;
-    TweenLite.to(
-      this,
-      1.75,
-      {
-        _rotateZ: -50,
-        ease: 'Power4.easeOut',
-        onComplete: () => {
-          this._orientationNeedsUpdate = false;
+      TweenLite.killTweensOf(this._points);
+      this._pointsNeedsUpdate = true;
+      TweenMax.staggerTo(
+        this._points,
+        1,
+        {
+          radius: 0,
+          ease: 'Power4.easeOut',
         },
-      },
-    );
-
-    TweenLite.killTweensOf(this._lines);
-    this._linesNeedsUpdate = true;
-    TweenMax.staggerTo(
-      this._lines,
-      0.5,
-      {
-        size: 0,
-        ease: 'Power4.easeOut',
-      },
-      -0.0025,
-      () => {
-        this._linesNeedsUpdate = false;
-      },
-    );
-
-    TweenLite.killTweensOf(this._points);
-    this._pointsNeedsUpdate = true;
-    TweenMax.staggerTo(
-      this._points,
-      1,
-      {
-        radius: 0,
-        ease: 'Power4.easeOut',
-      },
-      -0.1,
-      () => {
-        this._pointsNeedsUpdate = false;
-      },
-    );
-
-    TweenLite.killTweensOf(this._hexagones);
-    this._hexagonesNeedsUpdate = true;
-    TweenMax.staggerTo(
-      this._hexagones,
-      1,
-      {
-        globalSize: 0,
-        ease: 'Power4.easeOut',
-      },
-      -0.1,
-      () => {
-        this._hexagonesNeedsUpdate = false;
-      },
-    );
-
-    TweenLite.killTweensOf(this._timeline);
-    this._timelineNeedsUpdate = true;
-    TweenMax.to(
-      this._timeline,
-      1,
-      {
-        opacity: 0,
-        ease: 'Power2.easeOut',
-        onComplete: () => {
-          this._timelineNeedsUpdate = false;
+        -0.1,
+        () => {
+          this._pointsNeedsUpdate = false;
         },
-      },
-    );
+      );
 
-    this._title.hide({
-      updateTitle: false,
-    });
+      TweenLite.killTweensOf(this._hexagones);
+      this._hexagonesNeedsUpdate = true;
+      TweenMax.staggerTo(
+        this._hexagones,
+        1,
+        {
+          globalSize: 0,
+          ease: 'Power4.easeOut',
+        },
+        -0.1,
+        () => {
+          this._hexagonesNeedsUpdate = false;
+        },
+      );
+
+      TweenLite.killTweensOf(this._timeline);
+      this._timelineNeedsUpdate = true;
+      TweenMax.to(
+        this._timeline,
+        1,
+        {
+          opacity: 0,
+          ease: 'Power2.easeOut',
+          onComplete: () => {
+            this._timelineNeedsUpdate = false;
+          },
+        },
+      );
+
+      TweenLite.killTweensOf(this._previewTimeline);
+      this._previewTimelineNeedsUpdate = true;
+      TweenMax.to(
+        this._previewTimeline,
+        1,
+        {
+          progress: 0,
+          ease: 'Power4.easeOut',
+          onComplete: () => {
+            this._timelineNeedsUpdate = false;
+          },
+        },
+      );
+
+      this._title.hide({
+        updateTitle: false,
+      });
+    } else {
+      TweenLite.killTweensOf(this._el);
+      TweenLite.set(
+        this._el,
+        {
+          opacity: 0,
+          onComplete: () => {
+            this._hideAnimationDone = false;
+            this._el.style.display = 'none';
+            this._pointsNeedsUpdate = false;
+            this._linesNeedsUpdate = false;
+          },
+        },
+      );
+
+      this._rotateZ = -50;
+
+      TweenLite.set( this._lines, { size: 0 });
+      TweenLite.set( this._points, { radius: 0 });
+      TweenLite.set( this._hexagones, { globalSize: 0 });
+      TweenLite.set( this._timeline, { opacity: 0 });
+      TweenLite.set( this._previewTimeline, { progress: 0 });
+    }
   }
 
   scroll() {}
@@ -427,6 +478,9 @@ export default class TimelineView {
   }
 
   mousemove(event) {
+
+    if (this._page === pages.PROJECT) return;
+
     if (!this._hideAnimationDone) {
       this._orientationNeedsUpdate = true;
     }
@@ -447,7 +501,24 @@ export default class TimelineView {
     //   this.hide();
     // }
 
-    if (event.target.parentNode !== this._el && !this.scrolled()) {
+    this._el.style.cursor = 'auto';
+
+    for (let i = 0; i < this._points.length; i++) {
+      if (distance2(this._points[i], this._relativeMouse) < 30 && this.visible()) {
+        this._el.style.cursor = 'pointer';
+      }
+    }
+
+    // if (event.target.parentNode !== this._el && !this.scrolled()) {
+    //   console.log('hide');
+    //   this.hide();
+    // }
+
+    if (this._mouse.x < ( window.innerWidth * 0.5 - this._width * 0.4 ) / window.innerWidth * 2 - 1 ||
+        this._mouse.x > ( window.innerWidth * 0.5 + this._width * 0.4 ) / window.innerWidth * 2 - 1 ||
+        this._mouse.y < ( window.innerHeight * 0.5 - this._height * 0.4 ) / window.innerHeight * 2 - 1 ||
+        this._mouse.y > ( window.innerHeight * 0.5 + this._height * 0.4 ) / window.innerHeight * 2 - 1
+    ) {
       this.hide();
     }
   }
@@ -492,12 +563,22 @@ export default class TimelineView {
 
   @autobind
   _onClick() {
-    // console.log('dafuk');
-    // if (this._type === 'project') {
-    //   States.router.navigateTo(pages.PROJECT, { id: projectList.projects[Math.floor(this._timeline.progress)].id });
-    // } else {
-    //   States.router.navigateTo(pages.EXPERIMENT, { id: experimentList.experiments[Math.floor(this._timeline.progress)].id });
-    // }
+    for (let i = 0; i < this._points.length; i++) {
+      if (distance2(this._points[i], this._relativeMouse) < 30 && this.visible()) {
+        Signals.onTimelineProjectHover.dispatch(this._hoverIndex);
+      }
+    }
+  }
+
+  @autobind
+  _onTitleClick() {
+    this.hide({ animations: false });
+
+    if (this._type === 'project') {
+      States.router.navigateTo(pages.PROJECT, { id: this._id });
+    } else {
+      window.open(this._url, '_target');
+    }
   }
 
   // Update --------------------------------------------------------------------
@@ -506,6 +587,7 @@ export default class TimelineView {
 
     if (this._needsUpdate && this.active()) {
       this._ctx.clearRect(0, 0, this._width, this._height);
+      this._updatePreviewTimeline();
       this._updateTimeline();
       this._updatePoints();
       this._updateLines();
@@ -516,8 +598,22 @@ export default class TimelineView {
                         this._hexagonesNeedsUpdate ||
                         this._linesNeedsUpdate ||
                         this._timelineNeedsUpdate ||
+                        this._previewTimelineNeedsUpdate ||
                         this._orientationNeedsUpdate ||
                         this._updateTimelineNeedsUpdate;
+  }
+
+  _updatePreviewTimeline() {
+    const x = this._timeline.x;
+    const y = this._timeline.y;
+    const radius = this._timeline.radius;
+    const startProgress = Math.PI * -0.5;
+    const endProgress = Math.PI * 2 * this._previewTimeline.progress - Math.PI * 0.5;
+    this._ctx.beginPath();
+    this._ctx.arc(x, y, radius, startProgress, endProgress);
+    this._ctx.strokeStyle = `rgba(255, 255, 255, ${0.2})`;
+    this._ctx.lineWidth = 2;
+    this._ctx.stroke();
   }
 
   _updateTimeline() {
@@ -530,7 +626,7 @@ export default class TimelineView {
     const endProgress = Math.PI * 2 * this._timeline.progress - Math.PI * 0.5;
     this._ctx.beginPath();
     this._ctx.arc(x, y, radius, startProgress, endProgress);
-    this._ctx.strokeStyle = `rgba(255, 255, 255, ${0.5 * this._timeline.opacity})`;
+    this._ctx.strokeStyle = `rgba(255, 255, 255, ${1 * this._timeline.opacity})`;
     this._ctx.lineWidth = 2;
     this._ctx.stroke();
   }
@@ -557,6 +653,8 @@ export default class TimelineView {
         this._hexagones[i].sizeTarget = 1;
         if (this.visible()) {
           this._title.updateTitle(datas[i].title);
+          this._id = datas[i].id;
+          this._url = datas[i].url;
         }
       } else {
         this._hexagones[i].sizeTarget = 0;
@@ -564,7 +662,7 @@ export default class TimelineView {
 
       if (distance2(this._points[i], this._relativeMouse) < 30 && this.visible()) {
         this._hexagones[i].sizeTarget = 1;
-        Signals.onTimelineProjectHover.dispatch(i);
+        this._hoverIndex = i;
       }
 
       this._hexagones[i].size += ( this._hexagones[i].sizeTarget - this._hexagones[i].size ) * 0.2;

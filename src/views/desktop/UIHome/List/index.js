@@ -292,6 +292,8 @@ export default class DesktopListView {
   updateState(page) {
     if (page === pages.HOME || page === pages.EXPERIMENT) {
       this._fillContent(page);
+    } else if (page === pages.PROJECT) {
+      this._fillContent(pages.HOME);
     }
   }
 

@@ -70,6 +70,7 @@ export default class DecorPoints extends THREE.Object3D {
       uniforms: {
         u_delta: { type: 'f', value: 0 },
         u_time: { type: 'f', value: 0 },
+        uDirection: { type: 'f', value: 0 },
         t_mask: { type: 't', value: maskTexture },
       },
       vertexShader,
@@ -85,14 +86,15 @@ export default class DecorPoints extends THREE.Object3D {
   // State ---------------------
 
   setDirection(delta) {
-    this._direction = Math.sign(delta) * -1;
+    this._direction = Math.sign(delta);
   }
 
   // Update --------------------
 
   update(time, delta) {
+    // console.log(this._direction);
     this._material.uniforms.u_time.value += ( time - this._time ) * this._direction;
-    this._material.uniforms.u_delta.value -= delta;
+    this._material.uniforms.u_delta.value += delta;
 
     this._time = time;
   }

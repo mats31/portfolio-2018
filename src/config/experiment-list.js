@@ -19,7 +19,7 @@ const experimentList = {
       title: 'Devx Experiement 2017',
       subtitle: 'Devx Experiment 2017\'s subtitle',
       description: 'Devx Experiement 2017\'s description',
-      url: 'http://devx.ddd.it/en/experiment/21',
+      url: 'http://devx.ddd.it/en/experiment/23',
     },
     {
       id: 'christmas-experiment-2016',

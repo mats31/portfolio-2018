@@ -10,6 +10,7 @@ import OrbitControls from 'helpers/3d/OrbitControls/OrbitControls'
 import PostProcessing from './PostProcessing';
 import Project from './Project';
 import Experiment from './Experiment';
+import Background from './meshes/Background';
 import DecorPoints from './meshes/DecorPoints';
 import template from './webgl.tpl.html';
 
@@ -45,6 +46,7 @@ export default class WebGL {
 
     this._setupWebGL(window.innerWidth, window.innerHeight);
 
+    this._setupBackground();
     this._setupProject();
     this._setupExperiment();
     this._setupDecorPoints();
@@ -66,6 +68,16 @@ export default class WebGL {
     this._renderer.setClearColor( 0x000000 );
 
     this._el.appendChild(this._renderer.domElement);
+  }
+
+  _setupBackground() {
+    this._background = new Background({
+      renderer: this._renderer,
+      width: 512,
+      height: 512,
+    });
+
+    this._scene.add(this._background.getObject());
   }
 
   _setupProject() {
@@ -121,8 +133,6 @@ export default class WebGL {
     if (this._experiment.visible()) {
       this._experiment.deselect();
     }
-
-    this._decorPoints.setDirection(this._deltaTarget);
 
     if (!this._animatedScrollTimeout) {
       this._postProcessing.animate(this._deltaTarget);
@@ -222,6 +232,8 @@ export default class WebGL {
     this._camera.updateProjectionMatrix();
 
     this._renderer.setSize( vw, vh );
+
+    this._background.resize(this._camera);
   }
 
   @autobind
@@ -232,6 +244,8 @@ export default class WebGL {
   @autobind
   _onScrollWheel(event) {
     if (this.active() && !this._timelineProjectHover) {
+
+      this._decorPoints.setDirection(this._deltaTarget);
 
       TweenLite.killTweensOf(this, { _translation: true });
       this._deltaTarget = Math.min( 150, Math.max( -150, event.deltaY ) );
@@ -322,6 +336,7 @@ export default class WebGL {
       this._updateCamera();
       this._updatePoints(time);
       this._updateDecorPoints(time);
+      this._background.update();
 
       // this._renderer.render(this._scene, this._camera);
       this._postProcessing.update(delta);
