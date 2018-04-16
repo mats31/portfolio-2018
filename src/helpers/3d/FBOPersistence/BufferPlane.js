@@ -8,8 +8,8 @@ export default class BufferPlane extends THREE.Object3D {
     this._height = height;
     this._width = width;
     this._texture = texture;
-    this._bufferPlaneVertex = bufferPlaneVertex;
-    this._bufferPlaneFragment = bufferPlaneFragment;
+    this._bufferPlaneVertex = bufferPlaneVertex === null ? vertexShader : bufferPlaneVertex;
+    this._bufferPlaneFragment = bufferPlaneFragment === null ? fragmentShader : bufferPlaneFragment;
 
     this._setupGeometry();
     this._setupMaterial();
@@ -27,8 +27,8 @@ export default class BufferPlane extends THREE.Object3D {
       uniforms: {
         t_diffuse: { type: 't', value: this._texture },
       },
-      vertexShader,
-      fragmentShader,
+      vertexShader: this._bufferPlaneVertex,
+      fragmentShader: this._bufferPlaneFragment,
     });
   }
 

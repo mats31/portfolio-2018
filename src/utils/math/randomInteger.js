@@ -1,0 +1,11 @@
+/**
+ * Generate a random integer
+ *
+ * @param {number} min Minimum boundary
+ * @param {number} max Maximum boundary
+ * @return {number} Generated integer
+ */
+
+export default function (min, max) {
+  return Math.floor(Math.random() * max) + min;
+}

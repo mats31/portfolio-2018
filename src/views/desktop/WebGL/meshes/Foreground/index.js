@@ -2,14 +2,14 @@ import States from 'core/States';
 import { autobind } from 'core-decorators';
 import FBOPersistence from 'helpers/3d/FBOPersistence/FBOPersistence';
 import getPerspectiveSize from 'utils/3d/getPerspectiveSize';
-import BackgroundInstancedItems from './BackgroundInstancedItem';
-import BackgroundPostProcessing from './BackgroundPostProcessing';
+import ForegroundInstancedItems from './ForegroundInstancedItem';
+import ForegroundPostProcessing from './ForegroundPostProcessing';
 import backgroundItemVertex from './shaders/backgroundItem.vs';
 import backgroundItemFragment from './shaders/backgroundItem.fs';
-import vertexShader from './shaders/background.vs';
-import fragmentShader from './shaders/background.fs';
+import vertexShader from './shaders/foreground.vs';
+import fragmentShader from './shaders/foreground.fs';
 
-export default class Background extends FBOPersistence {
+export default class Foreground extends FBOPersistence {
   constructor(options) {
     super(options);
 
@@ -25,7 +25,7 @@ export default class Background extends FBOPersistence {
     const map = States.resources.getTexture('background').media;
     map.needsUpdate = true;
 
-    this._backgroundInstancedItems = new BackgroundInstancedItems({
+    this._backgroundInstancedItems = new ForegroundInstancedItems({
       nb: 15,
       material: new THREE.ShaderMaterial({
         // blending: THREE.AdditiveBlending,
@@ -43,7 +43,7 @@ export default class Background extends FBOPersistence {
   }
 
   _setupPlane() {
-    this._backgroundPostProcessing = new BackgroundPostProcessing({
+    this._backgroundPostProcessing = new ForegroundPostProcessing({
       scene: this._scene,
       renderer: this._renderer,
       camera: this._camera,
@@ -101,6 +101,6 @@ export default class Background extends FBOPersistence {
     this._backgroundPostProcessing.getBloomPass().readBuffer = this._FBO2;
     this._backgroundPostProcessing.update({ renderToScreen: false });
 
-    this._object.rotation.y = Math.sin(time * 0.5) * Math.PI * 0.1;
+    this._object.rotation.y = Math.sin(-time * 0.5) * Math.PI * 0.01;
   }
 }

@@ -11,8 +11,11 @@ import PostProcessing from './PostProcessing';
 import Project from './Project';
 import Experiment from './Experiment';
 import Background from './meshes/Background';
+import Foreground from './meshes/Foreground';
 import DecorPoints from './meshes/DecorPoints';
+import backgroundBufferFragmentShader from './meshes/Background/shaders/backgroundBufferPlane.fs';
 import template from './webgl.tpl.html';
+
 
 @active()
 @toggle('scrolled', 'scroll', 'unscroll', false)
@@ -75,9 +78,22 @@ export default class WebGL {
       renderer: this._renderer,
       width: 512,
       height: 512,
+      bufferPlaneFragment: backgroundBufferFragmentShader,
+    });
+    this._scene.add(this._background.getObject());
+
+    this._foreground = new Foreground({
+      renderer: this._renderer,
+      width: 512,
+      height: 512,
+      bufferPlaneFragment: backgroundBufferFragmentShader,
     });
 
-    this._scene.add(this._background.getObject());
+
+    if (this._foreground) {
+      this._foreground.getObject().position.z = 100;
+      this._scene.add(this._foreground.getObject());
+    }
   }
 
   _setupProject() {
@@ -234,6 +250,7 @@ export default class WebGL {
     this._renderer.setSize( vw, vh );
 
     this._background.resize(this._camera);
+    if (this._foreground) this._foreground.resize(this._camera);
   }
 
   @autobind
@@ -336,7 +353,8 @@ export default class WebGL {
       this._updateCamera();
       this._updatePoints(time);
       this._updateDecorPoints(time);
-      this._background.update();
+      this._background.update(time);
+      if (this._foreground) this._foreground.update(time);
 
       // this._renderer.render(this._scene, this._camera);
       this._postProcessing.update(delta);

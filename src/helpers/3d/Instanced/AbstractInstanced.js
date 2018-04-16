@@ -5,7 +5,7 @@ import fragmentShader from './shaders/instanced.fs';
 export default class AbstractInstanced extends THREE.Object3D {
   constructor({
     nb = 20,
-    geometry = new THREE.PlaneBufferGeometry( 10, 10, 1, 1 ),
+    geometry = new THREE.PlaneBufferGeometry( 1, 1, 1, 1 ),
     material = false,
     frustumCulled = false,
   } = {}) {

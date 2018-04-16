@@ -1,4 +1,4 @@
-import AbstractPostProcessing from '/helpers/3d/PostProcessing/AbstractPostProcessing';
+import AbstractPostProcessing from 'helpers/3d/PostProcessing/AbstractPostProcessing';
 import ScrollPass from './Passes/ScrollPass';
 
 export default class PostProcessing extends AbstractPostProcessing {

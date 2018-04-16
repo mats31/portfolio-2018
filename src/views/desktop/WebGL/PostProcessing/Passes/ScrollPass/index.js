@@ -11,7 +11,7 @@ export default class ScrollPass extends Pass {
     this.material = new ScrollPassMaterial();
     this.quad.material = this.material;
 
-    this._addGUI();
+    // this._addGUI();
   }
 
   // State --------------------
