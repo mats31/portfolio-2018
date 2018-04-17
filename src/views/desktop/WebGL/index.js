@@ -11,6 +11,7 @@ import PostProcessing from './PostProcessing';
 import Project from './Project';
 import Experiment from './Experiment';
 import Background from './meshes/Background';
+import Cloud from './meshes/Cloud';
 import Foreground from './meshes/Foreground';
 import DecorPoints from './meshes/DecorPoints';
 import backgroundBufferFragmentShader from './meshes/Background/shaders/backgroundBufferPlane.fs';
@@ -54,6 +55,7 @@ export default class WebGL {
     this._setupProject();
     this._setupExperiment();
     this._setupDecorPoints();
+    this._setupCloud();
     this._setupPostProcessing();
 
     this._addEvents();
@@ -81,7 +83,7 @@ export default class WebGL {
       height: 512,
       bufferPlaneFragment: backgroundBufferFragmentShader,
     });
-    this._scene.add(this._background.getObject());
+    // this._scene.add(this._background.getObject());
 
     this._foreground = new Foreground({
       renderer: this._renderer,
@@ -93,7 +95,7 @@ export default class WebGL {
 
     if (this._foreground) {
       this._foreground.getObject().position.z = 100;
-      this._scene.add(this._foreground.getObject());
+      // this._scene.add(this._foreground.getObject());
     }
   }
 
@@ -102,8 +104,8 @@ export default class WebGL {
       raycaster: this._raycaster,
     });
 
-    this._scene.add(this._project.getPoints());
-    this._scene.add(this._project.getDescription());
+    // this._scene.add(this._project.getPoints());
+    // this._scene.add(this._project.getDescription());
   }
 
   _setupExperiment() {
@@ -111,13 +113,18 @@ export default class WebGL {
       raycaster: this._raycaster,
     });
 
-    this._scene.add(this._experiment.getPoints());
-    this._scene.add(this._experiment.getDescription());
+    // this._scene.add(this._experiment.getPoints());
+    // this._scene.add(this._experiment.getDescription());
   }
 
   _setupDecorPoints() {
     this._decorPoints = new DecorPoints();
     this._scene.add(this._decorPoints);
+  }
+
+  _setupCloud() {
+    this._cloud = new Cloud({});
+    this._scene.add(this._cloud);
   }
 
   _setupPostProcessing() {
@@ -252,6 +259,7 @@ export default class WebGL {
 
     this._background.resize(this._camera);
     if (this._foreground) this._foreground.resize(this._camera);
+    if (this._cloud) this._cloud.resize(this._camera);
   }
 
   @autobind
@@ -356,6 +364,7 @@ export default class WebGL {
       this._updateDecorPoints(time);
       this._background.update(time);
       if (this._foreground) this._foreground.update(time);
+      if (this._cloud) this._cloud.update(time);
 
       // this._renderer.render(this._scene, this._camera);
       this._postProcessing.update(delta);

@@ -101,6 +101,6 @@ export default class Foreground extends FBOPersistence {
     this._backgroundPostProcessing.getBloomPass().readBuffer = this._FBO2;
     this._backgroundPostProcessing.update({ renderToScreen: false });
 
-    this._object.rotation.y = Math.sin(time * 0.5) * Math.PI * -0.01;
+    this._object.rotation.y = Math.sin(time * 0.5) * Math.PI * -0.005;
   }
 }
