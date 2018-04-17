@@ -83,7 +83,7 @@ export default class Background extends FBOPersistence {
   resize(camera) {
     const perspectiveSize = getPerspectiveSize(camera, camera.position.z);
 
-    this._object.scale.set(perspectiveSize.width * 1.3, perspectiveSize.height * 1.3, 1);
+    this._object.scale.set(perspectiveSize.width * 1.4, perspectiveSize.height * 1.4, 1);
   }
 
   // Update ------------------

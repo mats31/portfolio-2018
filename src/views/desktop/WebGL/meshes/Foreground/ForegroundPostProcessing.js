@@ -8,7 +8,7 @@ export default class BackgroundPostProcessing extends AbstractPostProcessing {
     this._bloomPass = new BloomPass({
       resolutionScale: 0.25,
       kernelSize: 2,
-      intensity: 3,
+      intensity: 5,
       distinction: 0,
       // distinction: 0.01,
     });

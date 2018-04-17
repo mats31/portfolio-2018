@@ -14,6 +14,7 @@ import Background from './meshes/Background';
 import Foreground from './meshes/Foreground';
 import DecorPoints from './meshes/DecorPoints';
 import backgroundBufferFragmentShader from './meshes/Background/shaders/backgroundBufferPlane.fs';
+import foregroundBufferFragmentShader from './meshes/Foreground/shaders/foregroundBufferPlane.fs';
 import template from './webgl.tpl.html';
 
 
@@ -86,7 +87,7 @@ export default class WebGL {
       renderer: this._renderer,
       width: 512,
       height: 512,
-      bufferPlaneFragment: backgroundBufferFragmentShader,
+      bufferPlaneFragment: foregroundBufferFragmentShader,
     });
 
 
@@ -370,16 +371,18 @@ export default class WebGL {
 
     for (let i = 0; i < intersects.length; i++) {
 
-      if (this._project.visible()) {
-        this._project.focus();
-      }
+      if (intersects[i].object.parent.name === 'description') {
+        if (this._project.visible()) {
+          this._project.focus();
+        }
 
-      if (this._experiment.visible()) {
-        this._experiment.focus();
-      }
+        if (this._experiment.visible()) {
+          this._experiment.focus();
+        }
 
-      document.body.style.cursor = 'pointer';
-      return;
+        document.body.style.cursor = 'pointer';
+        return;
+      }
     }
 
     document.body.style.cursor = 'inherit';

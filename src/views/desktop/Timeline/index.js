@@ -106,7 +106,7 @@ export default class TimelineView {
         break;
       case pages.PROJECT:
         this.deactivate();
-        this.hide();
+        this.hide({ animations: false });
         break;
       default:
 
@@ -572,8 +572,6 @@ export default class TimelineView {
 
   @autobind
   _onTitleClick() {
-    this.hide({ animations: false });
-
     if (this._type === 'project') {
       States.router.navigateTo(pages.PROJECT, { id: this._id });
     } else {

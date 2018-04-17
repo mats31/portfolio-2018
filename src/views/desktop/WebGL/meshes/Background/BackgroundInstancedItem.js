@@ -20,7 +20,7 @@ export default class BackgroundInstancedItem extends AbstractInstanced {
     for ( let i = 0; i < this._nb; i++) {
       aPos.setXYZW(i, 0, randomFloat(-200, 200), 0, randomFloat(0.08, 0.09));
       // aScale.setXYZ(i, randomFloat(10, 20), randomFloat(1, 3), 1);
-      aScale.setXYZ(i, randomFloat(0, 20), randomFloat(0, 2), 1);
+      aScale.setXYZ(i, randomFloat(0, 20), randomFloat(0, 1.5), 1);
       this.aOffset.setXY(i, 1 / 4 * randomInteger(0, 4), 1 / 4 * randomInteger(0, 4));
       this.aSpeed.setX(i, randomFloat(0.2, 0.6));
       this.aStartPosition.setX(i, randomFloat(-500, 500));

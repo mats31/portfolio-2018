@@ -67,9 +67,9 @@ void main() {
   // stablePosition.x += cos(u_time * 0.1) * 20. + ( sin(u_time * a_speed * a_direction) * a_radialColor.r * 30. * abs( step( 1., a_radialColor.r ) - 1. ) );
   // stablePosition.y += sin(u_time * 0.2) * 20. + ( sin(u_time * a_speed * a_direction) * a_radialColor.r * 30. * abs( step( 1., a_radialColor.r ) - 1. ) );
   // stablePosition.z += sin(u_time * 0.5) * 20. + ( sin(u_time * a_speed * a_direction) * a_radialColor.r * 30. * abs( step( 1., a_radialColor.r ) - 1. ) );
-  stablePosition.x += cos(u_time * 0.1) * 20.;
-  stablePosition.y += sin(u_time * 0.2) * 20.;
-  stablePosition.z += sin(u_time * 0.5) * 20.;
+  stablePosition.x += cos(u_time * 0.2) * 20.;
+  stablePosition.y += sin(u_time * 0.3) * 20.;
+  stablePosition.z += sin(u_time * 0.6) * 20.;
 
   pos = mix( mix(pos, stablePosition, a_select), a_hidePosition, uHide );
 

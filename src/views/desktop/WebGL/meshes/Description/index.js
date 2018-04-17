@@ -11,6 +11,7 @@ export default class Description extends THREE.Object3D {
     super();
 
     this.visible = false;
+    this.name = 'description';
 
     this._setupMaskDescription();
     this._setupGeometry();

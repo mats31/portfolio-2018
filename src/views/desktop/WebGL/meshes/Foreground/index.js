@@ -83,7 +83,7 @@ export default class Foreground extends FBOPersistence {
   resize(camera) {
     const perspectiveSize = getPerspectiveSize(camera, camera.position.z);
 
-    this._object.scale.set(perspectiveSize.width * 1.3, perspectiveSize.height * 1.3, 1);
+    this._object.scale.set(perspectiveSize.width * 1.4, perspectiveSize.height * 1.4, 1);
   }
 
   // Update ------------------
@@ -101,6 +101,6 @@ export default class Foreground extends FBOPersistence {
     this._backgroundPostProcessing.getBloomPass().readBuffer = this._FBO2;
     this._backgroundPostProcessing.update({ renderToScreen: false });
 
-    this._object.rotation.y = Math.sin(-time * 0.5) * Math.PI * 0.01;
+    this._object.rotation.y = Math.sin(time * 0.5) * Math.PI * -0.01;
   }
 }
