@@ -1,3 +1,4 @@
+import States from 'core/States';
 import getPerspectiveSize from 'utils/3d/getPerspectiveSize';
 import bgVertex from './shaders/bgCloud.vs';
 import bgFragment from './shaders/bgCloud.fs';
@@ -16,10 +17,24 @@ export default class Cloud extends THREE.Object3D {
   }
 
   _setupMaterial() {
+    const mask = States.resources.getTexture('mask').media;
+    mask.needsUpdate = true;
+
+    const maskOpacity = States.resources.getTexture('mask-opacity').media;
+    maskOpacity.needsUpdate = true;
+
+    const displacement = States.resources.getTexture('displacement').media;
+    displacement.wrapS = THREE.RepeatWrapping;
+    displacement.wrapT = THREE.RepeatWrapping;
+    displacement.needsUpdate = true;
+
     this._material = new THREE.ShaderMaterial({
       transparent: true,
       uniforms: {
         uTime: { type: 'f', value: 0 },
+        tMask: { type: 't', value: mask },
+        tMaskOpacity: { type: 't', value: maskOpacity },
+        tDisplacement: { type: 't', value: displacement },
       },
       vertexShader: bgVertex,
       fragmentShader: bgFragment,
