@@ -1,0 +1,50 @@
+@import '~stylesheets/common/global-imports';
+
+.about {
+  display: none;
+
+  .about__text {
+    position: absolute;
+    right: 5.5%;
+    top: 50%;
+    transform: translate(0, -50%);
+    font-size: 1.35rem;
+    color: white;
+    width: 20%;
+  }
+
+    .about__text a {
+      text-decoration: none;
+      opacity: 0.65;
+      transition: opacity 0.25s ease-out;
+      color: white;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    .about__title {
+      text-transform: uppercase;
+      // text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff, 0px -1px 0px #fff, 0px 1px 0px #fff;
+      font-size: 3rem;
+      line-height: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .about__body {
+      margin-bottom: 3rem;
+      letter-spacing: 0.15rem;
+      line-height: 1.8rem;
+
+      &:last-child{
+        margin-bottom: 0;
+      }
+    }
+
+      .about__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+}

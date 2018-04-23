@@ -108,6 +108,10 @@ export default class TimelineView {
         this.deactivate();
         this.hide({ animations: false });
         break;
+      case pages.ABOUT:
+        this.deactivate();
+        this.hide({ animations: false });
+        break;
       default:
 
     }
@@ -479,7 +483,7 @@ export default class TimelineView {
 
   mousemove(event) {
 
-    if (this._page === pages.PROJECT) return;
+    if (this._page === pages.PROJECT || this._page === pages.ABOUT) return;
 
     if (!this._hideAnimationDone) {
       this._orientationNeedsUpdate = true;

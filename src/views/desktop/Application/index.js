@@ -3,6 +3,7 @@ import * as pages from 'core/pages';
 import { autobind } from 'core-decorators';
 import UIHomeView from 'views/desktop/UIHome';
 import TimelineView from 'views/desktop/Timeline';
+import AboutView from 'views/desktop/About';
 import ProjectView from 'views/desktop/ProjectView';
 import WebglView from 'views/desktop/WebGL';
 import dat from 'dat.gui';
@@ -21,6 +22,7 @@ export default class DesktopAppView {
     this._uiHome = this._setupHome();
     this._projectView = this._setupProject();
     this._timeline = this._setupTimeline();
+    this._about = this._setupAbout();
     this._webgl = this._setupWebGL();
 
     this._views.push(this._uiHome, this._timeline, this._webgl);
@@ -47,6 +49,14 @@ export default class DesktopAppView {
 
   _setupTimeline() {
     const view = new TimelineView({
+      parent: this.el,
+    });
+
+    return view;
+  }
+
+  _setupAbout() {
+    const view = new AboutView({
       parent: this.el,
     });
 
@@ -87,12 +97,14 @@ export default class DesktopAppView {
         this._uiHome.show();
         this._webgl.activate();
         this._projectView.hide();
+        this._about.hide();
         break;
       case pages.EXPERIMENT:
         // document.body.style.overflow = 'hidden';
         this._uiHome.show();
         this._webgl.activate();
         this._projectView.hide();
+        this._about.hide();
         break;
       case pages.PROJECT:
         document.body.style.cursor = 'inherit';
@@ -101,6 +113,14 @@ export default class DesktopAppView {
 
         this._projectView.updateProject();
         this._projectView.show();
+        this._about.hide();
+        break;
+      case pages.ABOUT:
+        // document.body.style.overflow = 'hidden';
+        this._uiHome.show();
+        this._webgl.activate();
+        this._projectView.hide();
+        this._about.show();
         break;
       default:
     }

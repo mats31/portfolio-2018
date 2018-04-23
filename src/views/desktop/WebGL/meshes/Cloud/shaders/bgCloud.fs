@@ -40,6 +40,7 @@ float fbm (in vec2 st) {
 }
 
 uniform float uTime;
+uniform float uActive;
 uniform sampler2D tMask;
 uniform sampler2D tMaskOpacity;
 uniform sampler2D tDisplacement;
@@ -92,16 +93,19 @@ void main() {
   r.y = fbm( vUv + 1.0*q + vec2(8.3,2.8)+ 0.026*uTime);
 
   float f = fbm(vUv+r);
-  float mixValue = clamp((f*f)*2.5,0.0,2.0);
+  float mixValue = clamp((f*f)*2.2,0.0,2.0);
 
   vec3 firstFinalColor = mix(firstColor, mix(secondColor, vec3(0.), clamp(length(r.x),0.0,1.0)), mixValue);
-  firstFinalColor -= max( secondFinalColor.b, max(secondFinalColor.r, secondFinalColor.g) ) * smoothstep(0.99, 1., maskOpacityTexture.a);
+  firstFinalColor -= max( secondFinalColor.b, max(secondFinalColor.r, secondFinalColor.g) ) * smoothstep(0.99, 1., maskOpacityTexture.a) * uActive;
   firstFinalColor = max( vec3(0.), firstFinalColor );
 
-  vec3 color = mix(firstFinalColor, secondFinalColor, smoothstep(0.39, 1., maskOpacityTexture.a) );
+  vec3 color = mix(firstFinalColor, secondFinalColor, smoothstep(0.43, 1., maskOpacityTexture.a * uActive) );
 
   // color = mix(color, vec3(0.), clamp(length(q),0.0,1.0));
-  float alpha = 1.;
+  // float alpha = 1.;
+  float alpha = 1. - max(color.g, max(color.r, color.g) );
+  alpha -= smoothstep( max( 0., 0.5 - abs( uActive - 1. ) ), .9 + abs( uActive - 1.), vUv.x );
+  alpha -= abs(uActive - 1.) * 0.4;
   // float alpha = 1. * smoothstep( 0., .1, max(max( secondFinalColor.r, secondFinalColor.g), secondFinalColor.b ) );
 
   // gl_FragColor = displacementTexture;

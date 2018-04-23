@@ -232,10 +232,14 @@ export default class WebGL {
     this._project.updateState(page);
     this._experiment.updateState(page);
 
-    if (page = pages.HOME) {
-      this._type = 'project'
+    if (page === pages.HOME) {
+      this._type = 'project';
+      this._cloud.deactivate();
+    } else if (page === pages.ABOUT) {
+      this._cloud.activate();
     } else {
-      this._type = 'experiment'
+      this._type = 'experiment';
+      this._cloud.deactivate();
     }
   }
 

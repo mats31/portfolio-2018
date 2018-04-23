@@ -1,8 +1,10 @@
 import States from 'core/States';
 import getPerspectiveSize from 'utils/3d/getPerspectiveSize';
+import { active } from 'core/decorators';
 import bgVertex from './shaders/bgCloud.vs';
 import bgFragment from './shaders/bgCloud.fs';
 
+@active()
 export default class Cloud extends THREE.Object3D {
   constructor() {
     super();
@@ -35,6 +37,7 @@ export default class Cloud extends THREE.Object3D {
         tMask: { type: 't', value: mask },
         tMaskOpacity: { type: 't', value: maskOpacity },
         tDisplacement: { type: 't', value: displacement },
+        uActive: { type: 'f', value: 0 },
       },
       vertexShader: bgVertex,
       fragmentShader: bgFragment,
@@ -44,6 +47,32 @@ export default class Cloud extends THREE.Object3D {
   _setupMesh() {
     this._mesh = new THREE.Mesh(this._geometry, this._material);
     this.add(this._mesh);
+  }
+
+  // state ----------
+
+  activate() {
+    TweenLite.killTweensOf(this._material.uniforms.uActive);
+    TweenLite.to(
+      this._material.uniforms.uActive,
+      2,
+      {
+        value: 1,
+        ease: 'Power4.easeOut',
+      },
+    );
+  }
+
+  deactivate() {
+    TweenLite.killTweensOf(this._material.uniforms.uActive);
+    TweenLite.to(
+      this._material.uniforms.uActive,
+      2,
+      {
+        value: 0,
+        ease: 'Power4.easeOut',
+      },
+    );
   }
 
   // Events ----------
