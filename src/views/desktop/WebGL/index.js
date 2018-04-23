@@ -83,19 +83,19 @@ export default class WebGL {
       height: 512,
       bufferPlaneFragment: backgroundBufferFragmentShader,
     });
-    // this._scene.add(this._background.getObject());
+    this._scene.add(this._background.getObject());
 
-    this._foreground = new Foreground({
-      renderer: this._renderer,
-      width: 512,
-      height: 512,
-      bufferPlaneFragment: foregroundBufferFragmentShader,
-    });
+    // this._foreground = new Foreground({
+    //   renderer: this._renderer,
+    //   width: 512,
+    //   height: 512,
+    //   bufferPlaneFragment: foregroundBufferFragmentShader,
+    // });
 
 
     if (this._foreground) {
       this._foreground.getObject().position.z = 100;
-      // this._scene.add(this._foreground.getObject());
+      this._scene.add(this._foreground.getObject());
     }
   }
 
@@ -104,8 +104,8 @@ export default class WebGL {
       raycaster: this._raycaster,
     });
 
-    // this._scene.add(this._project.getPoints());
-    // this._scene.add(this._project.getDescription());
+    this._scene.add(this._project.getPoints());
+    this._scene.add(this._project.getDescription());
   }
 
   _setupExperiment() {
@@ -113,8 +113,8 @@ export default class WebGL {
       raycaster: this._raycaster,
     });
 
-    // this._scene.add(this._experiment.getPoints());
-    // this._scene.add(this._experiment.getDescription());
+    this._scene.add(this._experiment.getPoints());
+    this._scene.add(this._experiment.getDescription());
   }
 
   _setupDecorPoints() {
@@ -124,6 +124,7 @@ export default class WebGL {
 
   _setupCloud() {
     this._cloud = new Cloud({});
+    this._cloud.position.z = 300;
     this._scene.add(this._cloud);
   }
 
@@ -235,8 +236,10 @@ export default class WebGL {
     if (page === pages.HOME) {
       this._type = 'project';
       this._cloud.deactivate();
+      this._background.show();
     } else if (page === pages.ABOUT) {
       this._cloud.activate();
+      this._background.hide();
     } else {
       this._type = 'experiment';
       this._cloud.deactivate();
@@ -273,7 +276,7 @@ export default class WebGL {
 
   @autobind
   _onScrollWheel(event) {
-    if (this.active() && !this._timelineProjectHover) {
+    if (this.active() && !this._cloud.active() && !this._timelineProjectHover) {
 
       this._decorPoints.setDirection(this._deltaTarget);
 

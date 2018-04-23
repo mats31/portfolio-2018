@@ -74,6 +74,16 @@ export default class Background extends FBOPersistence {
     return this._object;
   }
 
+  // State -------------------
+
+  show() {
+    this._backgroundInstancedItems.show();
+  }
+
+  hide() {
+    this._backgroundInstancedItems.hide();
+  }
+
   // Events ------------------
   @autobind
   _onScrollWheel() {

@@ -11,7 +11,7 @@ import template from './list.tpl.html';
 import './list.scss';
 
 
-@visible()
+@visible(true)
 @focused()
 export default class DesktopListView {
   constructor(options) {
@@ -101,6 +101,7 @@ export default class DesktopListView {
   }
 
   hide() {
+    console.log('hide');
     this._el.style.display = 'none';
   }
 
@@ -321,6 +322,7 @@ export default class DesktopListView {
           baseAlpha: 0,
           extraAlpha: 0,
           currentAlpha: 0,
+          currentColor: 0,
         });
 
         div.addEventListener('click', this._onProjectItemClick);
@@ -352,6 +354,7 @@ export default class DesktopListView {
           baseAlpha: 0,
           extraAlpha: 0,
           currentAlpha: 0,
+          currentColor: 0,
         });
 
         div.addEventListener('click', this._onExperimentItemClick);
@@ -420,11 +423,6 @@ export default class DesktopListView {
     this._elHeight = window.innerHeight;
     this._canvasTop = this._ctx.canvas.getBoundingClientRect().top;
 
-    console.log('so coman');
-    console.log(this._elWidth);
-    console.log(this._elHeight);
-    console.log(this._canvasTop);
-
     const heightMargin = window.innerHeight * 0.1;
     this._height = this._elHeight * 0.5 + heightMargin;
 
@@ -473,7 +471,8 @@ export default class DesktopListView {
     const customHeight = this._points.length > 0 ? this._points[this._points.length - 1].y - this._points[0].y : 0;
     for (let i = 0; i < this._items.length; i++) {
       const top = ( i / ( this._items.length - 1 ) ) * customHeight + this._points[0].y + this._canvasTop;
-      const right = this._width + window.innerWidth * 0.025;
+      const right = this._width + window.innerWidth * 0.05;
+      // const right = this._width + window.innerWidth * 0.025;
       this._items[i].style.right = `${right}px`;
       this._items[i].style.top = `${top}px`;
     }
@@ -577,12 +576,14 @@ export default class DesktopListView {
       const scale = map( Math.min(window.innerHeight * 0.2, distance ), 0, window.innerHeight * 0.2, 1.3, 1 );
       if (this.focused()) {
         this._itemsAnim[i].extraAlpha = map( Math.min(window.innerHeight * 0.3, distance ), 0, window.innerHeight * 0.3, 0.8, 0 );
+        this._itemsAnim[i].currentColor = map( Math.min(window.innerHeight * 0.1, distance ), 0, window.innerHeight * 0.1, 255, 0 );
       }
 
       this._itemsAnim[i].currentAlpha += ( this._itemsAnim[i].extraAlpha - this._itemsAnim[i].currentAlpha ) * 0.05;
 
-      this._items[i].style.transform = `translate3d(0, -50%, 0) scale(${scale})`;
+      // this._items[i].style.transform = `translate3d(0, -50%, 0) scale(${scale})`;
       this._items[i].style.opacity = this._itemsAnim[i].baseAlpha + this._itemsAnim[i].currentAlpha;
+      this._items[i].style.color = `rgba(${this._itemsAnim[i].currentColor},${this._itemsAnim[i].currentColor},${this._itemsAnim[i].currentColor},1)`;
     }
   }
 }

@@ -6,7 +6,7 @@
     top: 0;
     cursor: auto;
     // background: rgba(0, 255, 0, 0.2);
-    @include font-about();
+    // @include font-about();
 
     .UIHome__listLabel {
       color: white;
@@ -24,8 +24,10 @@
     }
 
     .UIHome__item {
-      color: white;
-      font-size: 1.5rem;
+      color: rgba(0, 0, 0, 1);
+      text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff, 0px -1px 0px #fff, 0px 1px 0px #fff;
+      letter-spacing: 0.2rem;
+      font-size: 4rem;
       text-align: right;
       position: absolute;
       opacity: 0;

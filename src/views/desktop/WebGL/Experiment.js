@@ -73,6 +73,9 @@ export default class Experiment {
       case pages.EXPERIMENT:
         this.show();
         break;
+      case pages.ABOUT:
+        this.hide();
+        break;
       default:
     }
   }

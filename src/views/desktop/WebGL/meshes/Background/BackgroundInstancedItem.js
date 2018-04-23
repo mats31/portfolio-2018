@@ -1,6 +1,8 @@
 import AbstractInstanced from 'helpers/3d/Instanced/AbstractInstanced';
+import { visible } from 'core/decorators';
 import { randomInteger, randomFloat } from 'utils/math';
 
+@visible(true)
 export default class BackgroundInstancedItem extends AbstractInstanced {
   constructor(options) {
     super(options);
@@ -38,8 +40,21 @@ export default class BackgroundInstancedItem extends AbstractInstanced {
     aScale.needsUpdate = true;
   }
 
-  // Events
-  scrollWheel() {
+  // State ------
+
+  show() {
+    TweenLite.killTweensOf(this._material.uniforms.uGlobalScale);
+    TweenLite.to(
+      this._material.uniforms.uGlobalScale,
+      5,
+      {
+        value: 1,
+        ease: 'Power4.easeOut',
+      },
+    );
+  }
+
+  hide() {
     TweenLite.killTweensOf(this._material.uniforms.uGlobalScale);
     TweenLite.to(
       this._material.uniforms.uGlobalScale,
@@ -49,19 +64,18 @@ export default class BackgroundInstancedItem extends AbstractInstanced {
         ease: 'Power4.easeOut',
       },
     );
+  }
 
-    clearTimeout(this._timeout);
-    this._timeout = setTimeout(() => {
-      TweenLite.killTweensOf(this._material.uniforms.uGlobalScale);
-      TweenLite.to(
-        this._material.uniforms.uGlobalScale,
-        5,
-        {
-          value: 1,
-          ease: 'Power4.easeOut',
-        },
-      );
-    }, 1000);
+  // Events -----
+
+  scrollWheel() {
+
+    if (this.visible) {
+      this.hide();
+
+      clearTimeout(this._timeout);
+      this._timeout = setTimeout(this.show.bind(this), 1000);
+    }
   }
 
   update(time) {
