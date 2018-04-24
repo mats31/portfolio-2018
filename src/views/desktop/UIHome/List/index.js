@@ -107,6 +107,7 @@ export default class DesktopListView {
   show({ delay = 0 } = {}) {
     this._addEvents();
 
+    TweenLite.killTweensOf(this._el);
     TweenLite.to(
       this._el,
       1,
@@ -124,6 +125,7 @@ export default class DesktopListView {
 
   hide({ delay = 0 } = {}) {
     this._removeEvents();
+    TweenLite.killTweensOf(this._el);
     this._el.style.pointerEvents = 'none';
 
     this.blur();

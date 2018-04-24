@@ -1,6 +1,7 @@
 import States from 'core/States';
 import { autobind } from 'core-decorators';
 import { objectVisible } from 'core/decorators';
+import projectList from 'config/project-list';
 import MaskDescription from './MaskDescription';
 import vertexShader from './shaders/description.vs';
 import fragmentShader from './shaders/description.fs';
@@ -28,7 +29,7 @@ export default class Description extends THREE.Object3D {
   }
 
   _setupMaterial() {
-    this._texture = States.resources.getTexture('resn-little-helper-description').media;
+    this._texture = States.resources.getTexture(`${projectList.projects[0].id}-description`).media;
     this._texture.minFilter = THREE.LinearFilter;
     this._texture.magFilter = THREE.LinearFilter;
 
@@ -59,6 +60,24 @@ export default class Description extends THREE.Object3D {
   }
 
   // State -------------------------
+
+  updateProject(project) {
+    this._texture = States.resources.getTexture(`${project.id}-description`).media;
+    this._texture.minFilter = THREE.LinearFilter;
+    this._texture.magFilter = THREE.LinearFilter;
+    this._texture.needsUpdate = true;
+
+    this._material.uniforms.tDiffuse.value = this._texture;
+  }
+
+  updateExperiment(experiment) {
+    this._texture = States.resources.getTexture(`${experiment.id}-description`).media;
+    this._texture.minFilter = THREE.LinearFilter;
+    this._texture.magFilter = THREE.LinearFilter;
+    this._texture.needsUpdate = true;
+
+    this._material.uniforms.tDiffuse.value = this._texture;
+  }
 
   show() {
     TweenLite.killTweensOf(this._onDelayedHide);

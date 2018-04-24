@@ -1,5 +1,6 @@
 import States from 'core/States';
 import getPerspectiveSize from 'utils/3d/getPerspectiveSize';
+import { randomInteger } from 'utils/math';
 import { active } from 'core/decorators';
 import bgVertex from './shaders/bgCloud.vs';
 import bgFragment from './shaders/bgCloud.fs';
@@ -8,6 +9,8 @@ import bgFragment from './shaders/bgCloud.fs';
 export default class Cloud extends THREE.Object3D {
   constructor() {
     super();
+
+    this._masks = ['ball', 'db', 'gob', 'resn'];
 
     this._setupGeometry();
     this._setupMaterial();
@@ -19,10 +22,10 @@ export default class Cloud extends THREE.Object3D {
   }
 
   _setupMaterial() {
-    const mask = States.resources.getTexture('mask').media;
+    const mask = States.resources.getTexture('mask-ball').media;
     mask.needsUpdate = true;
 
-    const maskOpacity = States.resources.getTexture('mask-opacity').media;
+    const maskOpacity = States.resources.getTexture('mask-opacity-ball').media;
     maskOpacity.needsUpdate = true;
 
     const displacement = States.resources.getTexture('displacement').media;
@@ -53,7 +56,21 @@ export default class Cloud extends THREE.Object3D {
 
   // state ----------
 
+  _setRandomMask() {
+    const id = this._masks[randomInteger( 0, this._masks.length)];
+
+    const mask = States.resources.getTexture(`mask-${id}`).media;
+    mask.needsUpdate = true;
+    this._material.uniforms.tMask.value = mask;
+
+    const maskOpacity = States.resources.getTexture(`mask-opacity-${id}`).media;
+    maskOpacity.needsUpdate = true;
+    this._material.uniforms.tMaskOpacity.value = maskOpacity;
+  }
+
   activate() {
+    this._setRandomMask();
+
     TweenLite.killTweensOf(this._material.uniforms.uActive);
     TweenLite.to(
       this._material.uniforms.uActive,

@@ -60,8 +60,9 @@ export default class Project {
     this._description.hide();
   }
 
-  select() {
+  select(project) {
     this._points.select();
+    this._description.updateProject(project);
     this._description.show();
   }
 

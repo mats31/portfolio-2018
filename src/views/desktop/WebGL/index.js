@@ -201,6 +201,7 @@ export default class WebGL {
     this._delta = 0;
     this._timelineProjectHover = false;
     const remains = this._translation % 10000;
+    let target = this._translation - remains;
     TweenLite.killTweensOf(this, { _translation: true });
     if (Math.abs(remains) <= 5000) {
       TweenLite.to(
@@ -211,6 +212,7 @@ export default class WebGL {
         },
       );
     } else {
+      target = this._translation - ( 10000 - Math.abs(remains) );
       TweenLite.to(
         this,
         1,
@@ -221,11 +223,13 @@ export default class WebGL {
     }
 
     if (this._project.visible()) {
-      this._project.select();
+      const project = projectList.projects[Math.abs(target / 10000) % projectList.projects.length];
+      this._project.select(project);
     }
 
     if (this._experiment.visible()) {
-      this._experiment.select();
+      const experiment = experimentList.experiments[Math.abs(target / 10000) % experimentList.experiments.length];
+      this._experiment.select(experiment);
     }
   }
 

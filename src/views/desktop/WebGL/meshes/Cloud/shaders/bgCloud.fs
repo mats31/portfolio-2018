@@ -57,9 +57,17 @@ void main() {
   vec3 firstColor = vec3(0., 146. / 255. , 142. / 255. );
   vec3 secondColor = vec3(0., 33. / 255. , 67. / 255. );
 
-  vec3 thirdColor = vec3(248. / 255., 208. / 255. , 175. / 255. );
-  vec3 fourthColor = vec3(201. / 255., 132. / 255. , 110. / 255. );
-  vec3 fifthColor = vec3(60. / 255., 65. / 255. , 96. / 255. );
+  // vec3 thirdColor = vec3(248. / 255., 208. / 255. , 175. / 255. );
+  // vec3 fourthColor = vec3(201. / 255., 132. / 255. , 110. / 255. );
+  // vec3 fifthColor = vec3(60. / 255., 65. / 255. , 96. / 255. );
+
+  // vec3 thirdColor = vec3(0., 146. / 255. , 142. / 255. );
+  // vec3 fourthColor = vec3(0., 33. / 255. , 67. / 255. );
+  // vec3 fifthColor = vec3(0., 89.5 / 255. , 99.5 / 255. );
+
+  vec3 thirdColor = vec3(0./255., 146. / 255. , 142. / 255. );
+  vec3 fourthColor = vec3(0./255., 0. / 255. , 37. / 255. );
+  vec3 fifthColor = vec3(35./255., 89.5 / 255. , 99.5 / 255. );
 
 
   // float noise1 = fbm(vUv * 10. + uTime);
@@ -78,7 +86,8 @@ void main() {
   // float secondF = fbm(vUv+secondR);
 
   // float secondMixValue = clamp((secondF*secondF)*2.5,0.0,2.0);
-  float secondMixValue = clamp((secondR.x*secondR.x)*2.5,0.0,2.0);
+  // float secondMixValue = clamp((secondR.x*secondR.x)*2.5,0.0,2.0);
+  float secondMixValue = clamp((secondR.x*secondR.x)*3.5,0.0,2.0);
 
   vec3 secondFinalColor = mix(thirdColor, fourthColor, secondMixValue);
   secondFinalColor = mix(fifthColor, secondFinalColor, cloudMaskTexture.r * maskTexture.a);

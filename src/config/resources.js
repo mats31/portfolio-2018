@@ -20,12 +20,28 @@ const ressources = {
   textures: [
     { id: 'particle_mask', url: 'textures/particle_mask.jpg' },
     { id: 'scroll_pass', url: 'textures/scroll_pass.jpg' },
-    { id: 'resn-little-helper-description', url: 'textures/resn-little-helper-description.png' },
     { id: 'background', url: 'textures/background.png' },
-    { id: 'mask', url: 'textures/cloud-mask-db.png' },
-    // { id: 'mask', url: 'textures/cloud-mask.png' },
-    { id: 'mask-opacity', url: 'textures/cloud-mask-opacity-db.png' },
-    // { id: 'mask-opacity', url: 'textures/cloud-mask-opacity.png' },
+
+    { id: 'mask-db', url: 'textures/cloud-mask-db.png' },
+    { id: 'mask-opacity-db', url: 'textures/cloud-mask-opacity-db.png' },
+    { id: 'mask-ball', url: 'textures/cloud-mask-ball.png' },
+    { id: 'mask-opacity-ball', url: 'textures/cloud-mask-opacity-ball.png' },
+    { id: 'mask-gob', url: 'textures/cloud-mask-gob.png' },
+    { id: 'mask-opacity-gob', url: 'textures/cloud-mask-opacity-gob.png' },
+    { id: 'mask-resn', url: 'textures/cloud-mask-resn.png' },
+    { id: 'mask-opacity-resn', url: 'textures/cloud-mask-opacity-resn.png' },
+
+    { id: 'christmas-experiment-2017-description', url: 'textures/descriptions/christmas-experiment-2017-description.png' },
+    { id: 'christmas-experiment-2016-description', url: 'textures/descriptions/christmas-experiment-2016-description.png' },
+    { id: 'devx-experiment-2018-description', url: 'textures/descriptions/devx-experiment-2018-description.png' },
+    { id: 'devx-experiment-2017-description', url: 'textures/descriptions/devx-experiment-2017-description.png' },
+    { id: 'hp-description', url: 'textures/descriptions/hp-description.png' },
+    { id: 'nmd-description', url: 'textures/descriptions/nmd-description.png' },
+    { id: 'rasengan-description', url: 'textures/descriptions/rasengan-description.png' },
+    { id: 'resn-little-helper-description', url: 'textures/descriptions/resn-little-helper-description.png' },
+    { id: 'speedfactory-description', url: 'textures/descriptions/speedfactory-description.png' },
+    { id: 'tsuki8-description', url: 'textures/descriptions/tsuki8-description.png' },
+
     { id: 'displacement', url: 'textures/cloud-displacement.png' },
   ],
   sounds: [

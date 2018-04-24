@@ -60,8 +60,9 @@ export default class Experiment {
     this._description.hide();
   }
 
-  select() {
+  select(experiment) {
     this._points.select();
+    this._description.updateExperiment(experiment);
     this._description.show();
   }
 
