@@ -3,6 +3,12 @@
 .about {
   display: none;
 
+  .about__close {
+    position: absolute;
+    right: 9rem;
+    top: 5.25rem;
+  }
+
   .about__text {
     position: absolute;
     right: 5.5%;
@@ -30,12 +36,14 @@
       font-size: 3rem;
       line-height: 1.5rem;
       margin-bottom: 3rem;
+      opacity: 0;
     }
 
     .about__body {
       margin-bottom: 3rem;
       letter-spacing: 0.15rem;
       line-height: 1.8rem;
+      opacity: 0;
 
       &:last-child{
         margin-bottom: 0;

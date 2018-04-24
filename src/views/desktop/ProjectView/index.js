@@ -1,9 +1,11 @@
 import States from 'core/States';
+import * as pages from 'core/pages';
 import projectList from 'config/project-list';
 import { createDOM } from 'utils/dom';
 import { map, randomFloat } from 'utils/math';
 import { autobind } from 'core-decorators';
 import { visible, active } from 'core/decorators';
+import CloseButton from 'views/common/CloseButton';
 import template from './project_view.tpl.html';
 import './project_view.scss';
 
@@ -26,8 +28,14 @@ export default class DesktopProjectView {
       description: this._el.querySelector('.js-project__viewDescription'),
       date: this._el.querySelector('.js-project__date'),
       link: this._el.querySelector('.js-project__link'),
+      close: this._el.querySelector('.js-project__close'),
       medias: [],
     };
+
+    this._closeButton = new CloseButton({
+      parent: this._ui.close,
+      clickCallback: this._onCloseClick,
+    });
 
     this._rotations = [];
 
@@ -59,6 +67,8 @@ export default class DesktopProjectView {
 
     this._deltaY = 0;
     this._deltaTargetY = 0;
+
+    this._closeButton.show();
   }
 
   hide({ delay = 0 } = {}) {
@@ -75,7 +85,7 @@ export default class DesktopProjectView {
       },
     );
 
-    console.log('hide');
+    this._closeButton.hide();
 
     this.deactivate();
   }
@@ -143,7 +153,6 @@ export default class DesktopProjectView {
   }
 
   deactivate() {
-    console.log('deactivate');
     TweenLite.to(
       this._ui.mediaContainer,
       0.6,
@@ -171,6 +180,11 @@ export default class DesktopProjectView {
   @autobind
   _onResize(vw, vh) {
     this.resize(vw, vh);
+  }
+
+  @autobind
+  _onCloseClick() {
+    States.router.navigateTo(pages.HOME);
   }
 
   resize(vw, vh) {

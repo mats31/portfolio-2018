@@ -15,7 +15,7 @@ export default class Cloud extends THREE.Object3D {
   }
 
   _setupGeometry() {
-    this._geometry = new THREE.PlaneBufferGeometry( 1, 1, 1, 1 );
+    this._geometry = new THREE.PlaneBufferGeometry( 1, 1, 10, 10 );
   }
 
   _setupMaterial() {
@@ -38,7 +38,9 @@ export default class Cloud extends THREE.Object3D {
         tMaskOpacity: { type: 't', value: maskOpacity },
         tDisplacement: { type: 't', value: displacement },
         uActive: { type: 'f', value: 0 },
+        uShapeActive: { type: 'f', value: 0 },
       },
+      wireframe: false,
       vertexShader: bgVertex,
       fragmentShader: bgFragment,
     });
@@ -55,24 +57,44 @@ export default class Cloud extends THREE.Object3D {
     TweenLite.killTweensOf(this._material.uniforms.uActive);
     TweenLite.to(
       this._material.uniforms.uActive,
-      2,
+      4,
       {
         value: 1,
         ease: 'Power4.easeOut',
       },
     );
+
+    // TweenLite.killTweensOf(this._material.uniforms.uShapeActive);
+    // TweenLite.to(
+    //   this._material.uniforms.uShapeActive,
+    //   4,
+    //   {
+    //     value: 1,
+    //     ease: 'Power4.easeOut',
+    //   },
+    // );
   }
 
   deactivate() {
     TweenLite.killTweensOf(this._material.uniforms.uActive);
     TweenLite.to(
       this._material.uniforms.uActive,
-      2,
+      4,
       {
         value: 0,
         ease: 'Power4.easeOut',
       },
     );
+
+    // TweenLite.killTweensOf(this._material.uniforms.uShapeActive);
+    // TweenLite.to(
+    //   this._material.uniforms.uShapeActive,
+    //   4,
+    //   {
+    //     value: 0,
+    //     ease: 'Power4.easeOut',
+    //   },
+    // );
   }
 
   // Events ----------

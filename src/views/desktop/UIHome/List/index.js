@@ -11,7 +11,7 @@ import template from './list.tpl.html';
 import './list.scss';
 
 
-@visible(true)
+@visible(false)
 @focused()
 export default class DesktopListView {
   constructor(options) {
@@ -40,8 +40,6 @@ export default class DesktopListView {
     };
 
     this._setupCanvas();
-
-    this._addEvents();
   }
 
   _setupCanvas() {
@@ -94,15 +92,48 @@ export default class DesktopListView {
     Signals.onResize.add(this._onResize);
   }
 
-  // State ---------------------------------------------------------------------
-
-  show() {
-    this._el.style.display = 'block';
+  _removeEvents() {
+    this._ui.listLabel.removeEventListener('mouseenter', this._onListMouseenter);
+    this._el.removeEventListener('mousemove', this._onMousemove);
+    this._el.removeEventListener('mouseleave', this._onMouseleave);
+    Signals.onResize.remove(this._onResize);
   }
 
-  hide() {
-    console.log('hide');
-    this._el.style.display = 'none';
+  // State ---------------------------------------------------------------------
+
+  show({ delay = 0 } = {}) {
+    this._addEvents();
+
+    TweenLite.to(
+      this._el,
+      1,
+      {
+        delay,
+        opacity: 1,
+        ease: 'Power2.easeOut',
+        onStart: () => {
+          this._el.style.display = 'block';
+          this.resize();
+        },
+      },
+    );
+  }
+
+  hide({ delay = 0 } = {}) {
+    this._removeEvents();
+
+    TweenLite.to(
+      this._el,
+      1,
+      {
+        delay,
+        opacity: 0,
+        ease: 'Power2.easeOut',
+        onComplete: () => {
+          this._el.style.display = 'none';
+        },
+      },
+    );
   }
 
   focus() {

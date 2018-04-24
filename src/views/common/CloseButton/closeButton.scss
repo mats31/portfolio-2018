@@ -1,0 +1,34 @@
+.closeButton {
+  transform: rotate(45deg);
+  cursor: pointer;
+
+  .closeButton__lineContainer {
+    position: absolute;
+    top: 0;
+  }
+
+  .closeButton__secondLineContainer {
+    transform: rotate(90deg);
+  }
+
+  .closeButton__line {
+    transform: scale3d(0, 1, 1);
+    width: 5rem;
+    height: 0.5rem;
+    background: white;
+    transform-origin: center center;
+  }
+
+  .closeButton__secondLine {
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.75);
+    transform-origin: center center;
+  }
+
+  .closeButton__pointer {
+    width: 5rem;
+    height: 5rem;
+    // background: rgba(255,0,0,0.5);
+    transform: translate3d(0, -45%, 0);
+    position: absolute;
+  }
+}

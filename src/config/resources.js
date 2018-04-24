@@ -22,8 +22,10 @@ const ressources = {
     { id: 'scroll_pass', url: 'textures/scroll_pass.jpg' },
     { id: 'resn-little-helper-description', url: 'textures/resn-little-helper-description.png' },
     { id: 'background', url: 'textures/background.png' },
-    { id: 'mask', url: 'textures/cloud-mask.png' },
-    { id: 'mask-opacity', url: 'textures/cloud-mask-opacity.png' },
+    { id: 'mask', url: 'textures/cloud-mask-db.png' },
+    // { id: 'mask', url: 'textures/cloud-mask.png' },
+    { id: 'mask-opacity', url: 'textures/cloud-mask-opacity-db.png' },
+    // { id: 'mask-opacity', url: 'textures/cloud-mask-opacity.png' },
     { id: 'displacement', url: 'textures/cloud-displacement.png' },
   ],
   sounds: [

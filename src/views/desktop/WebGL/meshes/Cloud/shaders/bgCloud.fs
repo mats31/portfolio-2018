@@ -41,6 +41,7 @@ float fbm (in vec2 st) {
 
 uniform float uTime;
 uniform float uActive;
+uniform float uShapeActive;
 uniform sampler2D tMask;
 uniform sampler2D tMaskOpacity;
 uniform sampler2D tDisplacement;
@@ -96,7 +97,7 @@ void main() {
   float mixValue = clamp((f*f)*2.2,0.0,2.0);
 
   vec3 firstFinalColor = mix(firstColor, mix(secondColor, vec3(0.), clamp(length(r.x),0.0,1.0)), mixValue);
-  firstFinalColor -= max( secondFinalColor.b, max(secondFinalColor.r, secondFinalColor.g) ) * smoothstep(0.99, 1., maskOpacityTexture.a) * uActive;
+  // firstFinalColor -= max( secondFinalColor.b, max(secondFinalColor.r, secondFinalColor.g) ) * smoothstep(0.99, 1., maskOpacityTexture.a) * uShapeActive;
   firstFinalColor = max( vec3(0.), firstFinalColor );
 
   vec3 color = mix(firstFinalColor, secondFinalColor, smoothstep(0.43, 1., maskOpacityTexture.a * uActive) );

@@ -25,6 +25,8 @@ export default class DesktopHomeView {
       createDOM(template()),
     );
 
+    this._page = null;
+
     this._setupProjectDescription();
     this._setupTitle();
     this._setupMenu();
@@ -107,7 +109,10 @@ export default class DesktopHomeView {
         break;
       default:
         this._menu.show();
-        if (this._list) this._list.show();
+        if (this._list) {
+          const delay = this._page === pages.ABOUT || this._page === pages.PROJECT ? 2 : 0;
+          this._list.show({ delay });
+        }
         this._title.show();
         this._networks.show();
         this._scroll.show();
@@ -116,6 +121,8 @@ export default class DesktopHomeView {
 
     this._list.updateState(page);
     this._menu.updateState(page);
+
+    this._page = page;
   }
 
   // Events --------------------------------------------------------------------

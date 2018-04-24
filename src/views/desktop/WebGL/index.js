@@ -124,7 +124,7 @@ export default class WebGL {
 
   _setupCloud() {
     this._cloud = new Cloud({});
-    this._cloud.position.z = 300;
+    this._cloud.position.z = 200;
     this._scene.add(this._cloud);
   }
 
