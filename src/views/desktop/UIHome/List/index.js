@@ -28,11 +28,14 @@ export default class DesktopListView {
     this._nbLines = 40;
     this._width = 50;
     this._height = this._nbLines * 10;
+    this._pointIndex = 0;
 
     this.needsUpdate = false;
     this._linesNeedsUpdate = false;
     this._pointsNeedsUpdate = false;
     this._itemsNeedsUpdate = false;
+
+    this._type = null;
 
     this._ui = {
       itemContainer: this._el.querySelector('.js-UIHome__itemContainer'),
@@ -121,6 +124,9 @@ export default class DesktopListView {
 
   hide({ delay = 0 } = {}) {
     this._removeEvents();
+    this._el.style.pointerEvents = 'none';
+
+    this.blur();
 
     TweenLite.to(
       this._el,
@@ -370,6 +376,8 @@ export default class DesktopListView {
         };
 
         this._points.push(point);
+
+        this._type = pages.HOME;
       }
     } else if (page === pages.EXPERIMENT) {
       for (let i = 0; i < experimentList.experiments.length; i++) {
@@ -401,6 +409,8 @@ export default class DesktopListView {
 
         this._points.push(point);
       }
+
+      this._type = pages.EXPERIMENT;
     }
 
     this.resize();
@@ -447,6 +457,23 @@ export default class DesktopListView {
   @autobind
   _onResize() {
     this.resize();
+  }
+
+  @autobind
+  _onPointClick() {
+    if (this._type === pages.HOME) {
+      for (let i = 0; i < projectList.projects.length; i++) {
+        if (i === this._pointIndex) {
+          States.router.navigateTo(pages.PROJECT, { id: projectList.projects[i].id });
+        }
+      }
+    } else if (this._type === pages.EXPERIMENT) {
+      for (let i = 0; i < experimentList.experiments.length; i++) {
+        if (i === this._pointIndex) {
+          window.open(experimentList.experiments[i].url, '_blank');
+        }
+      }
+    }
   }
 
   resize() {
@@ -577,15 +604,33 @@ export default class DesktopListView {
   }
 
   _updatePoints() {
+    // const relativePointX = window.innerWidth - this._width + this._points[0].x;
+    // const relativePointY = this._points[0].y + this._canvasTop;
+    // const relativePoint = { x: relativePointX, y: relativePointY };
+    // console.log(distance2( this._mouse, relativePoint ));
+    let disableCursor = false;
     for (let i = 0; i < this._points.length; i++) {
 
       // if (this.focused()) {
-        // const relativePointX = window.innerWidth - this._points[i].x;
-        const relativePointY = this._points[i].y + this._canvasTop;
+      const relativePointX = window.innerWidth - this._width + this._points[i].x;
+      const relativePointY = this._points[i].y + this._canvasTop;
+      const relativePoint = { x: relativePointX, y: relativePointY };
 
-        // const relativePoint = { x: relativePointX, y: relativePointY };
-        // this._points[i].progressExtraRadius = map( Math.min(this._elWidth, distance2( this._mouse, relativePoint ) ), 0, this._elWidth, 1, 0 );
-        this._points[i].progressExtraRadius = map( Math.min(window.innerHeight * 0.1, Math.abs( this._mouse.y - relativePointY ) ), 0, window.innerHeight * 0.1, 1, 0 ) * this._points[i].progressRadius;
+      if (distance2( this._mouse, relativePoint ) < this._basePointRadius * 2 ) {
+        this._pointIndex = i;
+        this._el.style.cursor = 'pointer';
+        this._el.addEventListener('click', this._onPointClick);
+        disableCursor = true;
+      }
+
+      if (!disableCursor) {
+        this._el.style.cursor = 'inherit';
+        this._el.removeEventListener('click', this._onPointClick);
+      }
+
+      // const relativePoint = { x: relativePointX, y: relativePointY };
+      // this._points[i].progressExtraRadius = map( Math.min(this._elWidth, distance2( this._mouse, relativePoint ) ), 0, this._elWidth, 1, 0 );
+      this._points[i].progressExtraRadius = map( Math.min(window.innerHeight * 0.1, Math.abs( this._mouse.y - relativePointY ) ), 0, window.innerHeight * 0.1, 1, 0 ) * this._points[i].progressRadius;
       // }
 
       const x = this._points[i].x;

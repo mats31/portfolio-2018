@@ -36,6 +36,7 @@ export default class TimelineView {
     this._updateTimelineNeedsUpdate = false;
     this._firstShow = false;
     this._startScroll = false;
+    this._showAnimationDone = true;
     this._hideAnimationDone = true;
 
     this._rotateX = 0;
@@ -187,6 +188,7 @@ export default class TimelineView {
 
   show({ delay = 0 } = {}) {
     this._hideAnimationDone = false;
+    this._showAnimationDone = false;
     this._el.style.display = 'block';
 
     this._previewTimeline.progress = 1;
@@ -276,6 +278,7 @@ export default class TimelineView {
       0.29,
       () => {
         this._hexagonesNeedsUpdate = false;
+        this._showAnimationDone = true;
       },
     );
 
@@ -518,10 +521,11 @@ export default class TimelineView {
     //   this.hide();
     // }
 
-    if (this._mouse.x < ( window.innerWidth * 0.5 - this._width * 0.4 ) / window.innerWidth * 2 - 1 ||
+    if ((this._mouse.x < ( window.innerWidth * 0.5 - this._width * 0.4 ) / window.innerWidth * 2 - 1 ||
         this._mouse.x > ( window.innerWidth * 0.5 + this._width * 0.4 ) / window.innerWidth * 2 - 1 ||
         this._mouse.y < ( window.innerHeight * 0.5 - this._height * 0.4 ) / window.innerHeight * 2 - 1 ||
-        this._mouse.y > ( window.innerHeight * 0.5 + this._height * 0.4 ) / window.innerHeight * 2 - 1
+        this._mouse.y > ( window.innerHeight * 0.5 + this._height * 0.4 ) / window.innerHeight * 2 - 1) &&
+        this._showAnimationDone
     ) {
       this.hide();
     }

@@ -154,8 +154,8 @@ export default class DesktopAppView {
   // Update --------------------------------------------------------------------
   @autobind
   _update() {
-    this._uiHome.update();
     this._webgl.update();
+    this._uiHome.update();
     this._timeline.update();
     this._projectView.update();
 
