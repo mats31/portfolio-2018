@@ -535,7 +535,10 @@ export default class TimelineView {
   _onScrollWheel() {
     this.scroll();
 
-    if (this._page !== pages.PROJECT && this._page !== pages.ABOUT && !this._startScroll) {
+    // console.log(this._startScroll);
+
+    if (this._page !== pages.PROJECT && this._page !== pages.ABOUT) {
+      // console.log('show');
       this.show();
     }
 

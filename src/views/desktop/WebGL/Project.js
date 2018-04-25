@@ -64,10 +64,13 @@ export default class Project {
     this._description.hide();
   }
 
-  select(project) {
+  select() {
     this._points.select();
-    this._description.updateProject(project);
     this._description.show();
+  }
+
+  updateDescription(project) {
+    this._description.updateProject(project);
   }
 
   updateState(page) {

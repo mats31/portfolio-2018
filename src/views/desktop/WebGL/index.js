@@ -36,6 +36,7 @@ export default class WebGL {
 
     this._scrollWheelTimeout = null;
     this._cameraInterval = null;
+    this._page = null;
 
     this._animatedScrollTimeout = false;
     this._animateScrollTimeout = false;
@@ -222,18 +223,23 @@ export default class WebGL {
       );
     }
 
+    const project = projectList.projects[Math.abs(target / 10000) % projectList.projects.length];
+    this._project.updateDescription(project);
+
+    const experiment = experimentList.experiments[Math.abs(target / 10000) % experimentList.experiments.length];
+    this._experiment.updateDescription(experiment);
+
     if (this._project.visible()) {
-      const project = projectList.projects[Math.abs(target / 10000) % projectList.projects.length];
-      this._project.select(project);
+      this._project.select();
     }
 
     if (this._experiment.visible()) {
-      const experiment = experimentList.experiments[Math.abs(target / 10000) % experimentList.experiments.length];
-      this._experiment.select(experiment);
+      this._experiment.select();
     }
   }
 
   updateState(page) {
+
     this._project.updateState(page);
     this._experiment.updateState(page);
 
@@ -241,13 +247,36 @@ export default class WebGL {
       this._type = 'project';
       this._cloud.deactivate();
       this._background.show();
+
+      if (this._page === pages.EXPERIMENT) {
+        this._resetTranslation();
+      }
     } else if (page === pages.ABOUT) {
       this._cloud.activate();
       this._background.hide();
+    } else if (page === pages.EXPERIMENT) {
+      this._type = 'experiment';
+      this._cloud.deactivate();
+
+      if (this._page === pages.HOME) {
+        this._resetTranslation();
+      }
     } else {
       this._type = 'experiment';
       this._cloud.deactivate();
     }
+
+    this._page = page;
+  }
+
+  _resetTranslation() {
+    this._translation = 0;
+    this._delta = 0;
+    const project = projectList.projects[0];
+    this._project.updateDescription(project);
+
+    const experiment = experimentList.experiments[0];
+    this._experiment.updateDescription(experiment);
   }
 
   // Events --------------------------------------------------------------------

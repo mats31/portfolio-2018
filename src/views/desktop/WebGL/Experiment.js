@@ -64,10 +64,13 @@ export default class Experiment {
     this._description.hide();
   }
 
-  select(experiment) {
+  select() {
     this._points.select();
-    this._description.updateExperiment(experiment);
     this._description.show();
+  }
+
+  updateDescription(experiment) {
+    this._description.updateProject(experiment);
   }
 
   updateState(page) {

@@ -531,7 +531,7 @@ export default class DesktopListView {
     const customHeight = this._points.length > 0 ? this._points[this._points.length - 1].y - this._points[0].y : 0;
     for (let i = 0; i < this._items.length; i++) {
       const top = ( i / ( this._items.length - 1 ) ) * customHeight + this._points[0].y + this._canvasTop;
-      const right = this._width + window.innerWidth * 0.05;
+      const right = this._width + window.innerWidth * 0.005;
       // const right = this._width + window.innerWidth * 0.025;
       this._items[i].style.right = `${right}px`;
       this._items[i].style.top = `${top}px`;
