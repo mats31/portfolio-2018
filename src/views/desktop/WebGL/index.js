@@ -48,6 +48,7 @@ export default class WebGL {
     this._deltaTarget = 0;
     this._translation = 0;
     this._currentIndex = 0;
+    this._previousDeltaY = 0;
     this._timelineProjectHoverIndex = 9999;
 
     this._setupWebGL(window.innerWidth, window.innerHeight);
@@ -140,6 +141,7 @@ export default class WebGL {
   _addEvents() {
     this._el.addEventListener('mousedown', this._onMousedown);
     this._el.addEventListener('mouseup', this._onMouseup);
+    this._el.addEventListener('mouseleave', this._onMouseleave);
     this._el.addEventListener('click', this._onClick);
     Signals.onResize.add(this._onResize);
     // Signals.onScroll.add(this._onScroll);
@@ -317,24 +319,30 @@ export default class WebGL {
   _onScrollWheel(event) {
     if (this.active() && !this._cloud.active() && !this._timelineProjectHover) {
 
+      let baseDeltaY = event.deltaY * 4;
+      let delay = 500;
+
+      if (event.deltaMode === 1) {
+        baseDeltaY = event.deltaY * 12;
+        delay = 3000;
+      }
+
+      // if (this._previousDeltaY === baseDeltaY) {
+      //   baseDeltaY = 0;
+      // }
+
       this._decorPoints.setDirection(this._deltaTarget);
 
       TweenLite.killTweensOf(this, { _translation: true });
-      this._deltaTarget = Math.min( 150, Math.max( -150, event.deltaY ) );
+      this._deltaTarget = Math.min( 150, Math.max( -150, baseDeltaY ) );
       this.scroll();
-
-      // if (this._type === 'project') {
-      //   this._currentIndex = Math.floor( Math.abs(this._translation / ( projectList.projects.length * 10000 ) ) * projectList.projects.length );
-      // } else {
-      //   this._currentIndex = Math.floor( Math.abs(this._translation / ( experimentList.experiments.length * 10000 ) ) * experimentList.experiments.length );
-      // }
-      //
-      // console.log(this._currentIndex);
 
       clearTimeout(this._scrollWheelTimeout);
       this._scrollWheelTimeout = setTimeout(() => {
         this.unscroll();
-      }, 500);
+      }, delay);
+
+      this._previousDeltaY = baseDeltaY;
     }
   }
 
@@ -346,6 +354,12 @@ export default class WebGL {
 
   @autobind
   _onMouseup() {
+    this._project.mouseup();
+    this._experiment.mouseup();
+  }
+
+  @autobind
+  _onMouseleave() {
     this._project.mouseup();
     this._experiment.mouseup();
   }
@@ -464,6 +478,7 @@ export default class WebGL {
   }
 
   _updatePoints(time) {
+    this._deltaTarget += -this._deltaTarget * 0.1;
     this._delta += ( this._deltaTarget - this._delta ) * 0.1;
     this._translation -= this._delta * 2;
 

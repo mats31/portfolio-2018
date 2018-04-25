@@ -27,7 +27,7 @@ export default class DesktopHomeView {
 
     this._page = null;
 
-    this._setupProjectDescription();
+    // this._setupProjectDescription();
     this._setupTitle();
     this._setupMenu();
     this._setupList();
@@ -139,8 +139,8 @@ export default class DesktopHomeView {
 
   // Update --------------------------------------------------------------------
   update() {
-    const index = Math.floor( ( States.global.progress + (1 / projectList.projects.length) * 2 ) % projectList.projects.length );
-    this._projectDescription.updateProject(projectList.projects[index]);
+    // const index = Math.floor( ( States.global.progress + (1 / projectList.projects.length) * 2 ) % projectList.projects.length );
+    // this._projectDescription.updateProject(projectList.projects[index]);
 
     if (this._list) this._list.update();
   }

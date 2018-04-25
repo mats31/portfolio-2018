@@ -76,7 +76,7 @@ export default class DesktopAppView {
     window.addEventListener('resize', this._onResize);
     window.addEventListener('scroll', this._onScroll);
     window.addEventListener('mousewheel', this._onScrollWheel);
-    window.addEventListener('DOMMouseScroll', this._onScrollWheel);
+    window.addEventListener('wheel', this._onScrollWheel);
 
     this._onResize();
   }

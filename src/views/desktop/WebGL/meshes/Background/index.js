@@ -51,11 +51,18 @@ export default class Background extends FBOPersistence {
 
     this._rtt = this._backgroundPostProcessing.getComposer().default.writeBuffer;
 
-    this._geometry = new THREE.PlaneBufferGeometry(1, 1, 1, 1);
+    // const displacement = States.resources.getTexture('displacement').media;
+    // displacement.wrapS = THREE.RepeatWrapping;
+    // displacement.wrapT = THREE.RepeatWrapping;
+    // displacement.needsUpdate = true;
+
+    this._geometry = new THREE.PlaneBufferGeometry(1, 1, 20, 20);
     this._material = new THREE.ShaderMaterial({
       uniforms: {
         // tDiffuse: { type: 't', value: this._FBO2 },
+        // uTime: { type: 'f', value: 0 },
         tDiffuse: { type: 't', value: this._rtt },
+        // tDisplacement: { type: 't', value: displacement },
       },
       vertexShader,
       fragmentShader,
@@ -112,5 +119,7 @@ export default class Background extends FBOPersistence {
     this._backgroundPostProcessing.update({ renderToScreen: false });
 
     this._object.rotation.y = Math.sin(time * 0.5) * Math.PI * 0.1;
+
+    // this._material.uniforms.uTime.value = time;
   }
 }

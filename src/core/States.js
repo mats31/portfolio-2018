@@ -39,7 +39,9 @@ class States {
       },
     };
 
-    this.global = {};
+    this.global = {
+      progress: 0,
+    };
   }
 }
 
