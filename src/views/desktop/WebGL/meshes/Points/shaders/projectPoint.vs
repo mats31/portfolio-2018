@@ -1,6 +1,9 @@
+uniform vec2 uMouse;
+uniform vec2 uResolution;
 uniform float u_delta;
 uniform float u_time;
 uniform float uHide;
+uniform float uPress;
 
 attribute vec4 a_radialColor;
 
@@ -9,6 +12,7 @@ attribute float a_speed;
 attribute float a_select;
 attribute float a_radius;
 attribute float a_offset;
+attribute float a_press;
 
 varying vec4 vRadialColor;
 varying vec3 vPos;
@@ -59,6 +63,8 @@ mat3 quatToMatrix(vec4 q) {
 
 void main() {
 
+  vec2 viewportMouse = ( uMouse * ( uResolution * 0.5 ) ) * -1.;
+
   vec3 pos = position;
   pos.x += cos(u_delta * 0.002 * a_speed) * a_radius;
   pos.y += sin(u_delta * 0.002 * a_speed) * a_radius;
@@ -72,6 +78,13 @@ void main() {
   stablePosition.y += sin(u_time * 0.3) * 20.;
   stablePosition.z += sin(u_time * 0.6) * 20.;
 
+  float dist = distance(pos.xy, viewportMouse);
+  float area = abs( smoothstep(0., 300., dist) - 1. );
+
+  stablePosition.x += 50. * sin( u_time * 10. * a_press) * area * a_direction * uPress;
+  stablePosition.y += 50. * sin( u_time * 10. * a_press) * area * a_direction * uPress;
+  stablePosition.z += 200. * cos( u_time * 10. * a_press) * area * a_direction * uPress;
+
   pos = mix( mix(pos, stablePosition, a_select), a_hidePosition, uHide );
 
   mat3 rotation = quatToMatrix( vec4( 0.,0.,1., sin(u_time * 0.2) * 0.01) );
@@ -81,6 +94,7 @@ void main() {
   gl_PointSize = ( 3500.0 / length( mvPosition.xyz ) );
   // gl_PointSize = .2;
   gl_Position = projectionMatrix * mvPosition;
+  // gl_Position.x += 1052.;
 
   vRadialColor = a_radialColor;
   vSpeed = a_speed;

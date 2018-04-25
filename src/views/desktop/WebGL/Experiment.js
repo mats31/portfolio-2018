@@ -88,6 +88,20 @@ export default class Experiment {
     }
   }
 
+  // Events --------------------
+
+  mousedown() {
+    this._points.mousedown();
+  }
+
+  mouseup() {
+    this._points.mouseup();
+  }
+
+  mousemove(mouse) {
+    this._points.mousemove(mouse);
+  }
+
   // Update --------------------
 
   update(time, delta, translation) {

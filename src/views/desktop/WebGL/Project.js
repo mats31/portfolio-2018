@@ -88,6 +88,24 @@ export default class Project {
     }
   }
 
+  // Events --------------------
+
+  mousedown() {
+    this._points.mousedown();
+  }
+
+  mouseup() {
+    this._points.mouseup();
+  }
+
+  mousemove(mouse) {
+    this._points.mousemove(mouse);
+  }
+
+  resize(camera) {
+    this._points.resize(camera);
+  }
+
   // Update --------------------
 
   update(time, delta, translation) {

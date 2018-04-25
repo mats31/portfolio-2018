@@ -138,6 +138,8 @@ export default class WebGL {
   }
 
   _addEvents() {
+    this._el.addEventListener('mousedown', this._onMousedown);
+    this._el.addEventListener('mouseup', this._onMouseup);
     this._el.addEventListener('click', this._onClick);
     Signals.onResize.add(this._onResize);
     // Signals.onScroll.add(this._onScroll);
@@ -284,6 +286,9 @@ export default class WebGL {
   mousemove(event) {
     this._mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
     this._mouse.y = -( event.clientY / window.innerHeight ) * 2 + 1;
+
+    this._project.mousemove(this._mouse);
+    this._experiment.mousemove(this._mouse);
   }
 
   @autobind
@@ -300,6 +305,7 @@ export default class WebGL {
     this._background.resize(this._camera);
     if (this._foreground) this._foreground.resize(this._camera);
     if (this._cloud) this._cloud.resize(this._camera);
+    if (this._project) this._project.resize(this._camera);
   }
 
   @autobind
@@ -330,6 +336,18 @@ export default class WebGL {
         this.unscroll();
       }, 500);
     }
+  }
+
+  @autobind
+  _onMousedown() {
+    this._project.mousedown();
+    this._experiment.mousedown();
+  }
+
+  @autobind
+  _onMouseup() {
+    this._project.mouseup();
+    this._experiment.mouseup();
   }
 
   @autobind

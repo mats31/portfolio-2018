@@ -3,6 +3,7 @@ import projectList from 'config/project-list';
 import experimentList from 'config/experiment-list';
 import { selected } from 'core/decorators';
 import { randomFloat } from 'utils/math';
+import { getPerspectiveSize } from 'utils/3d';
 import Canvas from './Canvas';
 import projectVertexShader from './shaders/projectPoint.vs';
 import projectFragmentShader from './shaders/projectPoint.fs';
@@ -15,6 +16,8 @@ export default class Points extends THREE.Object3D {
     super();
 
     this._colors = [];
+
+    this._mouse = new THREE.Vector2();
 
     this._time = 0;
     this._selectOffsetValue = 0;
@@ -72,6 +75,7 @@ export default class Points extends THREE.Object3D {
     this._aSpeed = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
     this._aRadius = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
     this._aOffset = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
+    this._aPress = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
 
     for (let k = 0; k < this._colors.length; k++) {
       this[`aColor${k}`] = new THREE.BufferAttribute( new Float32Array( this._nb * 4 ), 4 );
@@ -134,6 +138,11 @@ export default class Points extends THREE.Object3D {
           randomFloat(-1000, 1000),
         );
 
+        this._aPress.setX(
+          index,
+          randomFloat(0.6, 1),
+        );
+
         index++;
         index4 += 4;
       }
@@ -179,6 +188,7 @@ export default class Points extends THREE.Object3D {
     this._geometry.addAttribute( 'a_speed', this._aSpeed );
     this._geometry.addAttribute( 'a_radius', this._aRadius );
     this._geometry.addAttribute( 'a_offset', this._aOffset );
+    this._geometry.addAttribute( 'a_press', this._aPress   );
 
     for (let k = 0; k < this._colors.length; k++) {
       this._geometry.addAttribute( `a_color${k}`, this[`aColor${k}`] );
@@ -200,6 +210,10 @@ export default class Points extends THREE.Object3D {
         u_mask: { type: 'f', value: 0 },
         u_progress: { type: 'f', value: 0 },
         uHide: { type: 'f', value: 1 },
+        uPress: { type: 'f', value: 0 },
+        uMouse: { type: 'v2', value: new THREE.Vector2() },
+        uResolution: { type: 'v2', value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
+        uPerspective: { type: 'v2', value: new THREE.Vector2() },
         t_mask: { type: 't', value: maskTexture },
       },
       vertexShader: this._type === 'project' ? projectVertexShader : experimentVertexShader,
@@ -306,6 +320,57 @@ export default class Points extends THREE.Object3D {
         },
       },
     );
+  }
+
+  // Events --------------------
+
+  mousedown() {
+    TweenLite.killTweensOf(this._material.uniforms.uPress);
+    TweenLite.to(
+      this._material.uniforms.uPress,
+      1,
+      {
+        value: 1,
+        ease: 'Elastic.easeOut',
+      },
+    );
+  }
+
+  mouseup() {
+    TweenLite.killTweensOf(this._material.uniforms.uPress);
+    TweenLite.to(
+      this._material.uniforms.uPress,
+      1,
+      {
+        value: 0,
+        ease: 'Elastic.easeOut',
+      },
+    );
+  }
+
+  mousemove(mouse) {
+    this._mouse = mouse;
+
+    // this._mouse.x += 1;
+    // this._mouse.x /= 2;
+    //
+    // this._mouse.y += 1;
+    // this._mouse.y /= 2;
+
+    this._material.uniforms.uMouse.value.x = this._mouse.x;
+    this._material.uniforms.uMouse.value.y = this._mouse.y;
+  }
+
+  resize(camera) {
+    const perspectiveSize = getPerspectiveSize( camera, Math.abs(camera.position.z - this.position.z));
+
+    this._material.uniforms.uResolution.value.x = window.innerWidth;
+    this._material.uniforms.uResolution.value.y = window.innerHeight;
+
+    this._material.uniforms.uPerspective.value.x = perspectiveSize.width;
+    this._material.uniforms.uPerspective.value.y = perspectiveSize.height;
+
+    console.log(this._material.uniforms.uPerspective.value);
   }
 
   // Update --------------------

@@ -1,4 +1,6 @@
 uniform sampler2D t_mask;
+uniform vec2 uMouse;
+uniform vec2 uResolution;
 uniform float u_mask;
 uniform float u_time;
 uniform float u_progress;
@@ -19,6 +21,9 @@ float map(float value, float inMin, float inMax, float outMin, float outMax) {
 
 void main() {
 
+  float dist = distance(gl_FragCoord.xy / uResolution, uMouse);
+  float area = abs( smoothstep(0., 0.1, dist) - 1. );
+
   vec4 mask_texture = texture2D(t_mask, gl_PointCoord);
 
   // vec3 color = vColor0.rgb * ( smoothstep(0.,0.,u_progress) - smoothstep(0.,1.,u_progress) ) +
@@ -31,6 +36,9 @@ void main() {
                vColor2.rgb * ( smoothstep(1.,2.,u_progress) - smoothstep(2.,3.,u_progress) ) +
                vColor3.rgb * ( smoothstep(2.,3.,u_progress) - smoothstep(3., 4., u_progress) ) +
                vColor4.rgb * ( smoothstep(3.,4.,u_progress) - smoothstep(4., 5., u_progress) );
+
+  // color.r += 1. * area;
+  // color = vec3(gl_FragCoord.x / 1364.);
 
   float distanceAlpha = abs( min( 1., max( 0., map( abs(vPos.z), 0., 900., 0., 1. ) ) ) - 1. );
   float maskTextureAlpha = min( 1., mask_texture.r + abs( u_mask - 1. ) );
@@ -47,6 +55,8 @@ void main() {
                vColor3.a * ( smoothstep(2.,3.,u_progress) - smoothstep(3., 4., u_progress) ) +
                vColor4.a * ( smoothstep(3.,4.,u_progress) - smoothstep(4., 5., u_progress) );
   float alpha = distanceAlpha * maskTextureAlpha * pixelAlpha;
+  // alpha -= 1. * area;
+  // alpha = 1.;
 
   // float alpha = abs( min( 1., max( 0., map( abs(vPos.z), 0., 900., 0., 1. ) ) ) - 1. );
   gl_FragColor = vec4(color, alpha);
