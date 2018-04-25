@@ -3,8 +3,8 @@ const experimentList = {
     {
       id: 'devx-experiment-2018',
       title: 'Devx Experiment 2018',
-      subtitle: 'Devx Experiement 2018\'s subtitle',
-      description: 'Devx Experiement 2018\'s description',
+      subtitle: 'Devx Experiment 2018\'s subtitle',
+      description: 'Devx Experiment 2018\'s description',
       url: 'http://devx.ddd.it/en/experiment/10',
     },
     {
@@ -16,7 +16,7 @@ const experimentList = {
     },
     {
       id: 'devx-experiment-2017',
-      title: 'Devx Experiement 2017',
+      title: 'Devx Experiment 2017',
       subtitle: 'Devx Experiment 2017\'s subtitle',
       description: 'Devx Experiement 2017\'s description',
       url: 'http://devx.ddd.it/en/experiment/23',

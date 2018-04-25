@@ -21,7 +21,9 @@ export default class Project {
   }
 
   _setupDescription() {
-    this._description = new Description();
+    this._description = new Description({
+      type: 'project',
+    });
     this._description.position.set(-200, -100, 300);
   }
 
@@ -38,7 +40,9 @@ export default class Project {
   // State --------------------
 
   show() {
-    this._description.show();
+    this._description.show({
+      delay: 1,
+    });
     this._points.show();
   }
 

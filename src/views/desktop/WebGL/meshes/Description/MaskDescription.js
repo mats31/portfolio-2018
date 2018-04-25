@@ -10,8 +10,8 @@ export default class MaskDescription {
     this._width = 256;
     this._height = 100;
     // this._pixelSize = 6;
-    this._pixelWidth = 10;
-    this._pixelHeight = 10;
+    this._pixelWidth = 15;
+    this._pixelHeight = 25;
 
     this.needsUpdate = false;
 
