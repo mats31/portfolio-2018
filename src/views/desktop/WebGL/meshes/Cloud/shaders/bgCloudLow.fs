@@ -1,3 +1,12 @@
+uniform float uTime;
+uniform float uActive;
+uniform float uOctaves;
+uniform float uShapeActive;
+uniform sampler2D tMask;
+uniform sampler2D tMaskOpacity;
+uniform sampler2D tDisplacement;
+varying vec2 vUv;
+
 float random (in vec2 st) {
     return fract(sin(dot(st.xy,
                          vec2(12.9898,78.233)))*
@@ -23,7 +32,7 @@ float noise (in vec2 st) {
             (d - b) * u.x * u.y;
 }
 
-#define OCTAVES 6
+#define OCTAVES 2
 float fbm (in vec2 st) {
     // Initial values
     float value = 0.0;
@@ -38,14 +47,6 @@ float fbm (in vec2 st) {
     }
     return value;
 }
-
-uniform float uTime;
-uniform float uActive;
-uniform float uShapeActive;
-uniform sampler2D tMask;
-uniform sampler2D tMaskOpacity;
-uniform sampler2D tDisplacement;
-varying vec2 vUv;
 
 void main() {
 
@@ -103,7 +104,7 @@ void main() {
   r.y = fbm( vUv + 1.0*q + vec2(8.3,2.8)+ 0.026*uTime);
 
   float f = fbm(vUv+r);
-  float mixValue = clamp((f*f)*3.2,0.0,2.0);
+  float mixValue = clamp((f*f)*2.2,0.0,2.0);
 
   vec3 firstFinalColor = mix(firstColor, mix(secondColor, vec3(0.), clamp(length(r.x),0.0,1.0)), mixValue);
   // firstFinalColor -= max( secondFinalColor.b, max(secondFinalColor.r, secondFinalColor.g) ) * smoothstep(0.99, 1., maskOpacityTexture.a) * uShapeActive;

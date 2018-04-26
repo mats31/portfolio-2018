@@ -1,4 +1,5 @@
 import States from 'core/States';
+import raf from 'raf';
 import { createDOM } from 'utils/dom';
 import { autobind } from 'core-decorators';
 import { visible } from 'core/decorators';
@@ -17,6 +18,13 @@ export default class LoaderView {
       createDOM(template()),
     );
 
+    this._callsColorsStocked = 0;
+    this._previousDate = null;
+
+    this._values = [];
+
+    this._assetsLoaded = false;
+
     this.setupDOM();
     this.setupEvents();
 
@@ -31,6 +39,7 @@ export default class LoaderView {
   setupEvents() {
     Signals.onAssetLoaded.add(this.onAssetsLoaded);
     Signals.onAssetsLoaded.add(this.onAssetsLoaded);
+    Signals.onColorStocked.add(this._onColorStocked);
   }
 
   // State ---------------------------------------------------------------------
@@ -54,6 +63,15 @@ export default class LoaderView {
 
   // Events --------------------------------------------------------------------
   @autobind
+  _onColorStocked() {
+    if (this._assetsLoaded && this._callsColorsStocked === 1) {
+      TweenLite.delayedCall(0.8, this._checkFPS );
+    }
+
+    this._callsColorsStocked++;
+  }
+
+  @autobind
   onAssetLoaded(percent) {
     const value = `${percent}%`;
 
@@ -65,7 +83,51 @@ export default class LoaderView {
     const value = `${percent}%`;
 
     this.counter.innerHTML = value;
+
+    this._assetsLoaded = true;
+  }
+
+  // Update -----------
+
+  @autobind
+  _checkFPS() {
+    this._raf = raf(this._checkFPS);
+
+    const date = Date.now();
+
+    if (!this._previousDate) {
+      this._previousDate = date;
+      return;
+    }
+
+    this._values.push(date - this._previousDate);
+
+    if (this._values.length >= 150) {
+      this._stopCheckFPS();
+
+      return;
+    }
+
+    this._previousDate = date;
+  }
+
+  _stopCheckFPS() {
+
+    let sum = 0;
+    for (let i = 0; i < this._values.length; i++) {
+      sum += this._values[i];
+    }
+
+    const average = sum / this._values.length;
+
+    // if (average > 22.22222222) {
+      Signals.onSetLowMode.dispatch();
+    // }
+
+    console.log('hide loader');
     this.hide();
+
+    raf.cancel(this._raf);
   }
 
 }

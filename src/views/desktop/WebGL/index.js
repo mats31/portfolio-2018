@@ -43,6 +43,7 @@ export default class WebGL {
     this._timelineProjectHover = false;
 
     this._type = 'project';
+    this._mode = 'high';
 
     this._delta = 0;
     this._deltaTarget = 0;
@@ -144,9 +145,9 @@ export default class WebGL {
     this._el.addEventListener('mouseleave', this._onMouseleave);
     this._el.addEventListener('click', this._onClick);
     Signals.onResize.add(this._onResize);
-    // Signals.onScroll.add(this._onScroll);
     Signals.onScrollWheel.add(this._onScrollWheel);
     Signals.onTimelineProjectHover.add(this._onTimelineProjectHover);
+    Signals.onSetLowMode.add(this._onSetLowMode);
   }
 
   // State ---------------------------------------------------------------------
@@ -317,13 +318,29 @@ export default class WebGL {
 
   @autobind
   _onScrollWheel(event) {
+
     if (this.active() && !this._cloud.active() && !this._timelineProjectHover) {
 
       let baseDeltaY = event.deltaY * 4;
       let delay = 500;
+      let range = 150;
 
-      if (event.deltaMode === 1) {
-        baseDeltaY = event.deltaY * 12;
+
+      if (States.OS === 'MAC') {
+        if (event.deltaMode === 1) {
+          baseDeltaY = event.deltaY * 30;
+          delay = 1200;
+          range = 500;
+        } else if (event.deltaY % 1 !== 0) {
+          delay = 1100;
+        }
+      } else if (event.deltaMode === 1) {
+        baseDeltaY = event.deltaY * 30;
+        delay = 1200;
+        range = 3000;
+      } else {
+        baseDeltaY = event.deltaY * 15;
+        range = 300;
         delay = 3000;
       }
 
@@ -334,7 +351,7 @@ export default class WebGL {
       this._decorPoints.setDirection(this._deltaTarget);
 
       TweenLite.killTweensOf(this, { _translation: true });
-      this._deltaTarget = Math.min( 150, Math.max( -150, baseDeltaY ) );
+      this._deltaTarget = Math.min( range, Math.max( -range, baseDeltaY ) );
       this.scroll();
 
       clearTimeout(this._scrollWheelTimeout);
@@ -422,6 +439,17 @@ export default class WebGL {
     this.unscroll();
   }
 
+  @autobind
+  _onSetLowMode() {
+    this._cloud.setLowMode();
+    this._background.setLowMode();
+    // this._scene.remove(this._cloud);
+    // this._scene.remove(this._background.getObject());
+    // this._scene.remove(this._project.getPoints());
+
+    this._mode = 'low';
+  }
+
   // Update --------------------------------------------------------------------
 
   update() {
@@ -435,6 +463,7 @@ export default class WebGL {
       this._updatePoints(time);
       this._updateDecorPoints(time);
       this._background.update(time);
+      // if (this._mode === 'high') this._background.update(time);
       if (this._foreground) this._foreground.update(time);
       if (this._cloud) this._cloud.update(time);
 
@@ -447,8 +476,10 @@ export default class WebGL {
     this._camera.rotation.x += ( this._mouse.y * 0.1 - this._camera.rotation.x ) * 0.1;
     this._camera.rotation.y += ( this._mouse.x * -0.1 - this._camera.rotation.y ) * 0.1;
 
+    const object = this._type === 'project' ? this._project.getDescription() : this._experiment.getDescription();
+
     this._raycaster.setFromCamera( this._mouse, this._camera );
-    const intersects = this._raycaster.intersectObjects( this._scene.children, true );
+    const intersects = this._raycaster.intersectObjects( object.children, true );
 
     for (let i = 0; i < intersects.length; i++) {
 

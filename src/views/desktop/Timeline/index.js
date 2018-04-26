@@ -89,6 +89,7 @@ export default class TimelineView {
     this._ui.title.addEventListener('click', this._onTitleClick);
     Signals.onResize.add(this._onResize);
     Signals.onScrollWheel.add(this._onScrollWheel);
+    Signals.onSetLowMode.add(this._onSetLowMode);
   }
 
   // State ---------------------------------------------------------------------
@@ -587,6 +588,24 @@ export default class TimelineView {
       States.router.navigateTo(pages.PROJECT, { id: this._id });
     } else {
       window.open(this._url, '_target');
+    }
+  }
+
+  @autobind
+  _onSetLowMode() {
+    this._nbLines = 75;
+    this._lines = [];
+    for (let i = 0; i < this._nbLines; i++) {
+      const line = {
+        x1: Math.cos(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._baseLinesRadius + this._width * 0.5,
+        y1: Math.sin(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._baseLinesRadius + this._width * 0.5,
+        x2: Math.cos(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._endLinesRadius + this._width * 0.5,
+        y2: Math.sin(Math.PI * 2 * ( i / this._nbLines ) - Math.PI * 0.5 ) * this._endLinesRadius + this._width * 0.5,
+        opacity: 0,
+        size: 0,
+      };
+
+      this._lines.push(line);
     }
   }
 

@@ -18,6 +18,8 @@ export default class Background extends FBOPersistence {
     this._setupBackgroundItems();
     this._setupPlane();
 
+    this._mode = 'high';
+
     this._addEvents();
   }
 
@@ -33,6 +35,7 @@ export default class Background extends FBOPersistence {
         uniforms: {
           tDiffuse: { type: 't', value: map },
           uTime: { type: 'f', value: 0 },
+          uRange: { type: 'f', value: 1000 },
           uGlobalScale: { type: 'f', value: 1 },
         },
         vertexShader: backgroundItemVertex,
@@ -61,7 +64,7 @@ export default class Background extends FBOPersistence {
       uniforms: {
         // tDiffuse: { type: 't', value: this._FBO2 },
         // uTime: { type: 'f', value: 0 },
-        tDiffuse: { type: 't', value: this._rtt },
+        tDiffuse: { type: 't', value: this._rtt.texture },
         // tDisplacement: { type: 't', value: displacement },
       },
       vertexShader,
@@ -91,6 +94,25 @@ export default class Background extends FBOPersistence {
     this._backgroundInstancedItems.hide();
   }
 
+  setLowMode() {
+    this._bufferPlane.setSize(128, 128);
+
+    this._FBO1.setSize(128, 128);
+    this._FBO2.setSize(128, 128);
+
+    this._camera.left = 128 / -2;
+    this._camera.right = 128 / 2;
+    this._camera.top = 128 / 2;
+    this._camera.bottom = 128 / -2;
+    this._camera.updateProjectionMatrix();
+
+    this._backgroundInstancedItems.setLowMode();
+
+    this._material.uniforms.tDiffuse.value = this._FBO2.texture;
+
+    this._mode = 'low';
+  }
+
   // Events ------------------
   @autobind
   _onScrollWheel() {
@@ -115,10 +137,12 @@ export default class Background extends FBOPersistence {
     this._bufferPlane.updateDiffuse(this._FBO1.texture);
     this._backgroundInstancedItems.update(time);
 
-    this._backgroundPostProcessing.getBloomPass().readBuffer = this._FBO2;
-    this._backgroundPostProcessing.update({ renderToScreen: false });
+    if (this._mode === 'high') {
+      this._backgroundPostProcessing.getBloomPass().readBuffer = this._FBO2;
+      this._backgroundPostProcessing.update({ renderToScreen: false });
+    }
 
-    this._object.rotation.y = Math.sin(time * 0.5) * Math.PI * 0.1;
+    this._object.rotation.y = Math.sin(time * 0.5) * Math.PI * 0.05;
 
     // this._material.uniforms.uTime.value = time;
   }

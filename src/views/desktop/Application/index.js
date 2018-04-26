@@ -5,6 +5,7 @@ import UIHomeView from 'views/desktop/UIHome';
 import TimelineView from 'views/desktop/Timeline';
 import AboutView from 'views/desktop/About';
 import ProjectView from 'views/desktop/ProjectView';
+// import ScrollView from 'views/desktop/Scroll';
 import WebglView from 'views/desktop/WebGL';
 import dat from 'dat.gui';
 
@@ -24,6 +25,7 @@ export default class DesktopAppView {
     this._timeline = this._setupTimeline();
     this._about = this._setupAbout();
     this._webgl = this._setupWebGL();
+    // this._scrollView = this._setupScroll();
 
     this._views.push(this._uiHome, this._timeline, this._webgl);
 
@@ -65,6 +67,14 @@ export default class DesktopAppView {
 
   _setupWebGL() {
     const view = new WebglView({
+      parent: this.el,
+    });
+
+    return view;
+  }
+
+  _setupScroll() {
+    const view = new ScrollView({
       parent: this.el,
     });
 

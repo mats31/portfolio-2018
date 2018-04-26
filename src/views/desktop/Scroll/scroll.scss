@@ -1,0 +1,21 @@
+@import '~stylesheets/common/global-imports';
+
+.scrollView {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
+  background: rgba(255, 0, 0, 0.2);
+  opacity: 1;
+
+  .box{
+    width: 500px;
+    height: 2000px;
+    background: blue;
+    margin-bottom: 200px;
+    opacity: 0;
+  }
+}

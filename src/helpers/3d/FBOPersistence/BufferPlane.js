@@ -17,7 +17,7 @@ export default class BufferPlane extends THREE.Object3D {
   }
 
   _setupGeometry() {
-    this._geometry = new THREE.PlaneBufferGeometry( this._width, this._height, 1, 1 );
+    this._geometry = new THREE.PlaneBufferGeometry( 1, 1, 1, 1 );
   }
 
   _setupMaterial() {
@@ -35,6 +35,14 @@ export default class BufferPlane extends THREE.Object3D {
   _setupMesh() {
     this._mesh = new THREE.Mesh( this._geometry, this._material );
     this.add(this._mesh);
+    this.scale.set(this._width, this._height, 1);
+  }
+
+  setSize(w, h) {
+    this._width = w;
+    this._height = h;
+
+    this.scale.set(this._width, this._height, 1);
   }
 
   updateDiffuse( texture ) {

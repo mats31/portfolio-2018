@@ -15,6 +15,7 @@ class States {
     this.IS_SAFARI = !!window.navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
     this.IS_CHROME = /Chrome/i.test(window.navigator.userAgent);
     this.IS_FF = window.navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    this.OS = this._getOS();
 
     this.resources = {
       images: [],
@@ -42,6 +43,29 @@ class States {
     this.global = {
       progress: 0,
     };
+  }
+
+  _getOS() {
+    const userAgent = window.navigator.userAgent;
+    const platform = window.navigator.platform;
+    const macosPlatforms = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
+    const windowsPlatforms = ['Win32', 'Win64', 'Windows', 'WinCE'];
+    const iosPlatforms = ['iPhone', 'iPad', 'iPod'];
+    let os = null;
+
+    if (macosPlatforms.indexOf(platform) !== -1) {
+      os = 'MAC';
+    } else if (iosPlatforms.indexOf(platform) !== -1) {
+      os = 'iOS';
+    } else if (windowsPlatforms.indexOf(platform) !== -1) {
+      os = 'WINDOWS';
+    } else if (/Android/.test(userAgent)) {
+      os = 'ANDROID';
+    } else if (!os && /Linux/.test(platform)) {
+      os = 'LINUX';
+    }
+
+    return os;
   }
 }
 

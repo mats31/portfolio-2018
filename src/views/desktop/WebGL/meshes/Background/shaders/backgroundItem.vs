@@ -8,6 +8,7 @@ attribute float aVertcalOffset;
 attribute float aDirection;
 
 uniform float uTime;
+uniform float uRange;
 uniform float uGlobalScale;
 
 varying vec2 vUv;
@@ -48,7 +49,7 @@ mat3 quatToMatrix(vec4 q) {
 void main() {
 
   vec3 pos = a_pos.xyz;
-  pos.x = mod(uTime * aSpeed * 200. * aDirection + aStartPosition, 1000.) - 500.;
+  pos.x = mod(uTime * aSpeed * 200. * aDirection + aStartPosition, uRange) - uRange * 0.5;
   pos.y += sin( uTime * aSpeed ) * aVertcalOffset;
   // pos.x += uTime * 10.;
 

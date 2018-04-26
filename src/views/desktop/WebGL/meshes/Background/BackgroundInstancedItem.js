@@ -66,6 +66,20 @@ export default class BackgroundInstancedItem extends AbstractInstanced {
     );
   }
 
+  setLowMode() {
+    const aScale = this.getAttribute('aScale');
+
+    for ( let i = 0; i < this._nb; i++) {
+      // aScale.setXYZ(i, randomFloat(0, 30), randomFloat(0, 1.5), 1);
+      this.aStartPosition.setX(i, randomFloat(-128, 128));
+    }
+
+    aScale.needsUpdate = true;
+    this.aStartPosition.needsUpdate = true;
+
+    this._material.uniforms.uRange.value = 250;
+  }
+
   // Events -----
 
   scrollWheel() {

@@ -7,10 +7,10 @@ void main() {
 
   // vec4 displacementTexture = texture2D(tDisplacement, uv + uTime * .1);
 
-  vec3 pos = position;
+  // vec3 pos = position;
   // pos.z += displacementTexture.r * 100.;
 
   vUv = uv;
 
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }

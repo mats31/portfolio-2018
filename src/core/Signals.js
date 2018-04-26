@@ -4,18 +4,22 @@ class Signals {
 
   constructor() {
 
-    // Assets
-    this.onAssetLoaded = new Signal();
-    this.onAssetsLoaded = new Signal();
-    this.onScrollWheel = new Signal();
-
     // General
     this.onResize = new Signal();
     this.onScroll = new Signal();
+    this.onScrollWheel = new Signal();
     this.onApplicationStart = new Signal();
+    this.onSetLowMode = new Signal();
+
+    // Assets
+    this.onAssetLoaded = new Signal();
+    this.onAssetsLoaded = new Signal();
 
     // Timeline
     this.onTimelineProjectHover = new Signal();
+
+    // Points
+    this.onColorStocked = new Signal();
   }
 }
 

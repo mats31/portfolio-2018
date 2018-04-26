@@ -4,6 +4,7 @@ import { randomInteger } from 'utils/math';
 import { active } from 'core/decorators';
 import bgVertex from './shaders/bgCloud.vs';
 import bgFragment from './shaders/bgCloud.fs';
+import bgFragmentLow from './shaders/bgCloudLow.fs';
 
 @active()
 export default class Cloud extends THREE.Object3D {
@@ -112,6 +113,11 @@ export default class Cloud extends THREE.Object3D {
     //     ease: 'Power4.easeOut',
     //   },
     // );
+  }
+
+  setLowMode() {
+    this._material.fragmentShader = bgFragmentLow;
+    this._material.needsUpdate = true;
   }
 
   // Events ----------

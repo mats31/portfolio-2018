@@ -41,6 +41,7 @@ export default class DesktopProjectView {
 
     this._deltaY = 0;
     this._deltaTargetY = 0;
+    this._easing = 0.2;
 
     this._needsUpdate = false;
 
@@ -202,8 +203,10 @@ export default class DesktopProjectView {
       const height = mediaContainerRect.height;
       const max = height + ( this._el.offsetHeight - height ) - window.innerHeight * 0.5 - lastMediaHeight * 0.5;
 
-      this._deltaTargetY -= event.deltaY * 0.5;
+      this._deltaTargetY -= event.deltaMode === 1 ? event.deltaY * 20 : event.deltaY * 0.5;
       this._deltaTargetY = Math.max( -max, Math.min( 0, this._deltaTargetY ) );
+
+      this._easing = event.deltaMode === 1 ? 0.05 : 0.2;
 
 
       this._needsUpdate = true;
@@ -220,7 +223,7 @@ export default class DesktopProjectView {
   }
 
   _updateMediaContainer() {
-    this._deltaY += (this._deltaTargetY - this._deltaY) * 0.2;
+    this._deltaY += (this._deltaTargetY - this._deltaY) * this._easing;
     if (Math.abs(this._deltaTargetY - this._deltaY) < 0.1) {
       this._deltaY = this._deltaTargetY;
       this._needsUpdate = false;
