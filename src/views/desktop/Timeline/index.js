@@ -554,7 +554,7 @@ export default class TimelineView {
       clearTimeout(this._updateTimelineTimeout);
       this._updateTimelineTimeout = setTimeout(() => {
         this._updateTimelineNeedsUpdate = false;
-      }, 2000);
+      }, 3000);
 
       if (this._mouse.x < ( window.innerWidth * 0.5 - this._width * 0.5 ) / window.innerWidth * 2 - 1 ||
           this._mouse.x > ( window.innerWidth * 0.5 + this._width * 0.5 ) / window.innerWidth * 2 - 1 ||

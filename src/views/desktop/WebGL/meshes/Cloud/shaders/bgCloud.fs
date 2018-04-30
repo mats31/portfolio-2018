@@ -103,7 +103,7 @@ void main() {
   r.y = fbm( vUv + 1.0*q + vec2(8.3,2.8)+ 0.026*uTime);
 
   float f = fbm(vUv+r);
-  float mixValue = clamp((f*f)*3.2,0.0,2.0);
+  float mixValue = clamp((f*f)*2.2,0.0,2.0);
 
   vec3 firstFinalColor = mix(firstColor, mix(secondColor, vec3(0.), clamp(length(r.x),0.0,1.0)), mixValue);
   // firstFinalColor -= max( secondFinalColor.b, max(secondFinalColor.r, secondFinalColor.g) ) * smoothstep(0.99, 1., maskOpacityTexture.a) * uShapeActive;

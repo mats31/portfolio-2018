@@ -3,6 +3,7 @@ import raf from 'raf';
 import { createDOM } from 'utils/dom';
 import { autobind } from 'core-decorators';
 import { visible } from 'core/decorators';
+import LoaderCanvas from './LoaderCanvas';
 import template from './loader.tpl.html';
 import './loader.scss';
 
@@ -18,26 +19,32 @@ export default class LoaderView {
       createDOM(template()),
     );
 
+    this._ui = {
+      canvasContainer: this.el.querySelector('.js-loader__canvasContainer'),
+      counter: this.el.querySelector('.js-loader__counter'),
+    };
+
+    this._loaderCanvas = new LoaderCanvas({
+      parent: this._ui.canvasContainer,
+    });
+
     this._callsColorsStocked = 0;
     this._previousDate = null;
 
     this._values = [];
 
     this._assetsLoaded = false;
+    this._activateCheck = false;
 
-    this.setupDOM();
     this.setupEvents();
 
     this.show();
-  }
 
-  setupDOM() {
-    this.counter = document.createElement('div');
-    this.el.appendChild(this.counter);
+    this._update();
   }
 
   setupEvents() {
-    Signals.onAssetLoaded.add(this.onAssetsLoaded);
+    Signals.onAssetLoaded.add(this.onAssetLoaded);
     Signals.onAssetsLoaded.add(this.onAssetsLoaded);
     Signals.onColorStocked.add(this._onColorStocked);
   }
@@ -73,16 +80,18 @@ export default class LoaderView {
 
   @autobind
   onAssetLoaded(percent) {
-    const value = `${percent}%`;
+    const value = `${Math.floor(percent)}%`;
 
-    this.counter.innerHTML = value;
+    this._ui.counter.innerHTML = value;
+
+    this._loaderCanvas.updateValue( Math.min( 0.85, percent / 100 ) );
   }
   @autobind
   onAssetsLoaded(percent) {
 
-    const value = `${percent}%`;
+    const value = `${Math.floor(percent)}%`;
 
-    this.counter.innerHTML = value;
+    this._ui.counter.innerHTML = value;
 
     this._assetsLoaded = true;
   }
@@ -90,25 +99,34 @@ export default class LoaderView {
   // Update -----------
 
   @autobind
-  _checkFPS() {
-    this._raf = raf(this._checkFPS);
+  _update() {
+    this._raf = raf(this._update);
 
-    const date = Date.now();
+    this._loaderCanvas.update();
 
-    if (!this._previousDate) {
+    if (this._activateCheck) {
+      const date = Date.now();
+
+      if (!this._previousDate) {
+        this._previousDate = date;
+        return;
+      }
+
+      this._values.push(date - this._previousDate);
+
+      if (this._values.length >= 150) {
+        this._stopCheckFPS();
+
+        return;
+      }
+
       this._previousDate = date;
-      return;
     }
+  }
 
-    this._values.push(date - this._previousDate);
-
-    if (this._values.length >= 150) {
-      this._stopCheckFPS();
-
-      return;
-    }
-
-    this._previousDate = date;
+  @autobind
+  _checkFPS() {
+    this._activateCheck = true;
   }
 
   _stopCheckFPS() {
@@ -120,12 +138,12 @@ export default class LoaderView {
 
     const average = sum / this._values.length;
 
-    // if (average > 22.22222222) {
+    if (average > 22.22222222) {
       Signals.onSetLowMode.dispatch();
-    // }
+    }
 
     console.log('hide loader');
-    this.hide();
+    // this.hide();
 
     raf.cancel(this._raf);
   }
