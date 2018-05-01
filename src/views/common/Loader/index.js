@@ -80,16 +80,16 @@ export default class LoaderView {
 
   @autobind
   onAssetLoaded(percent) {
-    const value = `${Math.floor(percent)}%`;
+    const value = `${Math.floor( Math.min( 85, percent ) )}%`;
 
     this._ui.counter.innerHTML = value;
 
-    this._loaderCanvas.updateValue( Math.min( 0.85, percent / 100 ) );
+    this._loaderCanvas.updateValue(percent / 100);
   }
   @autobind
   onAssetsLoaded(percent) {
 
-    const value = `${Math.floor(percent)}%`;
+    const value = `${Math.floor( Math.min( 85, percent ) )}%`;
 
     this._ui.counter.innerHTML = value;
 
