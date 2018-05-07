@@ -63,7 +63,10 @@ export default class LoaderView {
       {
         delay,
         opacity: 0,
-        onComplete: () => { this.el.style.display = 'none'; },
+        onComplete: () => {
+          raf.cancel(this._raf);
+          this.el.style.display = 'none';
+        },
       },
     );
   }
@@ -84,7 +87,7 @@ export default class LoaderView {
 
     this._ui.counter.innerHTML = value;
 
-    this._loaderCanvas.updateValue(percent / 100);
+    this._loaderCanvas.updateValue( Math.min( 85, percent ) / 100);
   }
   @autobind
   onAssetsLoaded(percent) {
@@ -142,10 +145,10 @@ export default class LoaderView {
       Signals.onSetLowMode.dispatch();
     }
 
-    console.log('hide loader');
-    // this.hide();
+    this._ui.counter.innerHTML = '100%';
+    this._loaderCanvas.updateValue(1);
 
-    raf.cancel(this._raf);
+    this.hide();
   }
 
 }
