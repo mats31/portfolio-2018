@@ -22,6 +22,13 @@
     z-index: $zindex-1;
     font-size: 3rem;
   }
+    .timeline__title .letters__container {
+      opacity: 0.5;
+      transition: opacity 0.25s ease-out;
+      &:hover {
+        opacity: 1;
+      }
+    }
 
     .timeline__title .textContainer__word {
       display: inline-block;

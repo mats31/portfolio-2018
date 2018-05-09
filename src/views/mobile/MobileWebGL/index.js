@@ -220,11 +220,14 @@ export default class MobileWebGL {
   onDeviceorientation(event) {
     // this._camera.rotation.x = event.beta * 0.003 - 0.2
     let gamma = event.gamma;
+    if (gamma > 29 || gamma < -29) {
+      gamma = 0;
+    }
     // if (gamma < 0) {
     //   gamma = map(gamma, -90, 0, 180, 90);
     // }
 
-    this._camera.rotation.y = gamma * 0.003;
+    this._camera.rotation.y = gamma * 0.001;
   }
 
   onDevicemotion(event) {

@@ -39,6 +39,8 @@ export default class MobilePoints extends THREE.Object3D {
     this._selectTimeout = null;
     this.visible = false;
     // this._calledNext = true;
+
+    Signals.onColorStocked.dispatch();
   }
 
   _setupColors() {

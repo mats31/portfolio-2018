@@ -142,7 +142,10 @@ export default class LoaderView {
     const average = sum / this._values.length;
 
     if (average > 22.22222222) {
+      console.log('low mode');
       Signals.onSetLowMode.dispatch();
+    } else {
+      console.log('high mode');
     }
 
     this._ui.counter.innerHTML = '100%';
