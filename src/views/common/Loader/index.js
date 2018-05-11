@@ -35,6 +35,7 @@ export default class LoaderView {
 
     this._assetsLoaded = false;
     this._activateCheck = false;
+    this._stoppedCheckFPS = false;
 
     this.setupEvents();
 
@@ -74,11 +75,12 @@ export default class LoaderView {
   // Events --------------------------------------------------------------------
   @autobind
   _onColorStocked() {
-    if (this._assetsLoaded && this._callsColorsStocked === 1) {
+    console.log('colorstocked delayed call');
+    // if (this._assetsLoaded && this._callsColorsStocked === 1) {
       TweenLite.delayedCall(0.8, this._checkFPS );
-    }
+    // }
 
-    this._callsColorsStocked++;
+    // this._callsColorsStocked++;
   }
 
   @autobind
@@ -107,6 +109,8 @@ export default class LoaderView {
 
     this._loaderCanvas.update();
 
+    console.log('update');
+
     if (this._activateCheck) {
       const date = Date.now();
 
@@ -134,24 +138,30 @@ export default class LoaderView {
 
   _stopCheckFPS() {
 
-    let sum = 0;
-    for (let i = 0; i < this._values.length; i++) {
-      sum += this._values[i];
+    if (!this._stoppedCheckFPS) {
+      let sum = 0;
+      for (let i = 0; i < this._values.length; i++) {
+        sum += this._values[i];
+      }
+
+      const average = sum / this._values.length;
+
+      if (average > 22.22222222) {
+        console.log('low mode');
+        console.log('average: ', average);
+        Signals.onSetLowMode.dispatch();
+      } else {
+        console.log('high mode');
+        console.log('average: ', average);
+      }
+
+      this._ui.counter.innerHTML = '100%';
+      this._loaderCanvas.updateValue(1);
+
+      this.hide();
+
+      this._stoppedCheckFPS = true;
     }
-
-    const average = sum / this._values.length;
-
-    if (average > 22.22222222) {
-      console.log('low mode');
-      Signals.onSetLowMode.dispatch();
-    } else {
-      console.log('high mode');
-    }
-
-    this._ui.counter.innerHTML = '100%';
-    this._loaderCanvas.updateValue(1);
-
-    this.hide();
   }
 
 }

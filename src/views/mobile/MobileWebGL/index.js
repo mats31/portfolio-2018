@@ -73,8 +73,8 @@ export default class MobileWebGL {
       raycaster: this._raycaster,
     });
 
-    this._scene.add(this._project.getPoints());
-    this._scene.add(this._project.getDescription());
+    if (this._project) this._scene.add(this._project.getPoints());
+    if (this._project) this._scene.add(this._project.getDescription());
   }
 
   _setupExperiment() {
@@ -82,13 +82,13 @@ export default class MobileWebGL {
       raycaster: this._raycaster,
     });
 
-    this._scene.add(this._experiment.getPoints());
-    this._scene.add(this._experiment.getDescription());
+    if (this._experiment) this._scene.add(this._experiment.getPoints());
+    if (this._experiment) this._scene.add(this._experiment.getDescription());
   }
 
   _setupDecorPoints() {
-    this._decorPoints = new DecorPoints();
-    this._scene.add(this._decorPoints);
+    // this._decorPoints = new DecorPoints();
+    if (this._decorPoints) this._scene.add(this._decorPoints);
   }
 
   _setupPostProcessing() {
@@ -122,15 +122,15 @@ export default class MobileWebGL {
   deactivate() {}
 
   scroll() {
-    if (this._project.visible()) {
+    if (this._project && this._project.visible()) {
       this._project.deselect();
     }
 
-    if (this._experiment.visible()) {
+    if (this._experiment && this._experiment.visible()) {
       this._experiment.deselect();
     }
 
-    this._decorPoints.setDirection(this._deltaTarget);
+    if (this._decorPoints) this._decorPoints.setDirection(this._deltaTarget);
 
     if (!this._animatedScrollTimeout) {
       this._postProcessing.animate(this._deltaTarget);
@@ -174,7 +174,7 @@ export default class MobileWebGL {
     this._delta = 0;
     let target = 0;
 
-    if (this._project.visible()) {
+    if (this._project && this._project.visible()) {
       target = Math.round(this._translation * projectList.projects.length) / projectList.projects.length;
     } else {
       target = Math.round(this._translation * experimentList.experiments.length) / experimentList.experiments.length;
@@ -189,18 +189,18 @@ export default class MobileWebGL {
       },
     );
 
-    if (this._project.visible()) {
+    if (this._project && this._project.visible()) {
       this._project.select();
     }
 
-    if (this._experiment.visible()) {
+    if (this._experiment && this._experiment.visible()) {
       this._experiment.select();
     }
   }
 
   updateState(page) {
-    this._project.updateState(page);
-    this._experiment.updateState(page);
+    if (this._project) this._project.updateState(page);
+    if (this._experiment) this._experiment.updateState(page);
 
     this._angle = 0;
     this._delta = 0;
@@ -274,6 +274,7 @@ export default class MobileWebGL {
   // @autobind
   // _onClick() {
   //   if (this._project.focused()) {
+  //   if (this._project.focused()) {
   //     const id = projectList.projects[Math.round(States.global.progress) * projectList.projects.length].id;
   //     console.log(Math.round(States.global.progress) * projectList.projects.length);
   //     States.router.navigateTo(pages.PROJECT, { id });
@@ -338,18 +339,15 @@ export default class MobileWebGL {
 
   // @autobind
   touchend() {
-    console.log('webgl touchend');
     this.unscroll();
 
     if (!this._dragged) {
-      console.log(this._project.focused());
-      if (this._project.focused() && this._project.visible()) {
-        console.log(Math.round(States.global.progress));
+      if (this._project && this._project.focused() && this._project.visible()) {
         const id = projectList.projects[Math.round(States.global.progress)].id;
         States.router.navigateTo(pages.PROJECT, { id });
       }
 
-      if (this._experiment.focused() && this._experiment.visible()) {
+      if (this._experiment && this._experiment.focused() && this._experiment.visible()) {
         window.open(experimentList.experiments[Math.floor(States.global.progress)].url, '_blank');
       }
     }
@@ -382,11 +380,11 @@ export default class MobileWebGL {
 
     for (let i = 0; i < intersects.length; i++) {
 
-      if (this._project.visible()) {
+      if (this._project && this._project.visible()) {
         this._project.focus();
       }
 
-      if (this._experiment.visible()) {
+      if (this._experiment && this._experiment.visible()) {
         this._experiment.focus();
       }
 
@@ -396,11 +394,11 @@ export default class MobileWebGL {
 
     document.body.style.cursor = 'inherit';
 
-    if (this._project.visible()) {
+    if (this._project && this._project.visible()) {
       this._project.blur();
     }
 
-    if (this._experiment.visible()) {
+    if (this._experiment && this._experiment.visible()) {
       this._experiment.blur();
     }
   }
@@ -419,17 +417,17 @@ export default class MobileWebGL {
     //   this._translation = this._type === 'project' ? -10000 * projectList.projects.length : -10000 * experimentList.experiments.length;
     // }
 
-    if (this._project.visible()) {
+    if (this._project && this._project.visible()) {
       this._project.update(time, this._finalDelta, this._translation);
     }
 
-    if (this._experiment.visible()) {
+    if (this._experiment && this._experiment.visible()) {
       this._experiment.update(time, this._finalDelta, this._translation);
     }
   }
 
   _updateDecorPoints(time) {
-    this._decorPoints.update(time, this._finalDelta);
+    if (this._decorPoints) this._decorPoints.update(time, this._finalDelta);
   }
 
 }
