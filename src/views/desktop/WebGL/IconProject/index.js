@@ -24,7 +24,7 @@ export default class IconProject {
     this._ctx.canvas.style.position = 'absolute';
     this._ctx.canvas.style.top = '0';
     this._ctx.canvas.style.left = '0';
-    this._ctx.canvas.style.zIndex = 99999;
+    this._ctx.canvas.style.zIndex = 50;
     this._ctx.canvas.style.display = 'none';
     this._parent.appendChild(this._ctx.canvas);
 

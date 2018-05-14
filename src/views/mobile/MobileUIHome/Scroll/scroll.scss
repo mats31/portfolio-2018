@@ -3,7 +3,7 @@
 .scroll {
   position: absolute;
   left: 50%;
-  top: 90vh;
+  top: calc(100vh - 19rem);
   transform: translate(-50%, 0);
   color: white;
   @include font-body();

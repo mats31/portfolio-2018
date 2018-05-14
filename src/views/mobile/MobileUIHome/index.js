@@ -25,10 +25,10 @@ export default class DesktopHomeView {
     );
 
     // this._setupProjectDescription();
-    // this._setupTitle();
+    this._setupTitle();
     this._setupMenu();
     // this._setupNetworks();
-    // this._setupScroll();
+    this._setupScroll();
 
     this._setupEvents();
   }
@@ -82,17 +82,17 @@ export default class DesktopHomeView {
   updateState(page) {
     switch (page) {
       case pages.PROJECT:
-        // this._title.show();
+        this._title.hide();
         // this._networks.hide();
         this._menu.hide();
-        // this._scroll.hide();
+        this._scroll.hide();
         // this._projectDescription.hide();
         break;
       default:
         this._menu.show();
-        // this._title.show();
+        this._title.show();
         // this._networks.show();
-        // this._scroll.show();
+        this._scroll.show();
         // this._projectDescription.show();
     }
 

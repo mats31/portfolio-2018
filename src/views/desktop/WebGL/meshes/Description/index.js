@@ -17,7 +17,7 @@ export default class Description extends THREE.Object3D {
     this.name = 'description';
     this._type = options.type;
 
-    this._baseH = 20;
+    this._baseH = 25;
 
     this._setupMaskDescription();
     this._setupGeometry();
@@ -86,22 +86,22 @@ export default class Description extends THREE.Object3D {
     this.scale.set(w, h, 1);
   }
 
-  updateExperiment(experiment) {
-    this._texture = States.resources.getTexture(`${experiment.id}-description`).media;
-    this._texture.minFilter = THREE.LinearFilter;
-    this._texture.magFilter = THREE.LinearFilter;
-    this._texture.needsUpdate = true;
-
-    this._material.uniforms.tDiffuse.value = this._texture;
-
-    const ratio = this._texture.image.naturalWidth / this._texture.image.naturalHeight;
-    // const w = 200;
-    // const h = w / ratio;
-    const h = this._baseH;
-    const w = h * ratio;
-
-    this.scale.set(w, h, 1);
-  }
+  // updateExperiment(experiment) {
+  //   this._texture = States.resources.getTexture(`${experiment.id}-description`).media;
+  //   this._texture.minFilter = THREE.LinearFilter;
+  //   this._texture.magFilter = THREE.LinearFilter;
+  //   this._texture.needsUpdate = true;
+  //
+  //   this._material.uniforms.tDiffuse.value = this._texture;
+  //
+  //   const ratio = this._texture.image.naturalWidth / this._texture.image.naturalHeight;
+  //   // const w = 200;
+  //   // const h = w / ratio;
+  //   const h = this._baseH;
+  //   const w = h * ratio;
+  //
+  //   this.scale.set(w, h, 1);
+  // }
 
   show({ delay = 0 } = {}) {
     TweenLite.killTweensOf(this._onDelayedHide);

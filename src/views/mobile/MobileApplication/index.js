@@ -98,7 +98,7 @@ export default class MobileAppView {
         break;
       case pages.PROJECT:
         window.removeEventListener('touchmove', this._onWindowTouchmove);
-        document.body.style.overflow = 'hidden visible';
+        document.body.style.overflow = 'hidden';
         this._uiHome.show();
         this._timeline.hide();
         this._webgl.deactivate();

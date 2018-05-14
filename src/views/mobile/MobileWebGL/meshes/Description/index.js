@@ -1,16 +1,23 @@
 import States from 'core/States';
 import { autobind } from 'core-decorators';
 import { objectVisible } from 'core/decorators';
+import projectList from 'config/project-list';
+import experimentList from 'config/experiment-list';
 import MaskDescription from './MaskDescription';
 import vertexShader from './shaders/description.vs';
 import fragmentShader from './shaders/description.fs';
 
 @objectVisible()
 export default class Description extends THREE.Object3D {
-  constructor() {
+  constructor(options) {
     super();
 
     this.visible = false;
+
+    this.name = 'description';
+    this._type = options.type;
+
+    this._baseH = 25;
 
     this._setupMaskDescription();
     this._setupGeometry();
@@ -27,7 +34,8 @@ export default class Description extends THREE.Object3D {
   }
 
   _setupMaterial() {
-    this._texture = States.resources.getTexture('resn-little-helper-description').media;
+    const id = this._type === 'project' ? `${projectList.projects[0].id}-description` : `${experimentList.experiments[0].id}-description`;
+    this._texture = States.resources.getTexture(id).media;
     this._texture.minFilter = THREE.LinearFilter;
     this._texture.magFilter = THREE.LinearFilter;
 
@@ -59,16 +67,53 @@ export default class Description extends THREE.Object3D {
 
   // State -------------------------
 
-  show() {
+  updateProject(project) {
+    console.log('update project', project);
+    console.log(`${project.id}-description`);
+    this._texture = States.resources.getTexture(`${project.id}-description`).media;
+    this._texture.minFilter = THREE.LinearFilter;
+    this._texture.magFilter = THREE.LinearFilter;
+    this._texture.needsUpdate = true;
+
+    this._material.uniforms.tDiffuse.value = this._texture;
+
+    const ratio = this._texture.image.naturalWidth / this._texture.image.naturalHeight;
+    // const w = 200;
+    // const h = w / ratio;
+    const h = this._baseH;
+    const w = h * ratio;
+
+    this.scale.set(w, h, 1);
+  }
+
+  // updateExperiment(experiment) {
+  //   this._texture = States.resources.getTexture(`${experiment.id}-description`).media;
+  //   this._texture.minFilter = THREE.LinearFilter;
+  //   this._texture.magFilter = THREE.LinearFilter;
+  //   this._texture.needsUpdate = true;
+  //
+  //   this._material.uniforms.tDiffuse.value = this._texture;
+  //
+  //   const ratio = this._texture.image.naturalWidth / this._texture.image.naturalHeight;
+  //   // const w = 200;
+  //   // const h = w / ratio;
+  //   const h = this._baseH;
+  //   const w = h * ratio;
+  //
+  //   this.scale.set(w, h, 1);
+  // }
+
+  show({ delay = 0 } = {}) {
     TweenLite.killTweensOf(this._onDelayedHide);
 
-    this.visible = true;
-    this._mask.activate();
+    TweenLite.delayedCall(delay, this._onDelayedShow);
   }
 
   hide() {
+    TweenLite.killTweensOf(this._onDelayedShow);
+
     this._mask.deactivate();
-    TweenLite.delayedCall(1, this._onDelayedHide);
+    TweenLite.delayedCall(0, this._onDelayedHide);
   }
 
   focus() {
@@ -79,7 +124,12 @@ export default class Description extends THREE.Object3D {
     this._mask.blur();
   }
 
-  // Events ------------------------
+  @autobind
+  _onDelayedShow() {
+    this.visible = true;
+    this._mask.activate();
+  }
+
   @autobind
   _onDelayedHide() {
     this.visible = false;

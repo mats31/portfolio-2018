@@ -5,8 +5,8 @@ const DEBUG = false;
 
 export default class Canvas {
   constructor() {
-    this._width = 256;
-    this._height = 256;
+    this._width = 512;
+    this._height = 512;
 
     this._dpi = Math.min( 2, window.devicePixelRatio );
 

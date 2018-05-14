@@ -1,5 +1,7 @@
 import States from 'core/States';
+import * as pages from 'core/pages';
 import projectList from 'config/project-list';
+import CloseButton from 'views/common/CloseButton';
 import { createDOM } from 'utils/dom';
 import { map, randomFloat } from 'utils/math';
 import { autobind } from 'core-decorators';
@@ -26,15 +28,21 @@ export default class DesktopProjectView {
       description: this._el.querySelector('.js-project__viewDescription'),
       date: this._el.querySelector('.js-project__date'),
       link: this._el.querySelector('.js-project__link'),
+      close: this._el.querySelector('.js-project__close'),
       medias: [],
     };
+
+    this._closeButton = new CloseButton({
+      parent: this._ui.close,
+      clickCallback: this._onCloseClick,
+    });
 
     this._rotations = [];
 
     this._deltaY = 0;
     this._deltaTargetY = 0;
 
-    this._needsUpdate = false;
+    this._needsUpdate = true;
 
     this._setupEvents();
   }
@@ -60,6 +68,8 @@ export default class DesktopProjectView {
 
     this._deltaY = 0;
     this._deltaTargetY = 0;
+
+    this._closeButton.show();
   }
 
   hide({ delay = 0 } = {}) {
@@ -76,7 +86,7 @@ export default class DesktopProjectView {
       },
     );
 
-    console.log('hide');
+    this._closeButton.hide();
 
     this.deactivate();
   }
@@ -172,6 +182,11 @@ export default class DesktopProjectView {
   // Events --------------------------------------------------------------------
 
   @autobind
+  _onCloseClick() {
+    States.router.navigateTo(pages.HOME);
+  }
+
+  @autobind
   _onResize(vw, vh) {
     this.resize(vw, vh);
   }
@@ -187,11 +202,10 @@ export default class DesktopProjectView {
 
   // Update --------------------------------------------------------------------
   update() {
-
-    if (this._needsUpdate) {
-      this._updateMediaContainer();
-      this._updateMedias();
-    }
+    // if (this._needsUpdate) {
+      // this._updateMediaContainer();
+    this._updateMedias();
+    // }
   }
 
   _updateMediaContainer() {

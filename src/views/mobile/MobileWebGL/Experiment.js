@@ -21,7 +21,9 @@ export default class Experiment {
   }
 
   _setupDescription() {
-    this._description = new Description();
+    this._description = new Description({
+      type: 'experiment',
+    });
     this._description.position.set(100, -100, 300);
   }
 
@@ -38,7 +40,9 @@ export default class Experiment {
   // State --------------------
 
   show() {
-    this._description.show();
+    this._description.show({
+      delay: 1,
+    });
     this._points.show();
   }
 
@@ -65,6 +69,10 @@ export default class Experiment {
     this._description.show();
   }
 
+  updateDescription(experiment) {
+    this._description.updateProject(experiment);
+  }
+
   updateState(page) {
     switch (page) {
       case pages.HOME:
@@ -74,6 +82,7 @@ export default class Experiment {
         this.show();
         break;
       default:
+        this.hide();
     }
   }
 

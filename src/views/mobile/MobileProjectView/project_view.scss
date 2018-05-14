@@ -5,13 +5,23 @@
   position: absolute;
   left: 0;
   top: 0;
-  width: 100%;
+  // width: 100%;
   min-height: 100vh;
   z-index: $zindex-1;
   color: white;
   display: none;
   opacity: 0;
+  overflow-y: scroll;
+  width: 100vw;
+  height: 100vh;
 }
+
+  .project__close {
+    position: fixed;
+    right: 9rem;
+    top: 5.25rem;
+    z-index: $zindex-1;
+  }
 
   .project__aside {
     font-size: 1.3rem;

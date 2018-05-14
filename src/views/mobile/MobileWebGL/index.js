@@ -30,6 +30,7 @@ export default class MobileWebGL {
 
     this._scrollWheelTimeout = null;
     this._cameraInterval = null;
+    this._page = null;
 
     this._animatedScrollTimeout = false;
     this._animateScrollTimeout = false;
@@ -189,6 +190,14 @@ export default class MobileWebGL {
       },
     );
 
+    if (this._project.visible()) {
+      const project = projectList.projects[Math.round(States.global.progress) % projectList.projects.length];
+      this._project.updateDescription(project);
+    } else if (this._experiment.visible()) {
+      const experiment = experimentList.experiments[Math.round(States.global.progress) % experimentList.experiments.length];
+      this._experiment.updateDescription(experiment);
+    }
+
     if (this._project && this._project.visible()) {
       this._project.select();
     }
@@ -209,10 +218,30 @@ export default class MobileWebGL {
     this._translation = 0;
 
     if (page === pages.HOME) {
-      this._type = 'project'
+      this._type = 'project';
+
+      if (this._page === pages.EXPERIMENT) {
+        this._resetTranslation();
+      }
     } else {
-      this._type = 'experiment'
+      if (this._page === pages.HOME) {
+        this._resetTranslation();
+      }
+
+      this._type = 'experiment';
     }
+
+    this._page = page;
+  }
+
+  _resetTranslation() {
+    this._translation = 0;
+    this._delta = 0;
+    const project = projectList.projects[0];
+    this._project.updateDescription(project);
+
+    const experiment = experimentList.experiments[0];
+    this._experiment.updateDescription(experiment);
   }
 
   // Events --------------------------------------------------------------------
@@ -315,7 +344,7 @@ export default class MobileWebGL {
     this._mouse.x = ( event.touches[0].clientX / window.innerWidth ) * 2 - 1;
     this._mouse.y = -( event.touches[0].clientY / window.innerHeight ) * 2 + 1;
 
-    const p2 = { x: window.screen.width * 0.5, y: window.screen.height * 0.5 };
+    const p2 = { x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 };
     let angle = angle2(this._p1, p2, true);
 
     if (angle < 0) {
@@ -374,31 +403,34 @@ export default class MobileWebGL {
   }
 
   _updateCamera() {
+    const object = this._type === 'project' ? this._project.getDescription() : this._experiment.getDescription();
 
     this._raycaster.setFromCamera( this._mouse, this._camera );
-    const intersects = this._raycaster.intersectObjects( this._scene.children, true );
+    const intersects = this._raycaster.intersectObjects( object.children, true );
 
     for (let i = 0; i < intersects.length; i++) {
 
-      if (this._project && this._project.visible()) {
-        this._project.focus();
-      }
+      if (intersects[i].object.parent.name === 'description') {
+        if (this._project.visible()) {
+          this._project.focus();
+        }
 
-      if (this._experiment && this._experiment.visible()) {
-        this._experiment.focus();
-      }
+        if (this._experiment.visible()) {
+          this._experiment.focus();
+        }
 
-      document.body.style.cursor = 'pointer';
-      return;
+        document.body.style.cursor = 'pointer';
+        return;
+      }
     }
 
     document.body.style.cursor = 'inherit';
 
-    if (this._project && this._project.visible()) {
+    if (this._project.visible()) {
       this._project.blur();
     }
 
-    if (this._experiment && this._experiment.visible()) {
+    if (this._experiment.visible()) {
       this._experiment.blur();
     }
   }
