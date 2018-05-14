@@ -10,6 +10,7 @@ import OrbitControls from 'helpers/3d/OrbitControls/OrbitControls'
 import PostProcessing from './PostProcessing';
 import Project from './Project';
 import Experiment from './Experiment';
+import IconProject from './IconProject';
 import Background from './meshes/Background';
 import Cloud from './meshes/Cloud';
 import Foreground from './meshes/Foreground';
@@ -60,6 +61,7 @@ export default class WebGL {
     this._setupDecorPoints();
     this._setupCloud();
     this._setupPostProcessing();
+    this._setupIconProject();
 
     this._addEvents();
   }
@@ -136,6 +138,12 @@ export default class WebGL {
       scene: this._scene,
       renderer: this._renderer,
       camera: this._camera,
+    });
+  }
+
+  _setupIconProject() {
+    this._iconProject = new IconProject({
+      parent: this._el,
     });
   }
 
@@ -252,6 +260,7 @@ export default class WebGL {
       this._type = 'project';
       this._cloud.deactivate();
       this._background.show();
+      this._iconProject.show();
 
       if (this._page === pages.EXPERIMENT) {
         this._resetTranslation();
@@ -259,9 +268,11 @@ export default class WebGL {
     } else if (page === pages.ABOUT) {
       this._cloud.activate();
       this._background.hide();
+      this._iconProject.hide();
     } else if (page === pages.EXPERIMENT) {
       this._type = 'experiment';
       this._cloud.deactivate();
+      this._iconProject.show();
 
       if (this._page === pages.HOME) {
         this._resetTranslation();
@@ -269,6 +280,7 @@ export default class WebGL {
     } else {
       this._type = 'experiment';
       this._cloud.deactivate();
+      this._iconProject.hide();
     }
 
     this._page = page;
@@ -292,6 +304,7 @@ export default class WebGL {
 
     this._project.mousemove(this._mouse);
     this._experiment.mousemove(this._mouse);
+    this._iconProject.mousemove(event);
   }
 
   @autobind
@@ -367,12 +380,16 @@ export default class WebGL {
   _onMousedown() {
     this._project.mousedown();
     this._experiment.mousedown();
+
+    this._iconProject.focus();
   }
 
   @autobind
   _onMouseup() {
     this._project.mouseup();
     this._experiment.mouseup();
+
+    this._iconProject.blur();
   }
 
   @autobind
@@ -463,6 +480,7 @@ export default class WebGL {
       this._updatePoints(time);
       this._updateDecorPoints(time);
       this._background.update(time);
+      if (this._iconProject) this._iconProject.update();
       // if (this._mode === 'high') this._background.update(time);
       if (this._foreground) this._foreground.update(time);
       if (this._cloud) this._cloud.update(time);

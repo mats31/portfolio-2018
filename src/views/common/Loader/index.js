@@ -75,7 +75,6 @@ export default class LoaderView {
   // Events --------------------------------------------------------------------
   @autobind
   _onColorStocked() {
-    console.log('colorstocked delayed call');
     // if (this._assetsLoaded && this._callsColorsStocked === 1) {
       TweenLite.delayedCall(0.8, this._checkFPS );
     // }
@@ -108,8 +107,6 @@ export default class LoaderView {
     this._raf = raf(this._update);
 
     this._loaderCanvas.update();
-
-    console.log('update');
 
     if (this._activateCheck) {
       const date = Date.now();
