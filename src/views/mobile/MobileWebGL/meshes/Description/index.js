@@ -51,7 +51,7 @@ export default class Description extends THREE.Object3D {
     this.add(this._mesh);
 
     const ratio = this._texture.image.naturalWidth / this._texture.image.naturalHeight;
-    const w = 200;
+    const w = 300;
     const h = w / ratio;
 
     this.scale.set(w, h, 1);

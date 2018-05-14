@@ -62,7 +62,7 @@ export default class IconProject {
     TweenLite.killTweensOf(this._circle);
     TweenLite.to(
       this._circle,
-      1,
+      2,
       {
         progress: 1,
         onComplete: () => {

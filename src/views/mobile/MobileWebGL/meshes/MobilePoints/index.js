@@ -61,8 +61,8 @@ export default class MobilePoints extends THREE.Object3D {
 
     this._geometry = new THREE.BufferGeometry();
 
-    const width = 512;
-    const height = 512;
+    const width = 256;
+    const height = 256;
 
     this._aRadialColor = new THREE.BufferAttribute( new Float32Array( this._nb * 4 ), 4 );
 
@@ -115,7 +115,7 @@ export default class MobilePoints extends THREE.Object3D {
           index,
           1,
         );
-        this._selectOffsetSpeeds[index] = randomFloat(0.01, 0.07);
+        this._selectOffsetSpeeds[index] = randomFloat(0.1, 0.2);
 
         this._aDirection.setX(
           index,
@@ -213,6 +213,7 @@ export default class MobilePoints extends THREE.Object3D {
   _setupMesh() {
     this._mesh = new THREE.Points( this._geometry, this._material );
     this.add(this._mesh);
+    this.scale.set(2, 2, 1);
   }
 
   // State ---------------------
