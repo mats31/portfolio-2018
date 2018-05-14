@@ -6,7 +6,9 @@ import { autobind } from 'core-decorators';
 import { visible } from 'core/decorators';
 import ProjectDescription from './ProjectDescription';
 import Title from './Title';
+import List from './List';
 import Menu from './Menu';
+import MobileAbout from './MobileAbout';
 import Networks from './Networks';
 import Scroll from './Scroll';
 import template from './ui_home.tpl.html';
@@ -14,7 +16,7 @@ import './ui_home.scss';
 
 
 @visible()
-export default class DesktopHomeView {
+export default class MobileUIHome {
 
   // Setup ---------------------------------------------------------------------
 
@@ -26,7 +28,9 @@ export default class DesktopHomeView {
 
     // this._setupProjectDescription();
     this._setupTitle();
+    this._setupList();
     this._setupMenu();
+    this._setupAbout();
     // this._setupNetworks();
     this._setupScroll();
 
@@ -47,8 +51,20 @@ export default class DesktopHomeView {
     });
   }
 
+  _setupList() {
+    this._list = new List({
+      parent: this._el,
+    });
+  }
+
   _setupMenu() {
     this._menu = new Menu({
+      parent: this._el,
+    });
+  }
+
+  _setupAbout() {
+    this._about = new MobileAbout({
       parent: this._el,
     });
   }
@@ -83,17 +99,24 @@ export default class DesktopHomeView {
     switch (page) {
       case pages.PROJECT:
         this._title.hide();
-        // this._networks.hide();
         this._menu.hide();
+        this._list.hide();
         this._scroll.hide();
-        // this._projectDescription.hide();
+        this._about.hide();
+        break;
+      case pages.ABOUT:
+        this._about.show();
+        this._title.hide();
+        this._menu.hide();
+        this._list.hide();
+        this._scroll.hide();
         break;
       default:
         this._menu.show();
+        this._list.show();
         this._title.show();
-        // this._networks.show();
         this._scroll.show();
-        // this._projectDescription.show();
+        this._about.hide();
     }
 
     this._menu.updateState(page);

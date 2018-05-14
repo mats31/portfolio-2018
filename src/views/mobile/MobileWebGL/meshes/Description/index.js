@@ -68,8 +68,6 @@ export default class Description extends THREE.Object3D {
   // State -------------------------
 
   updateProject(project) {
-    console.log('update project', project);
-    console.log(`${project.id}-description`);
     this._texture = States.resources.getTexture(`${project.id}-description`).media;
     this._texture.minFilter = THREE.LinearFilter;
     this._texture.magFilter = THREE.LinearFilter;

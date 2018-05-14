@@ -33,6 +33,12 @@ export default class DesktopTitleView {
   // Events --------------------------------------------------------------------
 
   _onClick() {
-    States.router.navigateTo(pages.HOME);
+    const lastRouteName = States.router.getLastRouteResolved().name;
+
+    if (lastRouteName === pages.ABOUT) {
+      States.router.navigateTo(pages.HOME);
+    } else {
+      States.router.navigateTo(pages.ABOUT);
+    }
   }
 }

@@ -33,7 +33,7 @@ export default class MobileWebGL {
     this._page = null;
 
     this._animatedScrollTimeout = false;
-    this._animateScrollTimeout = false;
+    this._animateScrollTimeout = true;
     this._dragged = true;
 
     this._type = 'project';
@@ -133,23 +133,26 @@ export default class MobileWebGL {
 
     if (this._decorPoints) this._decorPoints.setDirection(this._deltaTarget);
 
-    if (!this._animatedScrollTimeout) {
-      this._postProcessing.animate(this._deltaTarget);
+    // if (!this._animatedScrollTimeout) {
+    this._postProcessing.animate(this._deltaTarget);
 
-      this._shakeCamera();
-    }
+    this._shakeCamera();
+    // }
 
-    this._animatedScrollTimeout = true;
-    clearTimeout(this._animateScrollTimeout);
-    this._animateScrollTimeout = setTimeout(() => {
-      this._animatedScrollTimeout = false;
-      this._animateScrollTimeout = false;
-    }, 1500);
+    // this._animatedScrollTimeout = true;
+    // clearTimeout(this._animateScrollTimeout);
+    // this._animateScrollTimeout = setTimeout(() => {
+    //   this._animatedScrollTimeout = false;
+    //   this._animateScrollTimeout = false;
+    // }, 1500);
   }
 
   _shakeCamera() {
 
     let intervals = 0;
+
+    this._camera.position.x = randomFloat(-10, 10);
+    this._camera.position.y = randomFloat(-10, 10);
 
     clearInterval(this._cameraInterval);
     this._cameraInterval = setInterval( () => {
