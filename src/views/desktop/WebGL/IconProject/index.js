@@ -74,7 +74,7 @@ export default class IconProject {
   }
 
   focus() {
-    this.show();
+    // this.show();
 
     this._circle.needsUpdate = true;
     TweenLite.killTweensOf(this._circle);
@@ -92,7 +92,8 @@ export default class IconProject {
           }
 
           this._circle.needsUpdate = false;
-          this.hide();
+          this._circle.progress = 0;
+          this._outCircle.progress = 0;
         },
       },
     );
@@ -107,7 +108,6 @@ export default class IconProject {
         onComplete: () => {
 
           this._outCircle.needsUpdate = false;
-          this.hide();
         },
       },
     );
