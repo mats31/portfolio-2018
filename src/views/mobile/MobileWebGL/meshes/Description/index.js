@@ -3,6 +3,7 @@ import { autobind } from 'core-decorators';
 import { objectVisible } from 'core/decorators';
 import projectList from 'config/project-list';
 import experimentList from 'config/experiment-list';
+import { getPerspectiveSize } from 'utils/3d';
 import MaskDescription from './MaskDescription';
 import vertexShader from './shaders/description.vs';
 import fragmentShader from './shaders/description.fs';
@@ -16,8 +17,9 @@ export default class Description extends THREE.Object3D {
 
     this.name = 'description';
     this._type = options.type;
+    this._camera = options.camera;
 
-    this._baseH = 25;
+    this._baseH = 50;
 
     this._setupMaskDescription();
     this._setupGeometry();
@@ -58,9 +60,18 @@ export default class Description extends THREE.Object3D {
     this._mesh = new THREE.Mesh(this._geometry, this._material);
     this.add(this._mesh);
 
+    this.position.set(0, -160, 200);
+
+    this.scale.set(1, 1, 1);
+    const perspectiveSize = getPerspectiveSize(this._camera, Math.abs(this._camera.position.z - this.position.z));
     const ratio = this._texture.image.naturalWidth / this._texture.image.naturalHeight;
-    const w = 300;
-    const h = w / ratio;
+    let w = perspectiveSize.width;
+    let h = w / ratio;
+
+    if (h > 80) {
+      h = 60;
+      w = h * ratio;
+    }
 
     this.scale.set(w, h, 1);
   }
@@ -75,11 +86,16 @@ export default class Description extends THREE.Object3D {
 
     this._material.uniforms.tDiffuse.value = this._texture;
 
+    this.scale.set(1, 1, 1);
+    const perspectiveSize = getPerspectiveSize(this._camera, Math.abs(this._camera.position.z - this.position.z));
     const ratio = this._texture.image.naturalWidth / this._texture.image.naturalHeight;
-    // const w = 200;
-    // const h = w / ratio;
-    const h = this._baseH;
-    const w = h * ratio;
+    let w = perspectiveSize.width;
+    let h = w / ratio;
+
+    if (h > 80) {
+      h = 60;
+      w = h * ratio;
+    }
 
     this.scale.set(w, h, 1);
   }

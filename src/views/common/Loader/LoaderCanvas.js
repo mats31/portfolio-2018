@@ -4,8 +4,8 @@ export default class LoaderCanvas {
   constructor(options) {
     this._parent = options.parent;
 
-    this._width = 256;
-    this._height = 256;
+    this._width = 200;
+    this._height = 200;
     this._nbLines = 30;
     this._progress = 0;
     this._currentRotation = 0;

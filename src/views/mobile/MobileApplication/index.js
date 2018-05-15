@@ -13,6 +13,7 @@ export default class MobileAppView {
 
   constructor() {
     window.GUI = new dat.GUI();
+    window.GUI.destroy();
 
     console.info('mobile application initializing');
     this.el = document.getElementById('application');
@@ -124,18 +125,17 @@ export default class MobileAppView {
   @autobind
   _onWindowTouchmove(event) {
     event.preventDefault();
+    this._uiHome.removeScrollMessage();
   }
 
   @autobind
   _onTouchstart(event) {
-    console.log('touchstart');
     this._timeline.touchstart(event);
     this._webgl.touchstart(event);
   }
 
   @autobind
   _onTouchmove(event) {
-    console.log('touchmove');
     event.preventDefault();
     this._timeline.touchmove(event);
     this._webgl.touchmove(event);
@@ -143,7 +143,6 @@ export default class MobileAppView {
 
   @autobind
   _onTouchend(event) {
-    console.log('touchend');
     this._timeline.touchend(event);
     this._webgl.touchend(event);
   }

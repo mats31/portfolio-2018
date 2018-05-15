@@ -35,10 +35,22 @@
       opacity: 0;
       cursor: pointer;
       line-height: 0.9;
-      white-space: nowrap;
       text-transform: uppercase;
       transform: translateY(-50%);
     }
+
+      .UIHome__itemIndex {
+        display: inline-block;
+        font-size: 1.5rem;
+        vertical-align: top;
+        margin-top: 0.75rem;
+        margin-right: 1rem;
+      }
+
+      .UIHome__itemTitle {
+        display: inline-block;
+      }
+
 
     canvas {
         // background: rgba(255, 0, 0, 0.2);

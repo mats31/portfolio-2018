@@ -10,8 +10,11 @@ import OrbitControls from 'helpers/3d/OrbitControls/OrbitControls'
 import PostProcessing from './PostProcessing';
 import Project from './Project';
 import Experiment from './Experiment';
+import Background from './meshes/MobileBackground';
+// import Cloud from './meshes/MobileCloud';
 import DecorPoints from './meshes/DecorPoints';
 import template from './webgl.tpl.html';
+import backgroundBufferFragmentShader from './meshes/MobileBackground/shaders/backgroundBufferPlane.fs';
 
 @active()
 @toggle('scrolled', 'scroll', 'unscroll', false)
@@ -34,7 +37,7 @@ export default class MobileWebGL {
 
     this._animatedScrollTimeout = false;
     this._animateScrollTimeout = true;
-    this._dragged = true;
+    this._dragged = false;
 
     this._type = 'project';
 
@@ -46,9 +49,11 @@ export default class MobileWebGL {
 
     this._setupWebGL(window.innerWidth, window.innerHeight);
 
+    this._setupBackground();
     this._setupProject();
     this._setupExperiment();
     this._setupDecorPoints();
+    // this._setupCloud();
     this._setupPostProcessing();
 
     this._addEvents();
@@ -69,9 +74,20 @@ export default class MobileWebGL {
     this._el.appendChild(this._renderer.domElement);
   }
 
+  _setupBackground() {
+    this._background = new Background({
+      renderer: this._renderer,
+      width: 256,
+      height: 256,
+      bufferPlaneFragment: backgroundBufferFragmentShader,
+    });
+    this._scene.add(this._background.getObject());
+  }
+
   _setupProject() {
     this._project = new Project({
       raycaster: this._raycaster,
+      camera: this._camera,
     });
 
     if (this._project) this._scene.add(this._project.getPoints());
@@ -81,6 +97,7 @@ export default class MobileWebGL {
   _setupExperiment() {
     this._experiment = new Experiment({
       raycaster: this._raycaster,
+      camera: this._camera,
     });
 
     if (this._experiment) this._scene.add(this._experiment.getPoints());
@@ -90,6 +107,12 @@ export default class MobileWebGL {
   _setupDecorPoints() {
     // this._decorPoints = new DecorPoints();
     if (this._decorPoints) this._scene.add(this._decorPoints);
+  }
+
+  _setupCloud() {
+    this._cloud = new Cloud({});
+    this._cloud.position.z = 0;
+    this._scene.add(this._cloud);
   }
 
   _setupPostProcessing() {
@@ -107,7 +130,7 @@ export default class MobileWebGL {
     // this._el.addEventListener('touchend', this._onTouchend);
     Signals.onResize.add(this._onResize);
     // Signals.onScroll.add(this._onScroll);
-    Signals.onScrollWheel.add(this._onScrollWheel);
+    // Signals.onScrollWheel.add(this._onScrollWheel);
   }
 
   // Getters -------------------------------------------------------------------
@@ -134,10 +157,10 @@ export default class MobileWebGL {
     if (this._decorPoints) this._decorPoints.setDirection(this._deltaTarget);
 
     // if (!this._animatedScrollTimeout) {
-    this._postProcessing.animate(this._deltaTarget);
-
-    this._shakeCamera();
-    // }
+    if (!this._project.focused() && !this._experiment.focused()) {
+      this._postProcessing.animate(this._deltaTarget);
+      this._shakeCamera();
+    }
 
     // this._animatedScrollTimeout = true;
     // clearTimeout(this._animateScrollTimeout);
@@ -220,12 +243,20 @@ export default class MobileWebGL {
     this._finalDelta = 0;
     this._translation = 0;
 
+    if (page === pages.EXPERIMENT) {
+      if (this._cloud) this._cloud.activate();
+    }
+
     if (page === pages.HOME) {
       this._type = 'project';
+      if (this._background) this._background.show();
+      if (this._cloud) this._cloud.activate();
 
       if (this._page === pages.EXPERIMENT) {
         this._resetTranslation();
       }
+    } else if (this._page === pages.ABOUT) {
+      this._background.hide();
     } else {
       if (this._page === pages.HOME) {
         this._resetTranslation();
@@ -282,6 +313,9 @@ export default class MobileWebGL {
     this._camera.updateProjectionMatrix();
 
     this._renderer.setSize( vw, vh );
+
+    if (this._background) this._background.resize(this._camera);
+    if (this._cloud) this._cloud.resize(this._camera);
   }
 
   @autobind
@@ -289,19 +323,19 @@ export default class MobileWebGL {
     console.log(1);
   }
 
-  @autobind
-  _onScrollWheel(event) {
-    if (this.active()) {
-      TweenLite.killTweensOf(this, { _translation: true });
-      this._deltaTarget = Math.min( 150, Math.max( -150, event.deltaY ) );
-      this.scroll();
-
-      clearTimeout(this._scrollWheelTimeout);
-      this._scrollWheelTimeout = setTimeout(() => {
-        this.unscroll();
-      }, 500);
-    }
-  }
+  // @autobind
+  // _onScrollWheel(event) {
+  //   if (this.active()) {
+  //     TweenLite.killTweensOf(this, { _translation: true });
+  //     this._deltaTarget = Math.min( 150, Math.max( -150, event.deltaY ) );
+  //     this.scroll();
+  //
+  //     clearTimeout(this._scrollWheelTimeout);
+  //     this._scrollWheelTimeout = setTimeout(() => {
+  //       this.unscroll();
+  //     }, 500);
+  //   }
+  // }
 
   // @autobind
   // _onClick() {
@@ -322,7 +356,11 @@ export default class MobileWebGL {
 
     this._mouse.x = ( event.touches[0].clientX / window.innerWidth ) * 2 - 1;
     this._mouse.y = -( event.touches[0].clientY / window.innerHeight ) * 2 + 1;
+
+    this._updateCamera();
     this.scroll();
+
+    this._background.touch();
 
     this._p1 = { x: event.touches[0].clientX, y: event.touches[0].clientY };
     // const p2 = { x: window.screen.width * 0.5, y: window.screen.height * 0.5 };
@@ -373,18 +411,25 @@ export default class MobileWebGL {
   touchend() {
     this.unscroll();
 
+    this._background.touchend();
+
     if (!this._dragged) {
       if (this._project && this._project.focused() && this._project.visible()) {
-        const id = projectList.projects[Math.round(States.global.progress)].id;
+        const id = projectList.projects[Math.round(States.global.progress) % projectList.projects.length].id;
         States.router.navigateTo(pages.PROJECT, { id });
-      }
-
-      if (this._experiment && this._experiment.focused() && this._experiment.visible()) {
-        window.open(experimentList.experiments[Math.floor(States.global.progress)].url, '_blank');
+      } else if (this._experiment && this._experiment.focused() && this._experiment.visible()) {
+        window.open(experimentList.experiments[Math.round(States.global.progress) % experimentList.experiments.length].url, '_blank');
       }
     }
-
     this._dragged = false;
+  }
+
+  @autobind
+  _onSetLowMode() {
+    if (this._cloud) this._cloud.setLowMode();
+    if (this._background) this._background.setLowMode();
+
+    this._mode = 'low';
   }
 
   // Update --------------------------------------------------------------------
@@ -396,9 +441,11 @@ export default class MobileWebGL {
       const time = this._clock.getElapsedTime();
       const delta = this._clock.getDelta();
 
-      this._updateCamera();
+      // this._updateCamera();
       this._updatePoints(time);
       this._updateDecorPoints(time);
+      if (this._background) this._background.update(time);
+      if (this._cloud) this._cloud.update(time);
 
       // this._renderer.render(this._scene, this._camera);
       this._postProcessing.update(delta);
@@ -414,6 +461,7 @@ export default class MobileWebGL {
     for (let i = 0; i < intersects.length; i++) {
 
       if (intersects[i].object.parent.name === 'description') {
+        console.info('description');
         if (this._project.visible()) {
           this._project.focus();
         }
@@ -441,7 +489,7 @@ export default class MobileWebGL {
   _updatePoints(time) {
     // this._delta += ( this._deltaTarget - this._delta ) * 0.1;
     // this._delta += this._deltaTarget * 3;
-    this._delta += ( this._deltaTarget * 4 - this._delta ) * 0.1;
+    this._delta += ( this._deltaTarget * 20 - this._delta ) * 0.1;
     this._finalDelta += this._delta;
     if (this.scrolled()) {
       this._translation = this._angle / 360;

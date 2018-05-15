@@ -351,12 +351,26 @@ export default class DesktopListView {
       for (let i = 0; i < projectList.projects.length; i++) {
         const project = projectList.projects[i];
 
-        const div = document.createElement('div');
-        div.classList.add('js-UIHome__item');
-        div.classList.add('UIHome__item');
-        div.innerHTML = project.title;
-        div.setAttribute('data-id', project.id);
-        this._items.push(div);
+        const item = document.createElement('div');
+        item.classList.add('js-UIHome__item');
+        item.classList.add('UIHome__item');
+        item.setAttribute('data-id', project.id);
+
+        const j = i + 1 < 10 ? `_0${i + 1}.` : `_${i + 1}.`;
+        const index = document.createElement('div');
+        index.classList.add('UIHome__itemIndex');
+        index.setAttribute('data-id', project.id);
+        index.innerHTML = j;
+        // item.appendChild(index);
+
+        const title = document.createElement('div');
+        title.classList.add('UIHome__itemTitle');
+        title.setAttribute('data-id', project.id);
+        title.appendChild(index);
+        title.innerHTML += project.title;
+        item.appendChild(title);
+
+        this._items.push(item);
         this._itemsAnim.push({
           baseAlpha: 0,
           extraAlpha: 0,
@@ -364,9 +378,9 @@ export default class DesktopListView {
           currentColor: 0,
         });
 
-        div.addEventListener('click', this._onProjectItemClick);
+        item.addEventListener('click', this._onProjectItemClick);
 
-        this._ui.itemContainer.appendChild(div);
+        this._ui.itemContainer.appendChild(item);
 
         const point = {
           x: 0,
@@ -385,12 +399,27 @@ export default class DesktopListView {
       for (let i = 0; i < experimentList.experiments.length; i++) {
         const experiment = experimentList.experiments[i];
 
-        const div = document.createElement('div');
-        div.classList.add('js-UIHome__item');
-        div.classList.add('UIHome__item');
-        div.innerHTML = experiment.title;
-        div.setAttribute('data-id', experiment.id);
-        this._items.push(div);
+        const item = document.createElement('div');
+        item.classList.add('js-UIHome__item');
+        item.classList.add('UIHome__item');
+        item.setAttribute('data-id', experiment.id);
+
+        const j = i + 1 < 10 ? `_0${i + 1}.` : `_${i + 1}.`;
+        const index = document.createElement('span');
+        index.classList.add('UIHome__itemIndex');
+        index.setAttribute('data-id', experiment.id);
+        index.innerHTML = j;
+        // item.appendChild(index);
+
+        const title = document.createElement('div');
+        title.classList.add('UIHome__itemTitle');
+        title.setAttribute('data-id', experiment.id);
+        title.appendChild(index);
+        title.innerHTML += experiment.title;
+        item.appendChild(title);
+
+
+        this._items.push(item);
         this._itemsAnim.push({
           baseAlpha: 0,
           extraAlpha: 0,
@@ -398,9 +427,9 @@ export default class DesktopListView {
           currentColor: 0,
         });
 
-        div.addEventListener('click', this._onExperimentItemClick);
+        item.addEventListener('click', this._onExperimentItemClick);
 
-        this._ui.itemContainer.appendChild(div);
+        this._ui.itemContainer.appendChild(item);
 
         const point = {
           x: 0,
@@ -479,7 +508,7 @@ export default class DesktopListView {
   }
 
   resize() {
-    this._elWidth = window.innerWidth * 0.3;
+    this._elWidth = window.innerWidth * 0.4;
     this._elHeight = window.innerHeight;
     this._canvasTop = this._ctx.canvas.getBoundingClientRect().top;
 
@@ -651,16 +680,16 @@ export default class DesktopListView {
     for (let i = 0; i < this._items.length; i++) {
       const relativePointY = this._items[i].getBoundingClientRect().top + this._items[i].offsetHeight * 0.5;
       const distance = Math.abs( this._mouse.y - relativePointY );
-      const scale = map( Math.min(window.innerHeight * 0.2, distance ), 0, window.innerHeight * 0.2, 1.3, 1 );
+      // const scale = map( Math.min(window.innerHeight * 0.2, distance ), 0, window.innerHeight * 0.2, 1.3, 1 );
       if (this.focused()) {
         this._itemsAnim[i].extraAlpha = map( Math.min(window.innerHeight * 0.3, distance ), 0, window.innerHeight * 0.3, 0.8, 0 );
-        this._itemsAnim[i].currentColor = map( Math.min(window.innerHeight * 0.1, distance ), 0, window.innerHeight * 0.1, 255, 0 );
+        this._itemsAnim[i].currentColor = Math.ceil(map( Math.min(window.innerHeight * 0.1, distance ), 0, window.innerHeight * 0.1, 255, 0 ));
       }
 
       this._itemsAnim[i].currentAlpha += ( this._itemsAnim[i].extraAlpha - this._itemsAnim[i].currentAlpha ) * 0.05;
 
       // this._items[i].style.transform = `translate3d(0, -50%, 0) scale(${scale})`;
-      this._items[i].style.opacity = this._itemsAnim[i].baseAlpha + this._itemsAnim[i].currentAlpha;
+      this._items[i].style.opacity = (this._itemsAnim[i].baseAlpha + this._itemsAnim[i].currentAlpha);
       this._items[i].style.color = `rgba(${this._itemsAnim[i].currentColor},${this._itemsAnim[i].currentColor},${this._itemsAnim[i].currentColor},1)`;
     }
   }

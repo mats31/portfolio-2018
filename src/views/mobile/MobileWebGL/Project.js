@@ -9,6 +9,7 @@ export default class Project {
   constructor(options) {
 
     this._raycaster = options.raycaster;
+    this._camera = options.camera;
 
     this._setupPoints();
     this._setupDescription();
@@ -23,8 +24,8 @@ export default class Project {
   _setupDescription() {
     this._description = new Description({
       type: 'project',
+      camera: this._camera,
     });
-    this._description.position.set(100, -100, 300);
   }
 
   // Getters / Setters --------------------

@@ -255,6 +255,7 @@ export default class WebGL {
 
     this._project.updateState(page);
     this._experiment.updateState(page);
+    this._iconProject.updateState(page);
 
     if (page === pages.HOME) {
       this._type = 'project';

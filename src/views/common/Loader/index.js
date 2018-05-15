@@ -60,9 +60,10 @@ export default class LoaderView {
 
     TweenLite.to(
       this.el,
-      2,
+      0.8,
       {
         delay,
+        ease: 'Power2.easeOut',
         opacity: 0,
         onComplete: () => {
           raf.cancel(this._raf);

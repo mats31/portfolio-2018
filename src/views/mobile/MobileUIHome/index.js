@@ -122,6 +122,10 @@ export default class MobileUIHome {
     this._menu.updateState(page);
   }
 
+  removeScrollMessage() {
+    this._scroll.onTouchmove();
+  }
+
   // Events --------------------------------------------------------------------
 
   @autobind

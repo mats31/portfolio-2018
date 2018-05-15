@@ -1,3 +1,4 @@
+import experimentList from 'config/experiment-list';
 import projectList from 'config/project-list';
 import States from 'core/States';
 import * as pages from 'core/pages';
@@ -14,6 +15,8 @@ export default class IconProject {
     this._height = 50;
 
     this.needsUpdate = false;
+
+    this._type = 'project';
 
     this._setupCanvas();
     this._setupShapes();
@@ -39,9 +42,24 @@ export default class IconProject {
       progress: 0,
       needsUpdate: false,
     };
+
+    this._outCircle = {
+      x: this._width * 0.5,
+      y: this._height * 0.5,
+      progress: 0,
+      needsUpdate: false,
+    };
   }
 
   // State --------
+
+  updateState(page) {
+    if (page === pages.HOME) {
+      this._type = 'project';
+    } else {
+      this._type = 'experiment';
+    }
+  }
 
   show() {
     this._ctx.canvas.style.display = 'block';
@@ -66,10 +84,29 @@ export default class IconProject {
       {
         progress: 1,
         onComplete: () => {
-          const id = projectList.projects[Math.floor(States.global.progress)].id;
-          States.router.navigateTo(pages.PROJECT, { id });
+          if (this._type === 'project') {
+            const id = projectList.projects[Math.floor(States.global.progress)].id;
+            States.router.navigateTo(pages.PROJECT, { id });
+          } else {
+            window.open(experimentList.experiments[Math.floor(States.global.progress)].url, '_blank');
+          }
 
           this._circle.needsUpdate = false;
+          this.hide();
+        },
+      },
+    );
+
+    this._outCircle.needsUpdate = true;
+    TweenLite.killTweensOf(this._outCircle);
+    TweenLite.to(
+      this._outCircle,
+      2,
+      {
+        progress: 1,
+        onComplete: () => {
+
+          this._outCircle.needsUpdate = false;
           this.hide();
         },
       },
@@ -88,6 +125,20 @@ export default class IconProject {
         onComplete: () => {
           this._circle.needsUpdate = false;
           this.hide();
+        },
+      },
+    );
+
+    this._outCircle.needsUpdate = true;
+    TweenLite.killTweensOf(this._outCircle);
+    TweenLite.to(
+      this._outCircle,
+      1,
+      {
+        progress: 0,
+        ease: 'Power4.easeOut',
+        onComplete: () => {
+          this._outCircle.needsUpdate = false;
         },
       },
     );
@@ -113,19 +164,31 @@ export default class IconProject {
 
     if (this.needsUpdate) {
       this._updateCircle();
+      this._updateOutCircle();
     }
 
-    this.needsUpdate = this._circle.needsUpdate;
+    this.needsUpdate = this._circle.needsUpdate || this._outCircle.needsUpdate;
   }
 
   _updateCircle() {
     const x = this._circle.x;
     const y = this._circle.y;
-    const radius = this._width * 0.45;
+    const radius = this._width * 0.35;
     const progress = this._circle.progress;
 
     this._ctx.beginPath();
-    this._ctx.arc(x, y, radius, 0, 2 * Math.PI * progress);
+    this._ctx.arc(x, y, radius, 0, 2 * Math.PI * progress, false);
+    this._ctx.stroke();
+  }
+
+  _updateOutCircle() {
+    const x = this._outCircle.x;
+    const y = this._outCircle.y;
+    const radius = this._width * 0.45;
+    const progress = this._outCircle.progress;
+
+    this._ctx.beginPath();
+    this._ctx.arc(x, y, radius, 0, -2 * Math.PI * progress, true);
     this._ctx.stroke();
   }
 }

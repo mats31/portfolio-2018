@@ -1,5 +1,8 @@
+import States from 'core/States';
+import * as pages from 'core/pages';
 import CloseButton from 'views/common/CloseButton';
 import { createDOM } from 'utils/dom';
+import { autobind } from 'core-decorators';
 import template from './mobile_about.tpl.html';
 import './mobile_about.scss';
 
@@ -84,5 +87,12 @@ export default class MobileAbout {
     );
 
     this._closeButton.hide();
+  }
+
+  // Events --------------------------------------------------------------------
+
+  @autobind
+  _onCloseClick() {
+    States.router.navigateTo(pages.HOME);
   }
 }

@@ -41,7 +41,13 @@ void main() {
 
   // float alpha = distanceAlpha * maskTextureAlpha * smoothstep( 0.2 + ( sin( u_time * vSpeed ) + 1. / 2. ) * 0.4, 1., vRadialColor.r );
   // float alpha = distanceAlpha * maskTextureAlpha * smoothstep( 0.5 + sin(u_time * 10. * vSpeed) * 0.2, 1., vRadialColor.r );
-  float alpha = distanceAlpha * maskTextureAlpha;
+  float pixelAlpha = vColor0.a * ( 1. - smoothstep(0.,1.,u_progress) + smoothstep( 4., 5., u_progress) ) +
+               vColor1.a * ( smoothstep(0.,1.,u_progress) - smoothstep(1.,2.,u_progress) ) +
+               vColor2.a * ( smoothstep(1.,2.,u_progress) - smoothstep(2.,3.,u_progress) ) +
+               vColor3.a * ( smoothstep(2.,3.,u_progress) - smoothstep(3., 4., u_progress) ) +
+               vColor4.a * ( smoothstep(3.,4.,u_progress) - smoothstep(4., 5., u_progress) );
+
+  float alpha = distanceAlpha * maskTextureAlpha * pixelAlpha;
 
   // float alpha = abs( min( 1., max( 0., map( abs(vPos.z), 0., 900., 0., 1. ) ) ) - 1. );
   gl_FragColor = vec4(color, alpha);

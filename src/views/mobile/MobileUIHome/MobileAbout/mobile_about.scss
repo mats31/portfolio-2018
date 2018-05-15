@@ -7,18 +7,22 @@
   height: 100vh;
   width: 100vw;
   overflow-y: scroll;
+  position: relative;
+  z-index: $zindex-2;
 
   .about__close {
     position: absolute;
-    right: 9rem;
-    top: 5.25rem;
+    right: 4.7rem;
+    top: 1rem;
   }
 
   .about__text {
-    font-size: 1.35rem;
+    font-size: 1.45rem;
     color: white;
     width: 90%;
     padding-left: 5%;
+    padding-bottom: 6.7rem;
+    padding-top: 6.7rem;
   }
 
     .about__text a {
@@ -42,7 +46,7 @@
     }
 
     .about__body {
-      margin-bottom: 3rem;
+      margin-bottom: 10rem;
       letter-spacing: 0.15rem;
       line-height: 1.8rem;
       opacity: 0;

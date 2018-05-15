@@ -15,12 +15,6 @@ export default class DesktopScrollView {
     );
 
     this._scrollHide = false;
-
-    this._addEvents();
-  }
-
-  _addEvents() {
-    Signals.onScrollWheel.add(this._onScrollWheel);
   }
 
   // State ---------------------------------------------------------------------
@@ -55,8 +49,7 @@ export default class DesktopScrollView {
   }
 
   // Events --------------------------------------------------------------------
-  @autobind
-  _onScrollWheel() {
+  onTouchmove() {
     this.hide();
 
     if (States.router.getLastRouteResolved().name !== pages.PROJECT) {
