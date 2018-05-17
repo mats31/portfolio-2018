@@ -19,7 +19,14 @@ export default class DesktopNetworksView {
       experiments: this._el.querySelector('.js-UIHome__menuExperiments'),
     };
 
+    this._setupDOM();
     this._addEvents();
+  }
+
+  _setupDOM() {
+    if (States.IOS) {
+      this._el.classList.add('ios');
+    }
   }
 
   _addEvents() {

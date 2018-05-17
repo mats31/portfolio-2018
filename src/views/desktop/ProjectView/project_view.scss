@@ -64,9 +64,11 @@
     }
 
   .project__viewText {
-    margin: 22rem auto 4.2rem;
+    // margin: 22rem auto 4.2rem;
+    margin: 15rem auto 4.2rem;
     max-width: 70%;
     padding-bottom: 6.8rem;
+    // padding-bottom: 4rem;
     position: relative;
     text-align: center;
 
@@ -112,6 +114,7 @@
       @include font-about();
       font-size: 1.8rem;
       margin: 5rem auto;
+      // margin: 3rem auto;
       max-width: 69%;
       line-height: 2.5rem;
       letter-spacing: 0.3rem;
@@ -137,9 +140,18 @@
 
       .project__viewColumn {
         flex-grow: 1;
+        flex-basis: 0;
         text-align: center;
         font-size: 1.6rem;
         letter-spacing: 0.3rem;
+
+        @media screen and (max-width: 1100px) {
+          font-size: 1rem;
+        }
+
+        @media screen and (max-width: 800px) {
+          font-size: 0.7rem;
+        }
 
         a {
           color: white;
@@ -156,6 +168,14 @@
         .project__ViewColumnHead {
           margin-bottom: 1rem;
           font-size: 1.8rem;
+
+          // @media screen and (max-width: 1100px) {
+          //   font-size: 1.2rem;
+          // }
+          //
+          // @media screen and (max-width: 800px) {
+          //   font-size: 0.9rem;
+          // }
         }
 
   .project__viewImg,
