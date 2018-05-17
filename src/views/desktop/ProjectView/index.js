@@ -38,6 +38,7 @@ export default class DesktopProjectView {
     });
 
     this._rotations = [];
+    this._playing = [];
 
     this._deltaY = 0;
     this._deltaTargetY = 0;
@@ -243,9 +244,33 @@ export default class DesktopProjectView {
       const rotation = i === this._ui.medias.length - 1 ? 0 : Math.abs( opacity - 1 ) * 60;
 
       if (this._ui.medias[i].paused !== undefined && mediaRect.top > -mediaRect.height && mediaRect.top <= this._vh) {
-        this._ui.medias[i].play();
+
+        let toPlay = true;
+
+        for (let j = 0; j < this._playing.length; j++) {
+          const playingY = this._playing[j].getBoundingClientRect().top + this._playing[j].offsetHeight * 0.5;
+          const currentY = mediaRect.top + this._ui.medias[i].offsetHeight * 0.5;
+          const playingDistance = Math.abs(window.innerHeight * 0.5 - playingY);
+          const currentVideoDistance = Math.abs(window.innerHeight * 0.5 - currentY);
+          if (playingDistance < currentVideoDistance) {
+            toPlay = false;
+          } else if (this._ui.medias[i] !== this._playing[j]) {
+            this._playing[j].pause();
+          }
+        }
+
+        if (toPlay) {
+          this._ui.medias[i].play();
+          this._playing.push(this._ui.medias[i]);
+        }
+
       } else if (this._ui.medias[i].paused !== undefined) {
         this._ui.medias[i].pause();
+
+        const index = this._playing.indexOf(this._ui.medias[i]);
+        if (index > -1) {
+          this._playing.splice(index, 1);
+        }
       }
 
       this._ui.medias[i].style.opacity = opacity;

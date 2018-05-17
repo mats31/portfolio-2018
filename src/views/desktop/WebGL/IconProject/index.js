@@ -114,6 +114,7 @@ export default class IconProject {
   }
 
   blur() {
+
     this._circle.needsUpdate = true;
     TweenLite.killTweensOf(this._circle);
     TweenLite.to(
@@ -124,7 +125,7 @@ export default class IconProject {
         ease: 'Power4.easeOut',
         onComplete: () => {
           this._circle.needsUpdate = false;
-          this.hide();
+          // this.hide();
         },
       },
     );
