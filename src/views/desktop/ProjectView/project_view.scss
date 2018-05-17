@@ -21,7 +21,7 @@
   }
 
   .project__aside {
-    font-size: 1.3rem;
+    font-size: 2rem;
   }
 
     .project__date {
@@ -42,6 +42,24 @@
       a {
         text-decoration: none;
         color: white;
+
+        &::after {
+          content: '';
+          display: block;
+          background: white;
+          height: 1px;
+          width: 100%;
+          position: absolute;
+          left: 0;
+          bottom: -5px;
+          transform: scaleX(0);
+          transform-origin: left center;
+          transition: transform 0.2s ease-out;
+        }
+
+        &:hover::after {
+          transform: scaleX(1);
+        }
       }
     }
 
@@ -91,17 +109,62 @@
     }
 
     .project__viewDescription {
-      font-size: 1.3rem;
+      @include font-about();
+      font-size: 1.8rem;
       margin: 5rem auto;
-      max-width: 22%;
+      max-width: 69%;
+      line-height: 2.5rem;
+      letter-spacing: 0.3rem;
+
+      a {
+        color: white;
+        text-decoration: none;
+        opacity: 0.5;
+        transition: opacity 0.2s ease-out;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
+
+    .project__viewColumns {
+      @include font-about();
+      display: flex;
+      max-width: 69%;
+      margin: 0 auto;
+    }
+
+      .project__viewColumn {
+        flex-grow: 1;
+        text-align: center;
+        font-size: 1.6rem;
+        letter-spacing: 0.3rem;
+
+        a {
+          color: white;
+          text-decoration: none;
+          opacity: 0.5;
+          transition: opacity 0.2s ease-out;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+
+        .project__ViewColumnHead {
+          margin-bottom: 1rem;
+          font-size: 1.8rem;
+        }
 
   .project__viewImg,
   .project__viewVideo {
     display: block;
-    width: 66%;
+    width: 55%;
     margin: 0 auto 10rem;
-    max-width: 90rem;
+    // max-width: 90rem;
+    max-width: 192rem;
 
     &:last-child{
       margin-bottom: 0;

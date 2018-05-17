@@ -84,16 +84,16 @@ export default class IconProject {
       {
         progress: 1,
         onComplete: () => {
+          this._circle.needsUpdate = false;
+          this._circle.progress = 0;
+          this._outCircle.progress = 0;
+
           if (this._type === 'project') {
             const id = projectList.projects[Math.floor(States.global.progress)].id;
             States.router.navigateTo(pages.PROJECT, { id });
           } else {
             window.open(experimentList.experiments[Math.floor(States.global.progress)].url, '_blank');
           }
-
-          this._circle.needsUpdate = false;
-          this._circle.progress = 0;
-          this._outCircle.progress = 0;
         },
       },
     );
@@ -107,6 +107,8 @@ export default class IconProject {
         progress: 1,
         onComplete: () => {
 
+          this._circle.progress = 0;
+          this._outCircle.progress = 0;
           this._outCircle.needsUpdate = false;
         },
       },

@@ -201,8 +201,8 @@ export default class WebGL {
         return false;
       }
 
-      this._camera.position.x = randomFloat(-10, 10);
-      this._camera.position.y = randomFloat(-10, 10);
+      this._camera.position.x = randomFloat(-20, 20);
+      this._camera.position.y = randomFloat(-20, 20);
 
       intervals++;
 

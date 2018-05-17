@@ -23,6 +23,7 @@ export default class DesktopProjectView {
     );
 
     this._ui = {
+      columns: this._el.querySelector('.js-project__viewColumns'),
       mediaContainer: this._el.querySelector('.js-project__medias'),
       title: this._el.querySelector('.js-project__viewTitle'),
       description: this._el.querySelector('.js-project__viewDescription'),
@@ -98,7 +99,43 @@ export default class DesktopProjectView {
     this._ui.title.innerHTML = project.title;
     this._ui.description.innerHTML = project.description;
     this._ui.date.innerHTML = project.date;
-    this._ui.link.innerHTML = `<a href="${project.url}">${project.link}</a>`;
+    if (project.url) {
+      this._ui.link.innerHTML = `<a href="${project.url}" target="_blank">${project.link}</a>`;
+    } else {
+      this._ui.link.innerHTML = `${project.link}`;
+    }
+
+    while (this._ui.columns.firstChild) {
+      this._ui.columns.removeChild(this._ui.columns.firstChild);
+    }
+
+    if (project.role) {
+      const role = document.createElement('div');
+      role.classList.add('project__viewColumn');
+      role.innerHTML = `<div class="project__ViewColumnHead">Role:</div>${project.role}`;
+      this._ui.columns.appendChild(role);
+    }
+
+    if (project.technologies) {
+      const technologies = document.createElement('div');
+      technologies.classList.add('project__viewColumn');
+      technologies.innerHTML = `<div class="project__ViewColumnHead">Technologies:</div>${project.technologies}`;
+      this._ui.columns.appendChild(technologies);
+    }
+
+    if (project.clients) {
+      const clients = document.createElement('div');
+      clients.classList.add('project__viewColumn');
+      clients.innerHTML = `<div class="project__ViewColumnHead">Clients:</div>${project.clients}`;
+      this._ui.columns.appendChild(clients);
+    }
+
+    if (project.awards) {
+      const awards = document.createElement('div');
+      awards.classList.add('project__viewColumn');
+      awards.innerHTML = `<div class="project__ViewColumnHead">Awards:</div>${project.awards}`;
+      this._ui.columns.appendChild(awards);
+    }
 
     while (this._ui.mediaContainer.firstChild) {
       this._ui.mediaContainer.removeChild(this._ui.mediaContainer.firstChild);

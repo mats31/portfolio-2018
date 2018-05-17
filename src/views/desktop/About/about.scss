@@ -40,9 +40,11 @@
     }
 
     .about__body {
+      @include font-about();
       margin-bottom: 3rem;
       letter-spacing: 0.15rem;
       line-height: 1.8rem;
+      font-size: 1.6rem;
       opacity: 0;
 
       &:last-child{

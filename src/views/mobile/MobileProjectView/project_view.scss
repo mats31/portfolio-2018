@@ -24,12 +24,14 @@
   }
 
   .project__aside {
-    font-size: 1.3rem;
+    font-size: 1.4rem;
+    position: relative;
+    z-index: $zindex-1;
   }
 
     .project__date {
       position: fixed;
-      left: 5.5%;
+      left: 8%;
       top: 50%;
       transform: translateX(-50%) translateY(-50%) rotate(-90deg);
       white-space: nowrap;
@@ -37,7 +39,7 @@
 
     .project__link {
       position: fixed;
-      left: 94.5%;
+      left: 92%;
       top: 50%;
       transform: translateX(-50%) translateY(-50%) rotate(90deg);
       white-space: nowrap;
@@ -83,6 +85,35 @@
       margin: 5rem auto;
       max-width: 82%;
     }
+
+    .project__viewColumns {
+      @include font-about();
+      max-width: 69%;
+      margin: 0 auto;
+    }
+
+      .project__viewColumn {
+        margin-bottom: 3rem;
+        text-align: center;
+        font-size: 1.2rem;
+        letter-spacing: 0.3rem;
+
+        a {
+          color: white;
+          text-decoration: none;
+          opacity: 0.5;
+          transition: opacity 0.2s ease-out;
+
+          &:hover {
+            opacity: 1;
+          }
+        }
+      }
+
+        .project__ViewColumnHead {
+          margin-bottom: 0.5rem;
+          font-size: 1.3rem;
+        }
 
   .project__viewImg,
   .project__viewVideo {
