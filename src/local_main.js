@@ -29,7 +29,7 @@ class Main {
 
   start() {
 
-    if (!States.MOBILE) {
+    if (!States.MOBILE && !States.TABLET) {
       import('views/desktop/Application').then((App) => {
         import('stylesheets/main.scss').then(() => {
           this._application = new App();

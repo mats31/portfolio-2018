@@ -124,7 +124,7 @@ export default class MobileAppView {
 
   @autobind
   _onWindowTouchmove(event) {
-    event.preventDefault();
+    // event.preventDefault();
     this._uiHome.removeScrollMessage();
   }
 
