@@ -17,7 +17,7 @@
     <meta name="description" content="">
     <meta name="keywords" content="">
 
-    <base href="/subdomain/" >
+    <base href="/portfolio2018/" >
 
     <!-- Favicon -->
 
@@ -41,7 +41,7 @@
     <meta itemprop="description" content="">
     <meta itemprop="image" content="">
 
-    <?php if ($detect->isMobile() && !$detect->isTablet()) { ?>
+    <?php if ($detect->isMobile() || $detect->isTablet()) { ?>
     <link href="<%= htmlWebpackPlugin.files.chunks.mobile.css %>" rel="stylesheet"></head>
     <?php } else { ?>
     <link href="<%= htmlWebpackPlugin.files.chunks.desktop.css %>" rel="stylesheet"></head>

@@ -88,6 +88,7 @@ export default class WebGL {
       height: 512,
       bufferPlaneFragment: backgroundBufferFragmentShader,
     });
+    this._background.getObject().position.z = -2000;
     this._scene.add(this._background.getObject());
 
     // this._foreground = new Foreground({
@@ -129,7 +130,7 @@ export default class WebGL {
 
   _setupCloud() {
     this._cloud = new Cloud({});
-    this._cloud.position.z = 200;
+    this._cloud.position.z = -1000;
     this._scene.add(this._cloud);
   }
 

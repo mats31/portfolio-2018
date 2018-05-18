@@ -55,7 +55,8 @@ void main() {
   vec4 maskOpacityTexture = texture2D(tMaskOpacity, vec2(vUv.x + displacementTexture.r * .05  , vUv.y + displacementTexture.r * .05 ));
 
   vec3 firstColor = vec3(0., 146. / 255. , 142. / 255. );
-  vec3 secondColor = vec3(0., 33. / 255. , 67. / 255. );
+  // vec3 secondColor = vec3(0., 33. / 255. , 67. / 255. );
+  vec3 secondColor = vec3(22./255., 11. / 255. , ( 91. + sin(uTime) * 20. ) / 255. );
 
   // vec3 thirdColor = vec3(248. / 255., 208. / 255. , 175. / 255. );
   // vec3 fourthColor = vec3(201. / 255., 132. / 255. , 110. / 255. );
@@ -114,7 +115,7 @@ void main() {
   // color = mix(color, vec3(0.), clamp(length(q),0.0,1.0));
   // float alpha = 1.;
   float alpha = 1. - max(color.g, max(color.r, color.g) );
-  alpha -= smoothstep( max( 0., 0.5 - abs( uActive - 1. ) ), .9 + abs( uActive - 1.), vUv.x );
+  alpha -= smoothstep( max( 0., 0.5 - abs( uActive - 1. ) ), .9 + abs( uActive - 1.), vUv.x ) * uActive;
   alpha -= abs(uActive - 1.) * 0.4;
   // float alpha = 1. * smoothstep( 0., .1, max(max( secondFinalColor.r, secondFinalColor.g), secondFinalColor.b ) );
 

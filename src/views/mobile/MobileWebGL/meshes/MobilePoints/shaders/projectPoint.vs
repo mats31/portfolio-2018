@@ -19,12 +19,16 @@ attribute vec4 a_color1;
 attribute vec4 a_color2;
 attribute vec4 a_color3;
 attribute vec4 a_color4;
+attribute vec4 a_color5;
+attribute vec4 a_color6;
 attribute vec3 a_hidePosition;
 varying vec4 vColor0;
 varying vec4 vColor1;
 varying vec4 vColor2;
 varying vec4 vColor3;
 varying vec4 vColor4;
+varying vec4 vColor5;
+varying vec4 vColor6;
 
 mat3 quatToMatrix(vec4 q) {
   mat3 mat;

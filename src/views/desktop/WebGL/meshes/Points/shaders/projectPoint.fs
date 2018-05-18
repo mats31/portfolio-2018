@@ -58,8 +58,8 @@ void main() {
                vColor2.a * ( smoothstep(1.,2.,u_progress) - smoothstep(2.,3.,u_progress) ) +
                vColor3.a * ( smoothstep(2.,3.,u_progress) - smoothstep(3., 4., u_progress) ) +
                vColor4.a * ( smoothstep(3.,4.,u_progress) - smoothstep(4., 5., u_progress) ) +
-               vColor4.a * ( smoothstep(4.,5.,u_progress) - smoothstep(5., 6., u_progress) ) +
-               vColor4.a * ( smoothstep(5.,6.,u_progress) - smoothstep(6., 7., u_progress) );
+               vColor5.a * ( smoothstep(4.,5.,u_progress) - smoothstep(5., 6., u_progress) ) +
+               vColor6.a * ( smoothstep(5.,6.,u_progress) - smoothstep(6., 7., u_progress) );
   float alpha = distanceAlpha * maskTextureAlpha * pixelAlpha;
   // alpha -= 1. * area;
   // alpha = 1.;

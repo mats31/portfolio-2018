@@ -21,7 +21,9 @@
   }
 
   .project__aside {
+    position: relative;
     font-size: 2rem;
+    z-index: $zindex-2;
   }
 
     .project__date {
@@ -30,6 +32,17 @@
       top: 50%;
       transform: translateX(-50%) translateY(-50%) rotate(-90deg);
       white-space: nowrap;
+
+      a {
+        color: white;
+        text-decoration: none;
+        opacity: 0.5;
+        transition: opacity 0.2s ease-out;
+
+        &:hover {
+          opacity: 1;
+        }
+      }
     }
 
     .project__link {

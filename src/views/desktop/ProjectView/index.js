@@ -141,36 +141,41 @@ export default class DesktopProjectView {
       this._ui.mediaContainer.removeChild(this._ui.mediaContainer.firstChild);
     }
 
-    this._rotations = [];
+    clearTimeout(this._updateTimeout);
+    this._updateTimeout = setTimeout(() => {
+      this._rotations = [];
 
-    for (let i = 0; i < project.medias.length; i++) {
-      const media = project.medias[i];
+      for (let i = 0; i < project.medias.length; i++) {
+        const media = project.medias[i];
 
-      if (media.type === 'image') {
-        const img = new Image();
-        img.classList.add('js-project__viewImg');
-        img.classList.add('js-project__viewMedia');
-        img.classList.add('project__viewImg');
-        img.onload = this.activate.bind(this);
+        if (media.type === 'image') {
+          const img = new Image();
+          img.classList.add('js-project__viewImg');
+          img.classList.add('js-project__viewMedia');
+          img.classList.add('project__viewImg');
+          img.onload = this.activate.bind(this);
 
-        img.src = media.url;
+          img.src = media.url;
 
-        this._ui.mediaContainer.appendChild(img);
-      } else {
-        const video = document.createElement('video');
-        video.loop = true;
-        video.classList.add('js-project__viewVideo');
-        video.classList.add('js-project__viewMedia');
-        video.classList.add('project__viewVideo');
-        video.src = media.url;
+          this._ui.mediaContainer.appendChild(img);
+        } else {
+          const video = document.createElement('video');
+          video.loop = true;
+          video.classList.add('js-project__viewVideo');
+          video.classList.add('js-project__viewMedia');
+          video.classList.add('project__viewVideo');
+          video.src = media.url;
+          video.onload = this.activate.bind(this);
 
-        this._ui.mediaContainer.appendChild(video);
+          this._ui.mediaContainer.appendChild(video);
+        }
+
+        this._rotations.push({ x: randomFloat(-1, 1), y: randomFloat(-1, 1) });
       }
 
-      this._rotations.push({ x: randomFloat(-1, 1), y: randomFloat(-1, 1) });
-    }
+      this._ui.medias = this._ui.mediaContainer.querySelectorAll('.js-project__viewMedia');
+    }, 300);
 
-    this._ui.medias = this._ui.mediaContainer.querySelectorAll('.js-project__viewMedia');
   }
 
   activate() {
@@ -276,9 +281,10 @@ export default class DesktopProjectView {
       const mediaRect = this._ui.medias[i].getBoundingClientRect();
       const minValue = -600;
       const maxValue = -200;
-      const opacity = i === this._ui.medias.length - 1 ? 1 : Math.abs( map( Math.max( minValue, Math.min( maxValue, mediaRect.top ) ), minValue, maxValue, 0, 1) );
-      const translate = i === this._ui.medias.length - 1 ? 0 : Math.abs( opacity - 1 ) * -300;
-      const rotation = i === this._ui.medias.length - 1 ? 0 : Math.abs( opacity - 1 ) * 60;
+      const opacity = i === this._ui.medias.length - 1 ? 1 : map( Math.max( minValue, Math.min( maxValue, mediaRect.top ) ), minValue, maxValue, -1.5, 1);
+      const tween = i === this._ui.medias.length - 1 ? 1 : Math.abs( map( Math.max( minValue, Math.min( maxValue, mediaRect.top ) ), minValue, maxValue, 0, 1) );
+      const translate = i === this._ui.medias.length - 1 ? 0 : Math.abs( tween - 1 ) * -300;
+      const rotation = i === this._ui.medias.length - 1 ? 0 : Math.abs( tween - 1 ) * 60;
 
       if (this._ui.medias[i].paused !== undefined && mediaRect.top > -mediaRect.height && mediaRect.top <= this._vh) {
 

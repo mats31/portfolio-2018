@@ -8,7 +8,7 @@ const ressources = {
     { id: 'speedfactory-preview', url: 'images/projects/speedfactory.png' },
     { id: 'resn-little-helper-preview', url: 'images/projects/resn-little-helper.png' },
     { id: 'tsuki8-preview', url: 'images/projects/tsuki8.png' },
-    { id: 'celia-preview', url: 'images/projects/tsuki8.png' },
+    { id: 'celia-preview', url: 'images/projects/celia.png' },
     { id: 'lusine-preview', url: 'images/projects/lusine.png' },
 
     { id: 'devx-experiment-2018-preview', url: 'images/experiments/devx-experiment-2018-preview.png' },
@@ -43,8 +43,8 @@ const ressources = {
     { id: 'resn-little-helper-description', url: 'textures/descriptions/resn-little-helper-description.png' },
     { id: 'speedfactory-description', url: 'textures/descriptions/speedfactory-description.png' },
     { id: 'tsuki8-description', url: 'textures/descriptions/tsuki8-description.png' },
-    { id: 'celia-description', url: 'textures/descriptions/tsuki8-description.png' },
-    { id: 'lusine-description', url: 'textures/descriptions/tsuki8-description.png' },
+    { id: 'celia-description', url: 'textures/descriptions/celia-description.png' },
+    { id: 'lusine-description', url: 'textures/descriptions/lusine-description.png' },
 
     { id: 'displacement', url: 'textures/cloud-displacement.png' },
   ],
