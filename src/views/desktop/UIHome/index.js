@@ -110,7 +110,7 @@ export default class DesktopHomeView {
       default:
         this._menu.show();
         if (this._list) {
-          const delay = this._page === pages.ABOUT || this._page === pages.PROJECT ? 2 : 0;
+          const delay = this._page === pages.ABOUT || this._page === pages.PROJECT ? 1 : 0;
           this._list.show({ delay });
         }
         this._title.show();

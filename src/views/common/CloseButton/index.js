@@ -46,7 +46,7 @@ export default class CloseButtonView {
     TweenLite.killTweensOf(this._ui.firstLine);
     TweenLite.to(
       this._ui.firstLine,
-      1,
+      0.7,
       {
         scaleX: 0.8,
         ease: 'Power4.easeOut',
@@ -56,7 +56,7 @@ export default class CloseButtonView {
     TweenLite.killTweensOf(this._ui.secondLine);
     TweenLite.to(
       this._ui.secondLine,
-      1,
+      0.7,
       {
         delay: 0.35,
         scaleX: 0.8,
@@ -71,7 +71,7 @@ export default class CloseButtonView {
     TweenLite.killTweensOf(this._ui.secondLine);
     TweenLite.to(
       this._ui.secondLine,
-      1,
+      0.7,
       {
         scaleX: 0,
         ease: 'Power4.easeOut',
@@ -81,9 +81,9 @@ export default class CloseButtonView {
     TweenLite.killTweensOf(this._ui.firstLine);
     TweenLite.to(
       this._ui.firstLine,
-      1,
+      0.7,
       {
-        delay: 0.25,
+        delay: 0.1,
         scaleX: 0,
         ease: 'Power4.easeOut',
       },

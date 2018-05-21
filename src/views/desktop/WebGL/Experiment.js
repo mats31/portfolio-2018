@@ -24,7 +24,7 @@ export default class Experiment {
     this._description = new Description({
       type: 'experiment',
     });
-    this._description.position.set(-200, -100, 300);
+    this._description.position.set(-12.5, -6.25, 950);
   }
 
   // Getters / Setters --------------------
@@ -104,9 +104,9 @@ export default class Experiment {
 
   // Update --------------------
 
-  update(time, delta, translation) {
+  update(time, delta, translation, camera) {
 
     this._points.update(time, delta, translation);
-    this._description.update(time);
+    this._description.update(time, camera);
   }
 }

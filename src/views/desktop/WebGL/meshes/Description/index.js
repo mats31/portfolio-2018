@@ -17,7 +17,7 @@ export default class Description extends THREE.Object3D {
     this.name = 'description';
     this._type = options.type;
 
-    this._baseH = 25;
+    this._baseH = 2.5;
 
     this._setupMaskDescription();
     this._setupGeometry();
@@ -46,6 +46,7 @@ export default class Description extends THREE.Object3D {
       transparent: true,
       uniforms: {
         uTime: { type: 'f', value: 0 },
+        uOffset: { type: 'v2', value: new THREE.Vector2() },
         tDiffuse: { type: 't', value: this._texture },
         tMask: { type: 't', value: this._maskTexture },
       },
@@ -138,8 +139,13 @@ export default class Description extends THREE.Object3D {
 
   // Update ------------------------
 
-  update(time) {
+  update(time, camera) {
     this._material.uniforms.uTime.value = time;
+    this._material.uniforms.uOffset.value.x += (camera.rotation.y - this._material.uniforms.uOffset.value.x) * 0.2;
+    this._material.uniforms.uOffset.value.y += (-camera.rotation.x * 3 - this._material.uniforms.uOffset.value.y) * 0.2;
+
+    this.rotation.x = this._material.uniforms.uOffset.value.y;
+    this.rotation.y = this._material.uniforms.uOffset.value.x;
 
     this._updateRotation(time);
     this._updateMask();

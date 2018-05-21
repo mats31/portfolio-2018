@@ -23,7 +23,7 @@ float noise (in vec2 st) {
             (d - b) * u.x * u.y;
 }
 
-#define OCTAVES 6
+#define OCTAVES 4
 float fbm (in vec2 st) {
     // Initial values
     float value = 0.0;
@@ -32,6 +32,22 @@ float fbm (in vec2 st) {
     //
     // Loop of octaves
     for (int i = 0; i < OCTAVES; i++) {
+        value += amplitude * noise(st);
+        st *= 2.;
+        amplitude *= .5;
+    }
+    return value;
+}
+
+#define CUSTOM_OCTAVES 2
+float customFBM (in vec2 st) {
+    // Initial values
+    float value = 0.0;
+    float amplitude = .5;
+    float frequency = 0.;
+    //
+    // Loop of octaves
+    for (int i = 0; i < CUSTOM_OCTAVES; i++) {
         value += amplitude * noise(st);
         st *= 2.;
         amplitude *= .5;
@@ -77,11 +93,11 @@ void main() {
   // // vec3 color = vec3(noise);
 
   vec2 secondQ = vec2(0.);
-  secondQ.x = fbm( vUv / 0.05 + 0.0*uTime * 100.);
+  secondQ.x = customFBM( vUv / 0.05 + 0.0*uTime * 20.);
   // secondQ.y = fbm( vUv / 0.05 + vec2(1.0));
 
   vec2 secondR = vec2(0.);
-  secondR.x = fbm( vUv + 1.0*secondQ + vec2(1.7,5.2)+ 0.5*uTime );
+  secondR.x = customFBM( vUv + 1.0*secondQ + vec2(1.7,5.2)+ 1.*uTime );
   // secondR.y = fbm( vUv + 1.0*secondQ + vec2(8.3,2.8)+ 0.26*uTime);
 
   // float secondF = fbm(vUv+secondR);
@@ -100,8 +116,8 @@ void main() {
   q.y = fbm( vUv + vec2(1.0));
 
   vec2 r = vec2(0.);
-  r.x = fbm( vUv + 1.0*q + vec2(1.7,9.2)+ 0.05*uTime );
-  r.y = fbm( vUv + 1.0*q + vec2(8.3,2.8)+ 0.026*uTime);
+  r.x = fbm( vUv + 1.0*q + vec2(1.7,9.2)+ 0.1*uTime );
+  r.y = fbm( vUv + 1.0*q + vec2(8.3,2.8)+ 0.052*uTime);
 
   float f = fbm(vUv+r);
   float mixValue = clamp((f*f)*2.2,0.0,2.0);

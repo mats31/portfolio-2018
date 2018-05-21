@@ -30,6 +30,7 @@ export default class DesktopProjectView {
       date: this._el.querySelector('.js-project__date'),
       link: this._el.querySelector('.js-project__link'),
       close: this._el.querySelector('.js-project__close'),
+      loading: this._el.querySelector('.js-project__loading'),
       medias: [],
     };
 
@@ -96,6 +97,14 @@ export default class DesktopProjectView {
   updateProject() {
     const project = projectList.getProject(States.router.getLastRouteResolved().params.id);
 
+    this._ui.loading.style.transform = 'scaleX(0)';
+    TweenLite.set(this._ui.loading, { opacity: 1 });
+    this._loadingNeedsUpdate = true;
+    this._toLoad = 0;
+    this._loaded = 0;
+    this._targetLoad = 0;
+    this._currentLoad = 0;
+
     this._ui.title.innerHTML = project.title;
     this._ui.description.innerHTML = project.description;
     this._ui.date.innerHTML = project.date;
@@ -141,8 +150,8 @@ export default class DesktopProjectView {
       this._ui.mediaContainer.removeChild(this._ui.mediaContainer.firstChild);
     }
 
-    clearTimeout(this._updateTimeout);
-    this._updateTimeout = setTimeout(() => {
+    // clearTimeout(this._updateTimeout);
+    // this._updateTimeout = setTimeout(() => {
       this._rotations = [];
 
       for (let i = 0; i < project.medias.length; i++) {
@@ -153,11 +162,14 @@ export default class DesktopProjectView {
           img.classList.add('js-project__viewImg');
           img.classList.add('js-project__viewMedia');
           img.classList.add('project__viewImg');
-          img.onload = this.activate.bind(this);
+          // img.onload = this.activate.bind(this);
+          img.onload = this._onImgLoad;
 
           img.src = media.url;
 
           this._ui.mediaContainer.appendChild(img);
+
+          this._toLoad++;
         } else {
           const video = document.createElement('video');
           video.loop = true;
@@ -174,11 +186,35 @@ export default class DesktopProjectView {
       }
 
       this._ui.medias = this._ui.mediaContainer.querySelectorAll('.js-project__viewMedia');
-    }, 300);
+    // }, 300);
 
   }
 
+  @autobind
+  _onImgLoad() {
+    this._loaded++;
+
+    this._targetLoad = this._loaded / this._toLoad;
+
+    if (this._loaded === this._toLoad) {
+      this.activate();
+    }
+  }
+
   activate() {
+
+    TweenLite.killTweensOf(this._ui.loading);
+    this._ui.loading.style.display = 'block';
+    TweenLite.to(
+      this._ui.loading,
+      0.5,
+      {
+        opacity: 0,
+        ease: 'Power2.easeOut',
+      },
+    );
+
+    TweenLite.killTweensOf(this._ui.mediaContainer);
     this._ui.mediaContainer.style.display = 'block';
     TweenLite.fromTo(
       this._ui.mediaContainer,
@@ -188,15 +224,23 @@ export default class DesktopProjectView {
         opacity: 0,
       },
       {
-        delay: 0,
+        delay: 0.1,
         y: 0,
         opacity: 1,
         ease: 'Power4.easeOut',
+        onComplete: () => {
+          this._loadingNeedsUpdate = false;
+          this._ui.loading.style.display = 'none';
+        },
       },
     );
   }
 
   deactivate() {
+    TweenLite.killTweensOf(this._ui.loading);
+    this._ui.loading.style.display = 'block';
+
+    TweenLite.killTweensOf(this._ui.mediaContainer);
     TweenLite.to(
       this._ui.mediaContainer,
       0.6,
@@ -259,10 +303,18 @@ export default class DesktopProjectView {
   // Update --------------------------------------------------------------------
   update() {
 
+    if (this._loadingNeedsUpdate) this._updateLoading();
+
     if (this._needsUpdate) {
       this._updateMediaContainer();
       this._updateMedias();
     }
+  }
+
+  _updateLoading() {
+    this._currentLoad += (this._targetLoad - this._currentLoad) * 0.1;
+
+    this._ui.loading.style.transform = `scaleX(${this._currentLoad})`;
   }
 
   _updateMediaContainer() {

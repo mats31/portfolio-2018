@@ -513,7 +513,7 @@ export default class DesktopListView {
     this._canvasTop = this._ctx.canvas.getBoundingClientRect().top;
 
     const heightMargin = window.innerHeight * 0.1;
-    this._height = this._elHeight * 0.5 + heightMargin;
+    this._height = this._elHeight * 0.65 + heightMargin;
 
     const width = window.innerWidth - this._ui.listLabel.getBoundingClientRect().left + 30;
     const linesWidth = width * 0.4;

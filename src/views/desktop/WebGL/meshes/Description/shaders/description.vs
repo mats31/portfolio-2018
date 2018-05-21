@@ -1,4 +1,5 @@
 uniform float uTime;
+uniform vec2 uOffset;
 varying vec2 vUv;
 
 mat3 quatToMatrix(vec4 q) {
@@ -38,9 +39,9 @@ void main() {
   vUv = uv;
 
   vec3 pos = position;
-  pos.z += cos(uTime * 0.2) * 20.;
-  pos.y += sin(uTime * 0.2) * .2;
-  pos.x += sin(uTime * 0.5) * .02;
+  pos.z += cos(uTime * 0.2) * 1.;
+  pos.y += sin(uTime * 0.2) * .2 + uOffset.y;
+  pos.x += sin(uTime * 0.5) * .02 + uOffset.x;
 
 
   gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
