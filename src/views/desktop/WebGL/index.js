@@ -493,8 +493,8 @@ export default class WebGL {
   }
 
   _updateCamera() {
-    this._camera.rotation.x += ( this._mouse.y * 0.1 - this._camera.rotation.x ) * 0.15;
-    this._camera.rotation.y += ( this._mouse.x * -0.1 - this._camera.rotation.y ) * 0.15;
+    this._camera.rotation.x += ( this._mouse.y * 0.1 - this._camera.rotation.x ) * 0.11;
+    this._camera.rotation.y += ( this._mouse.x * -0.1 - this._camera.rotation.y ) * 0.11;
 
     const object = this._type === 'project' ? this._project.getDescription() : this._experiment.getDescription();
 
