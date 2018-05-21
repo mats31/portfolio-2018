@@ -30,6 +30,22 @@
     background-color: white;
   }
 
+  .project__back {
+    position: fixed;
+    left: 50%;
+    bottom: 5vh;
+    z-index: $zindex-3;
+    transform: translateX(-50%);
+    display: none;
+    opacity: 0;
+    font-size: 2rem;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1 !important;
+    }
+  }
+
   .project__aside {
     position: relative;
     font-size: 2rem;

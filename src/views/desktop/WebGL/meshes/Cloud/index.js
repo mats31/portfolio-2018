@@ -124,7 +124,7 @@ export default class Cloud extends THREE.Object3D {
   resize(camera) {
     const perspectiveSize = getPerspectiveSize(camera, Math.abs(camera.position.z - this.position.z));
 
-    this.scale.set(perspectiveSize.width * 1.3, perspectiveSize.height * 1.3, 1);
+    this.scale.set(perspectiveSize.width * 1.4, perspectiveSize.height * 1.4, 1);
   }
 
   // Update -------

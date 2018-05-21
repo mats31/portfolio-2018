@@ -31,6 +31,7 @@ export default class DesktopProjectView {
       link: this._el.querySelector('.js-project__link'),
       close: this._el.querySelector('.js-project__close'),
       loading: this._el.querySelector('.js-project__loading'),
+      back: this._el.querySelector('.js-project__back'),
       medias: [],
     };
 
@@ -47,11 +48,13 @@ export default class DesktopProjectView {
     this._easing = 0.2;
 
     this._needsUpdate = false;
+    this._backShowed = false;
 
     this._setupEvents();
   }
 
   _setupEvents() {
+    this._ui.back.addEventListener('click', this._onBackClick);
     Signals.onResize.add(this._onResize);
     Signals.onScrollWheel.add(this._onScrollWheel);
   }
@@ -266,6 +269,11 @@ export default class DesktopProjectView {
   // Events --------------------------------------------------------------------
 
   @autobind
+  _onBackClick() {
+    States.router.navigateTo(pages.HOME);
+  }
+
+  @autobind
   _onResize(vw, vh) {
     this.resize(vw, vh);
   }
@@ -292,6 +300,36 @@ export default class DesktopProjectView {
 
       this._deltaTargetY -= event.deltaMode === 1 ? event.deltaY * 20 : event.deltaY * 0.5;
       this._deltaTargetY = Math.max( -max, Math.min( 0, this._deltaTargetY ) );
+
+      if (Math.abs(max) - Math.abs(this._deltaTargetY) < 300 && !this._backShowed) {
+        this._ui.back.style.display = 'block';
+        TweenLite.killTweensOf(this._ui.back);
+        TweenLite.to(
+          this._ui.back,
+          0.8,
+          {
+            opacity: 0.7,
+            ease: 'Power2.easeOut',
+          },
+        );
+
+        this._backShowed = true;
+      } else if (Math.abs(max) - Math.abs(this._deltaTargetY) >= 300 && this._backShowed) {
+        TweenLite.killTweensOf(this._ui.back);
+        TweenLite.to(
+          this._ui.back,
+          0.8,
+          {
+            opacity: 0,
+            ease: 'Power2.easeOut',
+            onComplete: () => {
+              this._ui.back.style.display = 'none';
+            },
+          },
+        );
+
+        this._backShowed = false;
+      }
 
       this._easing = event.deltaMode === 1 ? 0.05 : 0.2;
 
