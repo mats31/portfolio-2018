@@ -87,6 +87,13 @@ export default class Experiment {
     }
   }
 
+  // Events --------------------
+
+  resize() {
+    this._points.resize();
+    this._description.resize();
+  }
+
   // Update --------------------
 
   update(time, delta, translation) {

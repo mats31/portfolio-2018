@@ -324,6 +324,7 @@ export default class WebGL {
     if (this._foreground) this._foreground.resize(this._camera);
     if (this._cloud) this._cloud.resize(this._camera);
     if (this._project) this._project.resize(this._camera);
+    if (this._experiment) this._experiment.resize(this._camera);
   }
 
   @autobind

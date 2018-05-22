@@ -24,7 +24,7 @@ export default class Experiment {
     this._description = new Description({
       type: 'experiment',
     });
-    this._description.position.set(-12.5, -6.25, 950);
+    this._description.position.set(-9.5, -6.25, 950);
   }
 
   // Getters / Setters --------------------
@@ -100,6 +100,11 @@ export default class Experiment {
 
   mousemove(mouse) {
     this._points.mousemove(mouse);
+  }
+
+  resize(camera) {
+    this._points.resize(camera);
+    this._description.resize();
   }
 
   // Update --------------------

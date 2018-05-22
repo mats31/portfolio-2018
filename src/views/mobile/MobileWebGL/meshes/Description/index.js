@@ -97,6 +97,11 @@ export default class Description extends THREE.Object3D {
       w = h * ratio;
     }
 
+    if (window.innerWidth > window.innerHeight) {
+      h = 120;
+      w = h * ratio;
+    }
+
     this.scale.set(w, h, 1);
   }
 
@@ -147,6 +152,28 @@ export default class Description extends THREE.Object3D {
   @autobind
   _onDelayedHide() {
     this.visible = false;
+  }
+
+  // Events ------------------------
+
+  resize() {
+    this.scale.set(1, 1, 1);
+    const perspectiveSize = getPerspectiveSize(this._camera, Math.abs(this._camera.position.z - this.position.z));
+    const ratio = this._texture.image.naturalWidth / this._texture.image.naturalHeight;
+    let w = perspectiveSize.width;
+    let h = w / ratio;
+
+    if (h > 80) {
+      h = 60;
+      w = h * ratio;
+    }
+
+    if (window.innerWidth > window.innerHeight) {
+      h = 120;
+      w = h * ratio;
+    }
+
+    this.scale.set(w, h, 1);
   }
 
   // Update ------------------------

@@ -49,6 +49,7 @@ export default class Toggle {
       1,
       {
         x: -window.innerWidth,
+        opacity: 0,
         ease: 'Power4.easeOut',
       },
     );
@@ -59,6 +60,7 @@ export default class Toggle {
       1,
       {
         x: -window.innerWidth,
+        opacity: 0,
         ease: 'Power4.easeOut',
       },
     );
@@ -99,6 +101,7 @@ export default class Toggle {
       1,
       {
         x: 0,
+        opacity: 1,
         ease: 'Power4.easeOut',
       },
     );
@@ -109,6 +112,7 @@ export default class Toggle {
       1,
       {
         x: 0,
+        opacity: 1,
         ease: 'Power4.easeOut',
       },
     );

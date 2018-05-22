@@ -49,6 +49,15 @@ export default class DesktopScrollView {
   }
 
   // Events --------------------------------------------------------------------
+
+  resize() {
+    if (window.innerWidth > window.innerHeight) {
+      this._el.style.top = `${window.innerHeight * 0.85}px`;
+    } else {
+      this._el.style.top = `${window.innerHeight * 0.9}px`;
+    }
+  }
+
   onTouchmove() {
     this.hide();
 

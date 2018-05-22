@@ -2,7 +2,7 @@ uniform float u_delta;
 uniform float u_time;
 uniform float uHide;
 
-attribute vec4 a_radialColor;
+// attribute vec4 a_radialColor;
 
 attribute float a_direction;
 attribute float a_speed;
@@ -10,9 +10,9 @@ attribute float a_select;
 attribute float a_radius;
 attribute float a_offset;
 
-varying vec4 vRadialColor;
+// varying vec4 vRadialColor;
 varying vec3 vPos;
-varying float vSpeed;
+// varying float vSpeed;
 
 attribute vec4 a_color0;
 attribute vec4 a_color1;
@@ -86,8 +86,9 @@ void main() {
   // gl_PointSize = .2;
   gl_Position = projectionMatrix * mvPosition;
 
-  vRadialColor = a_radialColor;
-  vSpeed = a_speed;
+  // vRadialColor = a_radialColor;
+  // vSpeed = a_speed;
+
   vPos = pos;
 
   vColor0 = a_color0;
@@ -95,4 +96,6 @@ void main() {
   vColor2 = a_color2;
   vColor3 = a_color3;
   vColor4 = a_color4;
+  vColor5 = a_color5;
+  vColor6 = a_color6;
 }

@@ -131,6 +131,9 @@ export default class MobileUIHome {
   @autobind
   _onResize(vw, vh) {
     this.resize(vw, vh);
+
+    this._menu.resize();
+    this._scroll.resize();
   }
 
   resize(vw, vh) {

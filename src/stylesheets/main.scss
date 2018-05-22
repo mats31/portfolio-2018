@@ -15,5 +15,6 @@ html {
 
   #application {
     @include font-body();
+    user-select: none;
   }
 }

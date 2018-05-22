@@ -13,7 +13,7 @@
 
   .closeButton__line {
     transform: scale3d(0, 1, 1);
-    width: 5rem;
+    width: 4rem;
     height: 0.5rem;
     background: white;
     transform-origin: center center;
@@ -25,8 +25,8 @@
   }
 
   .closeButton__pointer {
-    width: 5rem;
-    height: 5rem;
+    width: 4rem;
+    height: 4rem;
     // background: rgba(255,0,0,0.5);
     transform: translate3d(0, -45%, 0);
     position: absolute;

@@ -3,9 +3,9 @@ uniform float u_mask;
 uniform float u_time;
 uniform float u_progress;
 
-varying vec4 vRadialColor;
+// varying vec4 vRadialColor;
 varying vec3 vPos;
-varying float vSpeed;
+// varying float vSpeed;
 
 varying vec4 vColor0;
 varying vec4 vColor1;

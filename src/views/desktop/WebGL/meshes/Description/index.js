@@ -17,7 +17,7 @@ export default class Description extends THREE.Object3D {
     this.name = 'description';
     this._type = options.type;
 
-    this._baseH = 2.5;
+    this._baseH = Math.max( 1.3, Math.min( 2.5, window.innerWidth * 0.001 ) );
 
     this._setupMaskDescription();
     this._setupGeometry();
@@ -135,6 +135,22 @@ export default class Description extends THREE.Object3D {
   @autobind
   _onDelayedHide() {
     this.visible = false;
+  }
+
+  resize() {
+    this._baseH = Math.max( 1.3, Math.min( 2.5, window.innerWidth * 0.0012) );
+
+    const ratio = this._texture.image.naturalWidth / this._texture.image.naturalHeight;
+    const h = this._baseH;
+    const w = h * ratio;
+
+    this.scale.set(w, h, 1);
+
+    if (window.innerWidth < 700) {
+      this.position.x = 0;
+    } else {
+      this.position.x = -9.5;
+    }
   }
 
   // Update ------------------------

@@ -49,6 +49,7 @@ export default class MobilePoints extends THREE.Object3D {
     if (this._type === 'project') {
       for (let i = 0; i < projectList.projects.length; i++) {
         this._colors.push( this._canvas.getDataImage( States.resources.getImage(`${projectList.projects[i].id}-preview`).media ) );
+        // console.log(this._colors);
       }
     } else {
       for (let i = 0; i < experimentList.experiments.length; i++) {
@@ -311,6 +312,15 @@ export default class MobilePoints extends THREE.Object3D {
     );
   }
 
+  // Events --------------------
+
+  resize() {
+    if (window.innerWidth > window.innerHeight) {
+      this.scale.set(1.6, 1.6, 1);
+    } else {
+      this.scale.set(1, 1, 1);
+    }
+  }
   // Update --------------------
 
   update(time, delta, translation) {

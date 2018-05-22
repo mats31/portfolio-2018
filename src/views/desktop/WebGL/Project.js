@@ -24,7 +24,7 @@ export default class Project {
     this._description = new Description({
       type: 'project',
     });
-    this._description.position.set(-12.5, -6.25, 950);
+    this._description.position.set(-9.5, -6.25, 950);
   }
 
   // Getters / Setters --------------------
@@ -104,6 +104,7 @@ export default class Project {
 
   resize(camera) {
     this._points.resize(camera);
+    this._description.resize();
   }
 
   // Update --------------------

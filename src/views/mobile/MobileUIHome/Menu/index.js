@@ -3,6 +3,7 @@ import * as pages from 'core/pages';
 import { createDOM } from 'utils/dom';
 import { visible } from 'core/decorators';
 import { autobind } from 'core-decorators';
+import { map } from 'utils/math';
 import template from './menu.tpl.html';
 import './menu.scss';
 
@@ -80,5 +81,13 @@ export default class DesktopNetworksView {
   @autobind
   _onExperimentsClick() {
     States.router.navigateTo(pages.EXPERIMENT);
+  }
+
+  resize() {
+    if (window.innerWidth > window.innerHeight) {
+      this._el.style.top = `${window.innerHeight * 0.9}px`;
+    } else {
+      this._el.style.top = `${window.innerHeight * 0.95}px`;
+    }
   }
 }

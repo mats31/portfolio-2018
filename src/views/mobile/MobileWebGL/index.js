@@ -316,6 +316,8 @@ export default class MobileWebGL {
 
     if (this._background) this._background.resize(this._camera);
     if (this._cloud) this._cloud.resize(this._camera);
+    if (this._project) this._project.resize();
+    if (this._experiment) this._experiment.resize();
   }
 
   @autobind

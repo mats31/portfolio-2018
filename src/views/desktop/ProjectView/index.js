@@ -155,40 +155,40 @@ export default class DesktopProjectView {
 
     // clearTimeout(this._updateTimeout);
     // this._updateTimeout = setTimeout(() => {
-      this._rotations = [];
+    this._rotations = [];
 
-      for (let i = 0; i < project.medias.length; i++) {
-        const media = project.medias[i];
+    for (let i = 0; i < project.medias.length; i++) {
+      const media = project.medias[i];
 
-        if (media.type === 'image') {
-          const img = new Image();
-          img.classList.add('js-project__viewImg');
-          img.classList.add('js-project__viewMedia');
-          img.classList.add('project__viewImg');
-          // img.onload = this.activate.bind(this);
-          img.onload = this._onImgLoad;
+      if (media.type === 'image') {
+        const img = new Image();
+        img.classList.add('js-project__viewImg');
+        img.classList.add('js-project__viewMedia');
+        img.classList.add('project__viewImg');
+        // img.onload = this.activate.bind(this);
+        img.onload = this._onImgLoad;
 
-          img.src = media.url;
+        img.src = media.url;
 
-          this._ui.mediaContainer.appendChild(img);
+        this._ui.mediaContainer.appendChild(img);
 
-          this._toLoad++;
-        } else {
-          const video = document.createElement('video');
-          video.loop = true;
-          video.classList.add('js-project__viewVideo');
-          video.classList.add('js-project__viewMedia');
-          video.classList.add('project__viewVideo');
-          video.src = media.url;
-          video.onload = this.activate.bind(this);
+        this._toLoad++;
+      } else {
+        const video = document.createElement('video');
+        video.loop = true;
+        video.classList.add('js-project__viewVideo');
+        video.classList.add('js-project__viewMedia');
+        video.classList.add('project__viewVideo');
+        video.src = media.url;
+        // video.onload = this.activate.bind(this);
 
-          this._ui.mediaContainer.appendChild(video);
-        }
-
-        this._rotations.push({ x: randomFloat(-1, 1), y: randomFloat(-1, 1) });
+        this._ui.mediaContainer.appendChild(video);
       }
 
-      this._ui.medias = this._ui.mediaContainer.querySelectorAll('.js-project__viewMedia');
+      this._rotations.push({ x: randomFloat(-1, 1), y: randomFloat(-1, 1) });
+    }
+
+    this._ui.medias = this._ui.mediaContainer.querySelectorAll('.js-project__viewMedia');
     // }, 300);
 
   }

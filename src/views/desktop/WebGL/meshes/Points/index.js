@@ -371,8 +371,6 @@ export default class Points extends THREE.Object3D {
 
     this._material.uniforms.uPerspective.value.x = perspectiveSize.width;
     this._material.uniforms.uPerspective.value.y = perspectiveSize.height;
-
-    console.log(this._material.uniforms.uPerspective.value);
   }
 
   // Update --------------------

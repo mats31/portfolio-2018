@@ -45,8 +45,8 @@ export default class TimelineView {
     this._currentIndex = null;
     this._hoverIndex = null;
 
-    this._width = window.innerWidth * 0.5;
-    this._height = window.innerWidth * 0.5;
+    this._width = Math.max( 400, window.innerWidth * 0.5 );
+    this._height = Math.max( 400, window.innerWidth * 0.5 );
     this._timelineRadius = this._width * 0.33;
     this._baseLinesRadius = this._width * 0.37;
     this._endLinesRadius = this._width * 0.4;
@@ -449,8 +449,8 @@ export default class TimelineView {
     const datas = this._type === 'project' ? projectList.projects : experimentList.experiments;
 
     if (this._type) {
-      this._width = vw * 0.5;
-      this._height = vw * 0.5;
+      this._width = Math.max( 400, vw * 0.5);
+      this._height = Math.max( 400, vw * 0.5);
       this._timelineRadius = this._width * 0.33;
       this._baseLinesRadius = this._width * 0.37;
       this._endLinesRadius = this._width * 0.4;
