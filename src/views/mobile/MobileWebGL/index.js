@@ -207,7 +207,7 @@ export default class MobileWebGL {
       target = Math.round(this._translation * experimentList.experiments.length) / experimentList.experiments.length;
     }
 
-    TweenLite.killTweensOf(this._translation);
+    TweenLite.killTweensOf(this);
     TweenLite.to(
       this,
       1,
@@ -245,6 +245,10 @@ export default class MobileWebGL {
 
     if (page === pages.EXPERIMENT) {
       if (this._cloud) this._cloud.activate();
+
+      if (this._page === pages.HOME) {
+        this._resetTranslation();
+      }
     }
 
     if (page === pages.HOME) {
@@ -269,13 +273,22 @@ export default class MobileWebGL {
   }
 
   _resetTranslation() {
+    TweenLite.killTweensOf(this);
     this._translation = 0;
     this._delta = 0;
+    this._finalDelta = 0;
+    this._angle = 0;
     const project = projectList.projects[0];
     this._project.updateDescription(project);
 
     const experiment = experimentList.experiments[0];
     this._experiment.updateDescription(experiment);
+
+    States.global.progress = 0;
+
+    // this._disableEvents = true;
+    // clearTimeout(this._intervalTimeout);
+    // this._intervalTimeout = setTimeout(() => { this._disableEvents = false; }, 400);
   }
 
   // Events --------------------------------------------------------------------
@@ -314,6 +327,7 @@ export default class MobileWebGL {
 
     this._renderer.setSize( vw, vh );
 
+    if (this._postProcessing) this._postProcessing.resize();
     if (this._background) this._background.resize(this._camera);
     if (this._cloud) this._cloud.resize(this._camera);
     if (this._project) this._project.resize();
@@ -446,6 +460,7 @@ export default class MobileWebGL {
       // this._updateCamera();
       this._updatePoints(time);
       this._updateDecorPoints(time);
+
       if (this._background) this._background.update(time);
       if (this._cloud) this._cloud.update(time);
 
@@ -489,18 +504,11 @@ export default class MobileWebGL {
   }
 
   _updatePoints(time) {
-    // this._delta += ( this._deltaTarget - this._delta ) * 0.1;
-    // this._delta += this._deltaTarget * 3;
     this._delta += ( this._deltaTarget * 20 - this._delta ) * 0.1;
     this._finalDelta += this._delta;
     if (this.scrolled()) {
       this._translation = this._angle / 360;
     }
-    // this._translation += ( (this._angle / 360) - this._translation ) * 0.1;
-    // this._translation += this._delta;
-    // if (this._translation > 0) {
-    //   this._translation = this._type === 'project' ? -10000 * projectList.projects.length : -10000 * experimentList.experiments.length;
-    // }
 
     if (this._project && this._project.visible()) {
       this._project.update(time, this._finalDelta, this._translation);

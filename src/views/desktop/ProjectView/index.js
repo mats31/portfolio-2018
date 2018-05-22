@@ -32,6 +32,7 @@ export default class DesktopProjectView {
       close: this._el.querySelector('.js-project__close'),
       loading: this._el.querySelector('.js-project__loading'),
       back: this._el.querySelector('.js-project__back'),
+      viewText: this._el.querySelector('.js-project__viewText'),
       medias: [],
     };
 
@@ -221,13 +222,13 @@ export default class DesktopProjectView {
     this._ui.mediaContainer.style.display = 'block';
     TweenLite.fromTo(
       this._ui.mediaContainer,
-      0.6,
+      1,
       {
         y: 200,
         opacity: 0,
       },
       {
-        delay: 0.1,
+        delay: 0.3,
         y: 0,
         opacity: 1,
         ease: 'Power4.easeOut',
@@ -288,6 +289,14 @@ export default class DesktopProjectView {
     this._deltaTargetY = 0;
     this._deltaY = 0;
     this._needsUpdate = true;
+
+    const mediaContainerRect = this._ui.mediaContainer.getBoundingClientRect();
+    const mediaHeight = mediaContainerRect.height;
+    const height = this._el.offsetHeight - mediaHeight;
+
+    if (window.innerHeight < height) {
+      this._deltaTargetY = window.innerHeight - height;
+    }
   }
 
   @autobind

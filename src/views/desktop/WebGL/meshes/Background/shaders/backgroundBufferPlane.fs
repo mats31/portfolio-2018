@@ -9,7 +9,7 @@ void main( void ) {
   vec4 texture = texture2D(t_diffuse, uv);
 
   // vec3 color = texture.rgb * 0.998 - 0.0052;
-  vec3 color = texture.rgb * 0.999 - 0.00195;
+  vec3 color = texture.rgb * 0.999 - 0.00197;
 
   float alpha = 1.;
 

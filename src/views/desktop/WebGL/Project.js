@@ -10,6 +10,8 @@ export default class Project {
 
     this._raycaster = options.raycaster;
 
+    this._page = null;
+
     this._setupPoints();
     this._setupDescription();
   }
@@ -39,11 +41,11 @@ export default class Project {
 
   // State --------------------
 
-  show() {
+  show({ delay = 0 } = {}) {
     this._description.show({
-      delay: 1,
+      delay: delay + 1,
     });
-    this._points.show();
+    this._points.show({ delay });
   }
 
   hide() {
@@ -76,7 +78,8 @@ export default class Project {
   updateState(page) {
     switch (page) {
       case pages.HOME:
-        this.show();
+        const delay = this._page ? 0 : 2.5;
+        this.show({ delay });
         break;
       case pages.EXPERIMENT:
         this.hide();
@@ -86,6 +89,8 @@ export default class Project {
         break;
       default:
     }
+
+    this._page = page;
   }
 
   // Events --------------------

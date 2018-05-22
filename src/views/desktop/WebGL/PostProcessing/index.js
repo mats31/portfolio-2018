@@ -20,4 +20,8 @@ export default class PostProcessing extends AbstractPostProcessing {
   animate(deltaTarget) {
     this._scrollPass.animate(deltaTarget);
   }
+
+  resize() {
+    this._scrollPass.resize();
+  }
 }

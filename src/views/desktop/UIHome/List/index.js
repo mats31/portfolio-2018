@@ -46,7 +46,7 @@ export default class DesktopListView {
   }
 
   _setupCanvas() {
-    const width = 50;
+    const width = 25;
     const extraWidth = 100;
     const x = this._width;
 
@@ -516,8 +516,8 @@ export default class DesktopListView {
     this._height = this._elHeight * 0.65 + heightMargin;
 
     const width = window.innerWidth - this._ui.listLabel.getBoundingClientRect().left + 30;
-    const linesWidth = width * 0.4;
-    const extraWidth = width * 0.4;
+    const linesWidth = width * 0.2;
+    const extraWidth = width * 0.6;
     this._extraMainLineWidth = window.innerWidth * 0.03;
     // this._width = width + extraWidth + this._extraMainLineWidth;
     this._width = width;
@@ -589,12 +589,12 @@ export default class DesktopListView {
     for (let i = 0; i < this._lines.length; i++) {
 
       // if (this.focused()) {
-        // const relativeLinePointX = window.innerWidth - this._lines[i].x;
-        const relativeLinePointY = this._lines[i].y + this._canvasTop;
+      // const relativeLinePointX = window.innerWidth - this._lines[i].x;
+      const relativeLinePointY = this._lines[i].y + this._canvasTop;
 
-        // const linePoint = { x: relativeLinePointX, y: relativeLinePointY };
-        // this._lines[i].progressExtraWidth = map( Math.min(this._elWidth, distance2( this._mouse, linePoint ) ), 0, this._elWidth, 1, 0 );
-        this._lines[i].progressExtraWidth = map( Math.min(window.innerHeight * 0.1, Math.abs(relativeLinePointY - this._mouse.y) ), 0, window.innerHeight * 0.1, 1, 0 ) * this._lines[i].progressWidth;
+      // const linePoint = { x: relativeLinePointX, y: relativeLinePointY };
+      // this._lines[i].progressExtraWidth = map( Math.min(this._elWidth, distance2( this._mouse, linePoint ) ), 0, this._elWidth, 1, 0 );
+      this._lines[i].progressExtraWidth = map( Math.min(window.innerHeight * 0.1, Math.abs(relativeLinePointY - this._mouse.y) ), 0, window.innerHeight * 0.1, 1, 0 ) * this._lines[i].progressWidth;
       // }
 
       this._lines[i].currentExtraWidth += ( this._lines[i].progressExtraWidth - this._lines[i].currentExtraWidth ) * 0.1;

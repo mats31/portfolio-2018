@@ -58,7 +58,7 @@ export default class CloseButtonView {
       this._ui.secondLine,
       0.7,
       {
-        delay: 0.35,
+        delay: 0.15,
         scaleX: 0.8,
         ease: 'Power4.easeOut',
       },

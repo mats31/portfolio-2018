@@ -74,12 +74,14 @@ export default class DesktopNetworksView {
   // Events ------------------------------------
 
   @autobind
-  _onWorksClick() {
+  _onWorksClick(event) {
+    event.preventDefault();
     States.router.navigateTo(pages.HOME);
   }
 
   @autobind
-  _onExperimentsClick() {
+  _onExperimentsClick(event) {
+    event.preventDefault();
     States.router.navigateTo(pages.EXPERIMENT);
   }
 

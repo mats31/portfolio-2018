@@ -294,7 +294,7 @@ export default class Points extends THREE.Object3D {
     );
   }
 
-  show() {
+  show({ delay = 0 } = {}) {
     this.visible = true;
 
     TweenLite.killTweensOf(this._material.uniforms.uHide);
@@ -302,7 +302,7 @@ export default class Points extends THREE.Object3D {
       this._material.uniforms.uHide,
       3,
       {
-        delay: 0.4,
+        delay: delay + 0.4,
         value: 0,
         ease: 'Power4.easeOut',
       },

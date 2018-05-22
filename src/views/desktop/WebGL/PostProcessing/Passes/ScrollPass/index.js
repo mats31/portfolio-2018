@@ -39,6 +39,10 @@ export default class ScrollPass extends Pass {
     // this.material.uniforms.t_diffuse.value.minFilter = THREE.LinearFilter;
     // this.material.uniforms.t_diffuse.value.magFilter = THREE.LinearFilter;
 
+    TweenLite.killTweensOf(this.material.uniforms.uFadeIn);
+    TweenLite.killTweensOf(this.material.uniforms.uFadeOut);
+    TweenLite.killTweensOf(this.material.uniforms.uFisheye);
+
     this.material.uniforms.uFadeIn.value = 0;
     this.material.uniforms.uFadeOut.value = 0;
     // this.material.uniforms.uFadeIn.value = sign > 0 ? 1 : 0;
@@ -46,6 +50,30 @@ export default class ScrollPass extends Pass {
     this.material.uniforms.uDirection.value = Math.sign(deltaTarget);
     // TweenLite.killTweensof(this.material.uniforms.uFadeIn);
     // TweenLite.killTweensof(this.material.uniforms.uFadeOut);
+
+    TweenLite.to(
+      this.material.uniforms.uFisheye,
+      // sign > 0 ? 0.5 : 2,
+      0.5,
+      {
+        // value: sign > 0 ? 0 : 2,
+        value: 0.3,
+        ease: 'Power4.easeOut',
+      },
+    );
+
+    // TweenLite.killTweensOf(this.material.uniforms.uFisheye);
+    TweenLite.to(
+      this.material.uniforms.uFisheye,
+      // sign > 0 ? 0.5 : 2,
+      1,
+      {
+        delay: 0.3,
+        // value: sign > 0 ? 0 : 2,
+        value: 0.5,
+        ease: 'Power4.easeOut',
+      },
+    );
 
 
     TweenLite.to(
@@ -74,6 +102,11 @@ export default class ScrollPass extends Pass {
         // },
       },
     );
+  }
+
+  resize() {
+    this.material.uniforms.uResolution.value.x = window.innerWidth;
+    this.material.uniforms.uResolution.value.y = window.innerHeight;
   }
 
   render(renderer, readBuffer, writeBuffer) {

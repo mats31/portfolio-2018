@@ -173,7 +173,7 @@
     .project__viewColumns {
       @include font-about();
       display: flex;
-      max-width: 69%;
+      max-width: 82%;
       margin: 0 auto;
     }
 
@@ -182,7 +182,8 @@
         flex-basis: 0;
         text-align: center;
         font-size: 1.4rem;
-        letter-spacing: 0.3rem;
+        letter-spacing: 0.2rem;
+        line-height: 1.5;
 
         @media screen and (max-width: 1100px) {
           font-size: 1rem;
@@ -207,6 +208,7 @@
         .project__ViewColumnHead {
           margin-bottom: 1rem;
           font-size: 1.6rem;
+          text-transform: uppercase;
 
           // @media screen and (max-width: 1100px) {
           //   font-size: 1.2rem;
