@@ -190,7 +190,7 @@ export default class Points extends THREE.Object3D {
     this._geometry.addAttribute( 'a_speed', this._aSpeed );
     this._geometry.addAttribute( 'a_radius', this._aRadius );
     this._geometry.addAttribute( 'a_offset', this._aOffset );
-    this._geometry.addAttribute( 'a_press', this._aPress   );
+    this._geometry.addAttribute( 'a_press', this._aPress );
 
     for (let k = 0; k < this._colors.length; k++) {
       this._geometry.addAttribute( `a_color${k}`, this[`aColor${k}`] );
