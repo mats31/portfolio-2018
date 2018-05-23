@@ -68,6 +68,9 @@ export default class Experiment {
 
   select() {
     this._points.select();
+  }
+
+  showDescription() {
     this._description.show();
   }
 

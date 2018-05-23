@@ -245,10 +245,12 @@ export default class WebGL {
 
     if (this._project.visible()) {
       this._project.select();
+      this._project.showDescription();
     }
 
     if (this._experiment.visible()) {
       this._experiment.select();
+      this._experiment.showDescription();
     }
   }
 
@@ -301,7 +303,6 @@ export default class WebGL {
     this._experiment.updateDescription(experiment);
 
     this._project.select();
-
     this._experiment.select();
   }
 
