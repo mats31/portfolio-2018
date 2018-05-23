@@ -1,5 +1,5 @@
 <?php
-  require_once 'server/MobileDetect.php';
+  require_once 'server/Mobile_Detect.php';
   $detect = new Mobile_Detect;
 ?>
 
@@ -41,11 +41,11 @@
     <meta itemprop="image" content="http://www.mathis-biabiany.fr/images/share/facebook.jpg">
 
     <!-- Favicons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/share/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/share/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/share/favicon-16x16.png">
+    <link rel="manifest" href="/images/share/site.webmanifest">
+    <link rel="mask-icon" href="/images/share/safari-pinned-tab.svg" color="#5bbad5">
     <meta name="msapplication-TileColor" content="#da532c">
     <meta name="theme-color" content="#ffffff">
 
