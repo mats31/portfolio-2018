@@ -7,6 +7,8 @@ uniform float uPress;
 
 attribute vec4 a_radialColor;
 
+attribute vec2 a_coordinates;
+
 attribute float a_direction;
 attribute float a_speed;
 attribute float a_select;
@@ -16,23 +18,10 @@ attribute float a_press;
 
 varying vec4 vRadialColor;
 varying vec3 vPos;
+varying vec2 vCoordinates;
 varying float vSpeed;
 
-attribute vec4 a_color0;
-attribute vec4 a_color1;
-attribute vec4 a_color2;
-attribute vec4 a_color3;
-attribute vec4 a_color4;
-attribute vec4 a_color5;
-attribute vec4 a_color6;
 attribute vec3 a_hidePosition;
-varying vec4 vColor0;
-varying vec4 vColor1;
-varying vec4 vColor2;
-varying vec4 vColor3;
-varying vec4 vColor4;
-varying vec4 vColor5;
-varying vec4 vColor6;
 
 mat3 quatToMatrix(vec4 q) {
   mat3 mat;
@@ -103,12 +92,5 @@ void main() {
   vRadialColor = a_radialColor;
   vSpeed = a_speed;
   vPos = pos;
-
-  vColor0 = a_color0;
-  vColor1 = a_color1;
-  vColor2 = a_color2;
-  vColor3 = a_color3;
-  vColor4 = a_color4;
-  vColor5 = a_color5;
-  vColor6 = a_color6;
+  vCoordinates = a_coordinates;
 }

@@ -29,9 +29,9 @@ export default class Points extends THREE.Object3D {
 
     this._type = options.type;
     this._canvas = new Canvas();
-    this._setupColors();
+    // this._setupColors();
     this._radialDatas = this._canvas.getRadialImage();
-    this._nb = this._colors[0].length / 4;
+    this._nb = 262144;
     // this._nb = ( this._colors[0].length / 4 ) / 16;
 
     this._setupGeometry();
@@ -70,6 +70,8 @@ export default class Points extends THREE.Object3D {
 
     this._aPosition = new THREE.BufferAttribute( new Float32Array( this._nb * 3 ), 3 );
     this._aHidePosition = new THREE.BufferAttribute( new Float32Array( this._nb * 3 ), 3 );
+
+    this._aCoordinates = new THREE.BufferAttribute( new Float32Array( this._nb * 2 ), 2 );
 
     this._aSelect = new THREE.BufferAttribute( new Float32Array( this._nb * 1 ), 1 );
     this._selectOffsetSpeeds = new Float32Array( this._nb );
@@ -114,6 +116,12 @@ export default class Points extends THREE.Object3D {
           randomFloat(1150, 1200),
         );
 
+        this._aCoordinates.setXY(
+          index,
+          j,
+          i,
+        );
+
         this._aSelect.setX(
           index,
           1,
@@ -153,30 +161,30 @@ export default class Points extends THREE.Object3D {
     // console.log(index);
     // console.log(this._nb);
 
-    index = 0;
-    index4 = 0;
-    for (let k = 0; k < this._colors.length; k++) {
-
-      for (let i = 0; i < height; i += 1) {
-
-        for (let j = 0; j < width; j += 1) {
-
-          this[`aColor${k}`].setXYZW(
-            index,
-            this._colors[k][index4] / 255,
-            this._colors[k][index4 + 1] / 255,
-            this._colors[k][index4 + 2] / 255,
-            this._colors[k][index4 + 3] / 255,
-          );
-
-          index++;
-          index4 += 4;
-        }
-      }
-
-      index = 0;
-      index4 = 0;
-    }
+    // index = 0;
+    // index4 = 0;
+    // for (let k = 0; k < this._colors.length; k++) {
+    //
+    //   for (let i = 0; i < height; i += 1) {
+    //
+    //     for (let j = 0; j < width; j += 1) {
+    //
+    //       this[`aColor${k}`].setXYZW(
+    //         index,
+    //         this._colors[k][index4] / 255,
+    //         this._colors[k][index4 + 1] / 255,
+    //         this._colors[k][index4 + 2] / 255,
+    //         this._colors[k][index4 + 3] / 255,
+    //       );
+    //
+    //       index++;
+    //       index4 += 4;
+    //     }
+    //   }
+    //
+    //   index = 0;
+    //   index4 = 0;
+    // }
 
     // this._geometry.addAttribute( 'a_color', this._aColor );
     // this._geometry.addAttribute( 'a_nextColor', this._aNextColor );
@@ -185,6 +193,8 @@ export default class Points extends THREE.Object3D {
     this._geometry.addAttribute( 'position', this._aPosition );
     this._geometry.addAttribute( 'a_hidePosition', this._aHidePosition );
 
+    this._geometry.addAttribute( 'a_coordinates', this._aCoordinates );
+
     this._geometry.addAttribute( 'a_select', this._aSelect );
     this._geometry.addAttribute( 'a_direction', this._aDirection );
     this._geometry.addAttribute( 'a_speed', this._aSpeed );
@@ -192,14 +202,14 @@ export default class Points extends THREE.Object3D {
     this._geometry.addAttribute( 'a_offset', this._aOffset );
     this._geometry.addAttribute( 'a_press', this._aPress );
 
-    for (let k = 0; k < this._colors.length; k++) {
-      this._geometry.addAttribute( `a_color${k}`, this[`aColor${k}`] );
-    }
+    console.log(this._aCoordinates);
   }
 
   _setupMaterial() {
 
     const maskTexture = States.resources.getTexture('particle_mask').media;
+    const test = States.resources.getTexture('test').media;
+    test.flipY = false;
 
     this._material = new THREE.ShaderMaterial({
       transparent: true,
@@ -217,6 +227,7 @@ export default class Points extends THREE.Object3D {
         uResolution: { type: 'v2', value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
         uPerspective: { type: 'v2', value: new THREE.Vector2() },
         t_mask: { type: 't', value: maskTexture },
+        tDiffuse: { type: 't', value: test },
       },
       vertexShader: this._type === 'project' ? projectVertexShader : experimentVertexShader,
       fragmentShader: this._type === 'project' ? projectFragmentShader : experimentFragmentShader,
