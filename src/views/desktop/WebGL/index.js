@@ -271,6 +271,7 @@ export default class WebGL {
       this._cloud.activate();
       this._background.hide();
       this._iconProject.hide();
+      this._resetTranslation();
     } else if (page === pages.EXPERIMENT) {
       this._type = 'experiment';
       this._cloud.deactivate();
@@ -289,13 +290,19 @@ export default class WebGL {
   }
 
   _resetTranslation() {
+    TweenLite.killTweensOf(this);
     this._translation = 0;
     this._delta = 0;
+    this._deltaTarget = 0;
     const project = projectList.projects[0];
     this._project.updateDescription(project);
 
     const experiment = experimentList.experiments[0];
     this._experiment.updateDescription(experiment);
+
+    this._project.select();
+
+    this._experiment.select();
   }
 
   // Events --------------------------------------------------------------------
@@ -475,14 +482,14 @@ export default class WebGL {
 
   update() {
 
+    const time = this._clock.getElapsedTime();
+
     if (this.active()) {
 
-      const time = this._clock.getElapsedTime();
       const delta = this._clock.getDelta();
 
       this._updateCamera();
       this._updatePoints(time);
-      this._updateDecorPoints(time);
       this._background.update(time);
       if (this._iconProject) this._iconProject.update();
       // if (this._mode === 'high') this._background.update(time);
@@ -492,6 +499,8 @@ export default class WebGL {
       // this._renderer.render(this._scene, this._camera);
       this._postProcessing.update(delta);
     }
+
+    if (this._page !== pages.PROJECT) this._updateDecorPoints(time);
   }
 
   _updateCamera() {

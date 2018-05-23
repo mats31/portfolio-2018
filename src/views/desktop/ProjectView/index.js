@@ -103,6 +103,7 @@ export default class DesktopProjectView {
 
     this._ui.loading.style.transform = 'scaleX(0)';
     TweenLite.set(this._ui.loading, { opacity: 1 });
+    TweenLite.set(this._ui.back, { opacity: 0, display: 'none' });
     this._loadingNeedsUpdate = true;
     this._toLoad = 0;
     this._loaded = 0;

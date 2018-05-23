@@ -21,7 +21,6 @@ const ressources = {
   ],
   textures: [
     { id: 'particle_mask', url: 'textures/particle_mask.jpg' },
-    { id: 'scroll_pass', url: 'textures/scroll_pass.jpg' },
     { id: 'background', url: 'textures/background.png' },
 
     { id: 'mask-db', url: 'textures/cloud-mask-db.png' },
