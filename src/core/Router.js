@@ -21,7 +21,7 @@ export default class Router {
 
     this.navigo.notFound(this._onRouteNotFound);
     this.navigo.on({
-      '/': { as: pages.HOME, uses: this._onRouteHome },
+      '': { as: pages.HOME, uses: this._onRouteHome },
       '/experiment': { as: pages.EXPERIMENT, uses: this._onRouteExperiment },
       '/about': { as: pages.ABOUT, uses: this._onRouteAbout },
       '/project/:id': { as: pages.PROJECT, uses: this._onRouteProject },

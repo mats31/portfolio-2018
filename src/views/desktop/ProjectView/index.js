@@ -360,7 +360,7 @@ export default class DesktopProjectView {
   }
 
   _updateLoading() {
-    this._currentLoad += (this._targetLoad - this._currentLoad) * 0.1;
+    this._currentLoad += (Math.max(this._targetLoad, 0.1) - this._currentLoad) * 0.1;
 
     this._ui.loading.style.transform = `scaleX(${this._currentLoad})`;
   }

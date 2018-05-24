@@ -125,7 +125,7 @@ export default class Project {
 
   @autobind
   _onActivateMode() {
-    if (States.router.getLastRouteResolved().url === '') this.show();
+    if (States.router.getLastRouteResolved().name === 'home') this.show();
   }
 
   // Update --------------------
