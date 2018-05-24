@@ -35,6 +35,7 @@ export default class LoaderView {
 
     this._assetsLoaded = false;
     this._activateCheck = false;
+    this._colorsStocked = false;
     this._stoppedCheckFPS = false;
 
     this.setupEvents();
@@ -60,7 +61,7 @@ export default class LoaderView {
 
     TweenLite.to(
       this.el,
-      0.8,
+      1,
       {
         delay,
         ease: 'Power2.easeOut',
@@ -76,11 +77,13 @@ export default class LoaderView {
   // Events --------------------------------------------------------------------
   @autobind
   _onColorStocked() {
-    // if (this._assetsLoaded && this._callsColorsStocked === 1) {
-      TweenLite.delayedCall(0.8, this._checkFPS );
-    // }
+    if (this._assetsLoaded && this._callsColorsStocked === 1) {
+      TweenLite.delayedCall( 0.2, this._checkFPS );
+    } else if (this._callsColorsStocked === 1) {
+      this._colorsStocked = true;
+    }
 
-    // this._callsColorsStocked++;
+    this._callsColorsStocked++;
   }
 
   @autobind
@@ -99,6 +102,10 @@ export default class LoaderView {
     this._ui.counter.innerHTML = value;
 
     this._assetsLoaded = true;
+
+    if (this._colorsStocked) {
+      TweenLite.delayedCall( 0.2, this._checkFPS );
+    }
   }
 
   // Update -----------
@@ -119,7 +126,7 @@ export default class LoaderView {
 
       this._values.push(date - this._previousDate);
 
-      if (this._values.length >= 150) {
+      if (this._values.length >= 75) {
         this._stopCheckFPS();
 
         return;
@@ -151,12 +158,13 @@ export default class LoaderView {
       } else {
         console.log('high mode');
         console.log('average: ', average);
+        Signals.onSetHighMode.dispatch();
       }
 
       this._ui.counter.innerHTML = '100%';
       this._loaderCanvas.updateValue(1);
 
-      this.hide();
+      this.hide({ delay: 0.44 });
 
       this._stoppedCheckFPS = true;
     }

@@ -138,7 +138,7 @@ export default class Description extends THREE.Object3D {
   }
 
   resize() {
-    this._baseH = Math.max( 1.3, Math.min( 2.5, window.innerWidth * 0.0012) );
+    this._baseH = Math.max( 2, Math.min( 2.5, window.innerWidth * 0.0012) );
 
     const ratio = this._texture.image.naturalWidth / this._texture.image.naturalHeight;
     const h = this._baseH;

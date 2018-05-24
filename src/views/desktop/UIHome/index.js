@@ -92,7 +92,7 @@ export default class DesktopHomeView {
   updateState(page) {
     switch (page) {
       case pages.PROJECT:
-        this._title.show();
+        this._title.hide();
         this._networks.hide();
         this._menu.hide();
         if (this._list) this._list.hide();
@@ -132,10 +132,7 @@ export default class DesktopHomeView {
     this.resize(vw, vh);
   }
 
-  resize(vw, vh) {
-    console.log('width: ', vw);
-    console.log('height: ', vh);
-  }
+  resize(vw, vh) {}
 
   // Update --------------------------------------------------------------------
   update() {

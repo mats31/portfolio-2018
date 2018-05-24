@@ -5,10 +5,7 @@ uniform float u_time;
 uniform float uHide;
 uniform float uPress;
 
-attribute vec4 a_radialColor;
-
 attribute vec2 a_coordinates;
-
 attribute float a_direction;
 attribute float a_speed;
 attribute float a_select;
@@ -16,10 +13,8 @@ attribute float a_radius;
 attribute float a_offset;
 attribute float a_press;
 
-varying vec4 vRadialColor;
 varying vec3 vPos;
 varying vec2 vCoordinates;
-varying float vSpeed;
 
 attribute vec3 a_hidePosition;
 
@@ -64,9 +59,6 @@ void main() {
   pos.z = mod( position.z + ( u_delta * -1. * a_speed ) + 1000. + a_offset, 2000. ) - 1000.;
 
   vec3 stablePosition = position;
-  // stablePosition.x += cos(u_time * 0.1) * 20. + ( sin(u_time * a_speed * a_direction) * a_radialColor.r * 30. * abs( step( 1., a_radialColor.r ) - 1. ) );
-  // stablePosition.y += sin(u_time * 0.2) * 20. + ( sin(u_time * a_speed * a_direction) * a_radialColor.r * 30. * abs( step( 1., a_radialColor.r ) - 1. ) );
-  // stablePosition.z += sin(u_time * 0.5) * 20. + ( sin(u_time * a_speed * a_direction) * a_radialColor.r * 30. * abs( step( 1., a_radialColor.r ) - 1. ) );
   stablePosition.x += cos(u_time * 0.2) * 20.;
   stablePosition.y += sin(u_time * 0.3) * 20.;
   stablePosition.z += sin(u_time * 0.6) * 20.;
@@ -85,12 +77,8 @@ void main() {
   vec4 mvPosition = modelViewMatrix * vec4( pos * rotation, 1.0 );
 
   gl_PointSize = ( 3500.0 / length( mvPosition.xyz ) );
-  // gl_PointSize = .2;
   gl_Position = projectionMatrix * mvPosition;
-  // gl_Position.x += 1052.;
 
-  vRadialColor = a_radialColor;
-  vSpeed = a_speed;
   vPos = pos;
   vCoordinates = a_coordinates;
 }

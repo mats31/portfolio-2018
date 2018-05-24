@@ -1,4 +1,6 @@
 import * as pages from 'core/pages';
+import States from 'core/States';
+import { autobind } from 'core-decorators';
 import { visible, focused } from 'core/decorators';
 import Description from './meshes/Description';
 import MobilePoints from './meshes/MobilePoints';
@@ -11,8 +13,12 @@ export default class Experiment {
     this._raycaster = options.raycaster;
     this._camera = options.camera;
 
+    this._page = null;
+
     this._setupPoints();
     this._setupDescription();
+
+    this._addEvents();
   }
 
   _setupPoints() {
@@ -26,6 +32,11 @@ export default class Experiment {
       type: 'experiment',
       camera: this._camera,
     });
+  }
+
+  _addEvents() {
+    Signals.onSetLowMode.add(this._onActivateMode);
+    Signals.onSetHighMode.add(this._onActivateMode);
   }
 
   // Getters / Setters --------------------
@@ -80,11 +91,13 @@ export default class Experiment {
         this.hide();
         break;
       case pages.EXPERIMENT:
-        this.show();
+        if (this._page) this.show();
         break;
       default:
         this.hide();
     }
+
+    this._page = page;
   }
 
   // Events --------------------
@@ -92,6 +105,11 @@ export default class Experiment {
   resize() {
     this._points.resize();
     this._description.resize();
+  }
+
+  @autobind
+  _onActivateMode() {
+    if (States.router.getLastRouteResolved().name === 'experiment') this.show();
   }
 
   // Update --------------------

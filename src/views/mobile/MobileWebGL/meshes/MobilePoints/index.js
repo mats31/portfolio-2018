@@ -3,7 +3,6 @@ import projectList from 'config/project-list';
 import experimentList from 'config/experiment-list';
 import { selected } from 'core/decorators';
 import { randomFloat } from 'utils/math';
-import Canvas from './Canvas';
 import projectVertexShader from './shaders/projectPoint.vs';
 import projectFragmentShader from './shaders/projectPoint.fs';
 import experimentVertexShader from './shaders/experimentPoint.vs';
@@ -21,15 +20,13 @@ export default class MobilePoints extends THREE.Object3D {
     this._lastTranslation = 0;
     this._currentIndex = 0;
     this._correction = 0;
+    this._nbItems = 0;
     States.global.progress = 0;
     this._nextIndex = 1;
 
     this._type = options.type;
-    this._canvas = new Canvas();
-    this._setupColors();
-    this._radialDatas = this._canvas.getRadialImage();
-    this._nb = this._colors[0].length / 4;
-    // this._nb = ( this._colors[0].length / 4 ) / 16;
+    this._getNbItems();
+    this._nb = 262144; // 512 x 512
 
     this._setupGeometry();
     this._setupMaterial();
@@ -38,23 +35,16 @@ export default class MobilePoints extends THREE.Object3D {
     this._selectNeedsUpdate = false;
     this._selectTimeout = null;
     this.visible = false;
-    // this._calledNext = true;
 
     Signals.onColorStocked.dispatch();
-    console.log('colorstocked dispatch');
   }
 
-  _setupColors() {
+  _getNbItems() {
 
     if (this._type === 'project') {
-      for (let i = 0; i < projectList.projects.length; i++) {
-        this._colors.push( this._canvas.getDataImage( States.resources.getImage(`${projectList.projects[i].id}-preview`).media ) );
-        // console.log(this._colors);
-      }
+      this._nbItems = projectList.projects.length;
     } else {
-      for (let i = 0; i < experimentList.experiments.length; i++) {
-        this._colors.push( this._canvas.getDataImage( States.resources.getImage(`${experimentList.experiments[i].id}-preview`).media ) );
-      }
+      this._nbItems = experimentList.experiments.length;
     }
   }
 
@@ -65,10 +55,11 @@ export default class MobilePoints extends THREE.Object3D {
     const width = 512;
     const height = 512;
 
-    this._aRadialColor = new THREE.BufferAttribute( new Float32Array( this._nb * 4 ), 4 );
 
     this._aPosition = new THREE.BufferAttribute( new Float32Array( this._nb * 3 ), 3 );
     this._aHidePosition = new THREE.BufferAttribute( new Float32Array( this._nb * 3 ), 3 );
+
+    this._aCoordinates = new THREE.BufferAttribute( new Float32Array( this._nb * 2 ), 2 );
 
     this._aSelect = new THREE.BufferAttribute( new Float32Array( this._nb * 1 ), 1 );
     this._selectOffsetSpeeds = new Float32Array( this._nb );
@@ -77,26 +68,12 @@ export default class MobilePoints extends THREE.Object3D {
     this._aRadius = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
     this._aOffset = new THREE.BufferAttribute( new Float32Array( this._nb ), 1 );
 
-    for (let k = 0; k < this._colors.length; k++) {
-      this[`aColor${k}`] = new THREE.BufferAttribute( new Float32Array( this._nb * 4 ), 4 );
-    }
-
     let index = 0;
-    let index4 = 0;
     for (let i = 0; i < height; i += 1) {
       const y = i - height * 0.5;
-      // const y = ( height - i ) - height * 0.5;
-      for (let j = 0; j < width; j += 1) {
-        // const x = ( j ) - width * 0.5;
-        const x = ( width - j ) - width * 0.5;
 
-        this._aRadialColor.setXYZW(
-          index,
-          this._radialDatas[index4] / 255,
-          this._radialDatas[index4 + 1] / 255,
-          this._radialDatas[index4 + 2] / 255,
-          this._radialDatas[index4 + 3] / 255,
-        );
+      for (let j = 0; j < width; j += 1) {
+        const x = ( width - j ) - width * 0.5;
 
         this._aPosition.setXYZ(
           index,
@@ -110,6 +87,12 @@ export default class MobilePoints extends THREE.Object3D {
           randomFloat(-2000, 2000),
           randomFloat(-2000, 2000),
           randomFloat(1150, 1200),
+        );
+
+        this._aCoordinates.setXY(
+          index,
+          j,
+          i,
         );
 
         this._aSelect.setX(
@@ -139,65 +122,31 @@ export default class MobilePoints extends THREE.Object3D {
         );
 
         index++;
-        index4 += 4;
       }
     }
-
-    // console.log(index);
-    // console.log(this._nb);
-
-    index = 0;
-    index4 = 0;
-    for (let k = 0; k < this._colors.length; k++) {
-
-      for (let i = 0; i < height; i += 1) {
-
-        for (let j = 0; j < width; j += 1) {
-
-          this[`aColor${k}`].setXYZW(
-            index,
-            this._colors[k][index4] / 255,
-            this._colors[k][index4 + 1] / 255,
-            this._colors[k][index4 + 2] / 255,
-            this._colors[k][index4 + 3] / 255,
-          );
-
-          index++;
-          index4 += 4;
-        }
-      }
-
-      index = 0;
-      index4 = 0;
-    }
-
-    // this._geometry.addAttribute( 'a_color', this._aColor );
-    // this._geometry.addAttribute( 'a_nextColor', this._aNextColor );
-    this._geometry.addAttribute( 'a_radialColor', this._aRadialColor );
 
     this._geometry.addAttribute( 'position', this._aPosition );
     this._geometry.addAttribute( 'a_hidePosition', this._aHidePosition );
+
+    this._geometry.addAttribute( 'a_coordinates', this._aCoordinates );
 
     this._geometry.addAttribute( 'a_select', this._aSelect );
     this._geometry.addAttribute( 'a_direction', this._aDirection );
     this._geometry.addAttribute( 'a_speed', this._aSpeed );
     this._geometry.addAttribute( 'a_radius', this._aRadius );
     this._geometry.addAttribute( 'a_offset', this._aOffset );
-
-    for (let k = 0; k < this._colors.length; k++) {
-      this._geometry.addAttribute( `a_color${k}`, this[`aColor${k}`] );
-    }
   }
 
   _setupMaterial() {
 
     const maskTexture = States.resources.getTexture('particle_mask').media;
+    const diffuse = this._type === 'project' ? States.resources.getTexture('spritesheet-project').media : States.resources.getTexture('spritesheet-experiment').media;
+    diffuse.flipY = false;
 
     this._material = new THREE.ShaderMaterial({
       transparent: true,
       depthTest: false,
       depthWrite: false,
-      // blending: THREE.AdditiveBlending,
       uniforms: {
         u_delta: { type: 'f', value: 0 },
         u_time: { type: 'f', value: 0 },
@@ -205,6 +154,7 @@ export default class MobilePoints extends THREE.Object3D {
         u_progress: { type: 'f', value: 0 },
         uHide: { type: 'f', value: 1 },
         t_mask: { type: 't', value: maskTexture },
+        tDiffuse: { type: 't', value: diffuse },
       },
       vertexShader: this._type === 'project' ? projectVertexShader : experimentVertexShader,
       fragmentShader: this._type === 'project' ? projectFragmentShader : experimentFragmentShader,
@@ -222,34 +172,6 @@ export default class MobilePoints extends THREE.Object3D {
     this._selectOffsetValue = 1;
     this._selectNeedsUpdate = true;
 
-    // TweenLite.killTweensOf(this);
-    //
-    // if (States.global.progress % 1 <= 0.5) {
-    //   console.log(( States.global.progress % 1 ) * -1);
-    //   TweenLite.to(
-    //     this,
-    //     1,
-    //     {
-    //       _correction: ( States.global.progress % 1 ) * -1,
-    //       onComplete: () => {
-    //         console.log(States.global.progress);
-    //       },
-    //     },
-    //   );
-    // } else {
-    //   console.log(1 - ( States.global.progress % 1 ));
-    //   TweenLite.to(
-    //     this,
-    //     1,
-    //     {
-    //       _correction: 1 - ( States.global.progress % 1 ),
-    //       onComplete: () => {
-    //         console.log(States.global.progress);
-    //       },
-    //     },
-    //   );
-    // }
-
     TweenLite.killTweensOf(this._material.uniforms.u_mask);
     TweenLite.to(
       this._material.uniforms.u_mask,
@@ -259,12 +181,6 @@ export default class MobilePoints extends THREE.Object3D {
         ease: 'Power4.easeOut',
       },
     );
-
-    // clearTimeout(this._selectTimeout);
-    // this._selectTimeout = setTimeout(() => {
-    //   this._material.blending = 1;
-    // }, 500);
-    // this._material.blending = 1;
   }
 
   deselect() {
@@ -353,12 +269,7 @@ export default class MobilePoints extends THREE.Object3D {
 
   _updateColor(translation) {
 
-    States.global.progress = translation * this._colors.length;
-    if (this._type === 'experiment') {
-      console.log(translation);
-    }
-
-    // console.log(translation);
+    States.global.progress = translation * this._nbItems;
     this._material.uniforms.u_progress.value = States.global.progress;
   }
 }

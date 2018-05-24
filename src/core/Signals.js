@@ -10,6 +10,7 @@ class Signals {
     this.onScrollWheel = new Signal();
     this.onApplicationStart = new Signal();
     this.onSetLowMode = new Signal();
+    this.onSetHighMode = new Signal();
 
     // Assets
     this.onAssetLoaded = new Signal();

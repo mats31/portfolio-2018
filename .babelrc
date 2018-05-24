@@ -4,9 +4,9 @@
     {
       "targets": {
         "node": "current",
-      }
+      },
     }],
-    "stage-0"],
+  ],
   "plugins": [
     "transform-decorators-legacy",
     "add-module-exports",

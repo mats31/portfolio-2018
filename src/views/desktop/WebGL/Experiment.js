@@ -1,4 +1,6 @@
 import * as pages from 'core/pages';
+import States from 'core/States';
+import { autobind } from 'core-decorators';
 import { visible, focused } from 'core/decorators';
 import Description from './meshes/Description';
 import Points from './meshes/Points';
@@ -14,6 +16,8 @@ export default class Experiment {
 
     this._setupPoints();
     this._setupDescription();
+
+    this._addEvents();
   }
 
   _setupPoints() {
@@ -27,6 +31,11 @@ export default class Experiment {
       type: 'experiment',
     });
     this._description.position.set(-9.5, -6.25, 950);
+  }
+
+  _addEvents() {
+    Signals.onSetLowMode.add(this._onActivateMode);
+    Signals.onSetHighMode.add(this._onActivateMode);
   }
 
   // Getters / Setters --------------------
@@ -43,7 +52,7 @@ export default class Experiment {
 
   show({ delay = 0 } = {}) {
     this._description.show({
-      delay: delay + 1,
+      delay: delay + 1.1,
     });
     this._points.show({ delay });
   }
@@ -84,8 +93,7 @@ export default class Experiment {
         this.hide();
         break;
       case pages.EXPERIMENT:
-        const delay = this._page ? 0 : 2.5;
-        this.show({ delay });
+        if (this._page) this.show();
         break;
       case pages.ABOUT:
         this.hide();
@@ -113,6 +121,11 @@ export default class Experiment {
   resize(camera) {
     this._points.resize(camera);
     this._description.resize();
+  }
+
+  @autobind
+  _onActivateMode() {
+    if (States.router.getLastRouteResolved().name === 'experiment') this.show();
   }
 
   // Update --------------------
