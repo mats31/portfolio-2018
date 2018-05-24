@@ -55,10 +55,39 @@
     <link href="<%= htmlWebpackPlugin.files.chunks.desktop.css %>" rel="stylesheet"></head>
     <?php } ?>
 
+    <style>
+      #fallback {
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        text-align: center;
+        background: black;
+        color: white;
+        font-size: 2rem;
+        display: none;
+      }
+
+      #fallback .fallback__text {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 80%;
+        font-family: 'roboto';
+      }
+
+      @media screen and (min-width:0\0) and (min-resolution: +72dpi) {
+        #fallback {
+          display: block;
+        }
+      }
+    </style>
+
   </head>
 
   <body>
 
+    <div id="fallback"><div class="fallback__text">Your browser is outdated. Please, use the last version of Google Chrome.</div></div>
     <div id="application">
 
     </div>
