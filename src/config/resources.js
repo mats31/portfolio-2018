@@ -1,7 +1,7 @@
 const ressources = {
   images: [
     // { id: 'logo', url: 'images/imanebahouss-logo-red.png', description: 'logo' },
-    { id: 'twitter', url: 'images/twitter.png', description: 'twitter' },
+    // { id: 'twitter', url: 'images/twitter.png', description: 'twitter' },
 
     // { id: 'hp-preview', url: 'images/projects/hp.png' },
     // { id: 'nmd-preview', url: 'images/projects/nmd.png' },

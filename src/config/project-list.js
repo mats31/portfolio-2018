@@ -3,7 +3,6 @@ const projectList = {
     {
       id: 'celia',
       title: 'Célia Lopez',
-      subtitle: 'Resn Little Helper\'s subtitle',
       description: 'Célia Lopez is a junior 3D and interactive designer. I helped her to realize her portfolio.',
       date: '2018',
       link: 'View website',
@@ -22,8 +21,7 @@ const projectList = {
     {
       id: 'resn-little-helper',
       title: 'Resn\'s Little Helper',
-      subtitle: 'Resn Little Helper\'s subtitle',
-      description: 'A long time ago, before St. Nick, Father Christmas, Kris Kringle, Santa or whatever you wanna call him, there was an elf, some ’shrooms and a flute. The real first Christmas. Truth.',
+      description: 'A long time ago, before St. Nick, Father Christmas, Kris Kringle, Santa or whatever you wanna call him, there was an elf, some ’shrooms and a flute. The real first Christmas. Truth. We realized this special christmas card at Resn.',
       date: '<a href="http://resn.co.nz/" target="_blank">Resn</a> 2017',
       link: 'View website',
       url: 'http://littlehelper.resn.global/',
@@ -41,8 +39,7 @@ const projectList = {
     {
       id: 'hp',
       title: 'HP Sound in Color',
-      subtitle: 'HP Sound in Color\'s subtitle',
-      description: 'Capture any piece of audio on your Android handheld or desktop and transform it into a lush, abstract piece of art.',
+      description: 'Capture any piece of audio on your Android handheld or desktop and transform it into a lush, abstract piece of art. We realized this website to promote the HP Spectre x360 computer. I mainly worked on the UI and it\'s animations.',
       date: '<a href="http://resn.co.nz/" target="_blank">Resn</a> 2016',
       link: 'View website',
       url: 'https://www.hpsoundincolor.com/',
@@ -61,12 +58,11 @@ const projectList = {
     {
       id: 'tsuki8',
       title: 'Tsuki 8',
-      subtitle: 'Tsuki 8\'s subtitle',
-      description: 'Tsuki8 is an artistic project realized by the french media-artists <a href="http://makioandfloz.com/" target="_blank">Makio&Floz</a>. I joined them for one month. We traveled around Japan, discovering the country, meeting people and getting inspire by it to do projection mapping, which means using a projector to project animations and visuals on nature & building.',
-      date: 'Makio&Floz 2016',
+      description: 'Tsuki8 is an artistic project realized by the french media-artists <a href="http://makioandfloz.com/" target="_blank">Makio&Floz</a>. I joined them for one month to help them right after I ended Gobelins school. We traveled around Japan, discovered the country, met people and got inspired by it to do projection mapping, which means using a projector to project animations and visuals on nature & buildings.',
+      date: '<a href="http://makioandfloz.com/" target="_blank">Makio&Floz</a> 2016',
       link: 'View website',
       url: 'http://tsuki8.makioandfloz.com/',
-      role: '<div>Developer</div><div>Assistant pre-production</div>',
+      role: '<div>Developer</div><div>Pre-production assistant</div>',
       technologies: '<div>WebGL</div><div>ThreeJS</div>',
       clients: null,
       awards: null,
@@ -80,8 +76,7 @@ const projectList = {
     {
       id: 'speedfactory',
       title: 'Adidas Speedfactory',
-      subtitle: 'Adidas Speedfactory\'s subtitle',
-      description: 'A globally touring activation showcasing adidas’ high-tech, data driven footwear and it’s manufacturing process. Visitors experience a series of interactive installations that teach the adidas Speedfactory key approaches of Innovation, Co-Creation and Speed. Here is the website,',
+      description: 'A globally touring activation showcasing adidas’ high-tech, data driven footwear and it’s manufacturing process. Visitors experience a series of interactive installations that teach the adidas Speedfactory key approaches of Innovation, Co-Creation and Speed. Below are some medias coming from the website we made at Resn.',
       date: '<a href="http://resn.co.nz/" target="_blank">Resn</a> 2017 / 2018',
       link: 'View website',
       url: 'https://www.adidas.co.uk/speedfactory',
@@ -100,8 +95,7 @@ const projectList = {
     {
       id: 'nmd',
       title: 'Adidas NMD',
-      subtitle: 'Adidas NMD\'s subtitle',
-      description: 'Adidas Original NMD 2017 combined the launch of a new apparel category alongside a fresh update of shoe coulourways for the year. Tailored towards the streetwear audience who live and breathe the urban nightlife.',
+      description: 'Adidas Original NMD 2017 combined the launch of a new apparel category alongside a fresh update of shoe coulourways for the year. Tailored towards the streetwear audience who live and breathe the urban nightlife. We made the website at Resn. I mainly worked on the WebGL background and some UI animations.',
       date: '<a href="http://resn.co.nz/" target="_blank">Resn</a> 2017',
       link: 'Website offline',
       role: '<div>Creative Developer</div>',
@@ -118,8 +112,7 @@ const projectList = {
     {
       id: 'lusine',
       title: 'Delicious Moment',
-      subtitle: 'Adidas NMD\'s subtitle',
-      description: 'Usine description',
+      description: 'This experience for bread maker L\'usine is aimed at kids and parents to promote food creativity and enjoyment at home. The site allows users to first create a sandwich using our large variety of fillings, toppings, breads and condiments. Then you can download the receipe and also have a look to the others created sandwichs beforehand. We made this website at Resn. I mainly worked on all the animations and some WebGL parts.',
       date: '<a href="http://resn.co.nz/" target="_blank">Resn</a> 2016',
       link: 'Website offline',
       role: '<div>Creative Developer</div>',

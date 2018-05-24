@@ -4,7 +4,6 @@ import projectList from 'config/project-list';
 import { createDOM } from 'utils/dom';
 import { autobind } from 'core-decorators';
 import { visible } from 'core/decorators';
-import ProjectDescription from './ProjectDescription';
 import Title from './Title';
 import List from './List';
 import Menu from './Menu';
@@ -27,7 +26,6 @@ export default class DesktopHomeView {
 
     this._page = null;
 
-    // this._setupProjectDescription();
     this._setupTitle();
     this._setupMenu();
     this._setupList();
@@ -35,14 +33,6 @@ export default class DesktopHomeView {
     this._setupScroll();
 
     this._setupEvents();
-  }
-
-  _setupProjectDescription() {
-    this._projectDescription = new ProjectDescription({
-      parent: this._el,
-    });
-
-    this._projectDescription.updateProject(projectList.projects[0]);
   }
 
   _setupTitle() {

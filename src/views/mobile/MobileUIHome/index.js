@@ -4,12 +4,10 @@ import projectList from 'config/project-list';
 import { createDOM } from 'utils/dom';
 import { autobind } from 'core-decorators';
 import { visible } from 'core/decorators';
-import ProjectDescription from './ProjectDescription';
 import Title from './Title';
 import List from './List';
 import Menu from './Menu';
 import MobileAbout from './MobileAbout';
-import Networks from './Networks';
 import Scroll from './Scroll';
 import template from './ui_home.tpl.html';
 import './ui_home.scss';
@@ -26,23 +24,13 @@ export default class MobileUIHome {
       createDOM(template()),
     );
 
-    // this._setupProjectDescription();
     this._setupTitle();
     this._setupList();
     this._setupMenu();
     this._setupAbout();
-    // this._setupNetworks();
     this._setupScroll();
 
     this._setupEvents();
-  }
-
-  _setupProjectDescription() {
-    this._projectDescription = new ProjectDescription({
-      parent: this._el,
-    });
-
-    this._projectDescription.updateProject(projectList.projects[0]);
   }
 
   _setupTitle() {
@@ -65,12 +53,6 @@ export default class MobileUIHome {
 
   _setupAbout() {
     this._about = new MobileAbout({
-      parent: this._el,
-    });
-  }
-
-  _setupNetworks() {
-    this._networks = new Networks({
       parent: this._el,
     });
   }

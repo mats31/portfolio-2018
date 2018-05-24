@@ -104,7 +104,8 @@
 
   .project__viewText {
     // margin: 22rem auto 4.2rem;
-    margin: 15rem auto 4.2rem;
+    margin: 2.45rem auto 4.2rem;
+    // margin: 15rem auto 4.2rem;
     max-width: 68%;
     padding-bottom: 6.8rem;
     // padding-bottom: 4rem;
@@ -123,6 +124,10 @@
       left: 50%;
       bottom: 0;
       margin-left: -2px;
+    }
+
+    @media screen and (max-height: 700px) and (max-width: 1100px) {
+      padding-bottom: 3rem;
     }
   }
 
@@ -147,6 +152,21 @@
         font-size: 9rem;
         line-height: 9rem;
       }
+
+      @media screen and (max-height: 900px) {
+        font-size: 12rem;
+        line-height: 10rem;
+      }
+
+      @media screen and (max-height: 700px) {
+        font-size: 10rem;
+        line-height: 8rem;
+      }
+
+      @media screen and (max-height: 700px) and (max-width: 1100px) {
+        font-size: 8rem;
+        line-height: 6rem;
+      }
     }
 
     .project__viewDescription {
@@ -167,6 +187,18 @@
         &:hover {
           opacity: 1;
         }
+      }
+
+      @media screen and (max-height: 900px) {
+        font-size: 1.5rem;
+        line-height: 2rem;
+        margin: 3rem auto;
+      }
+
+      @media screen and (max-height: 700px) and (max-width: 1100px) {
+        font-size: 1.3rem;
+        line-height: 1.5rem;
+        margin: 3rem auto;
       }
     }
 
@@ -193,6 +225,14 @@
           font-size: 0.7rem;
         }
 
+        @media screen and (max-height: 900px) {
+          font-size: 1.2rem;
+        }
+
+        @media screen and (max-height: 700px) and (max-width: 1100px) {
+          font-size: 1.1rem;
+        }
+
         a {
           color: white;
           text-decoration: none;
@@ -209,6 +249,14 @@
           margin-bottom: 1rem;
           font-size: 1.6rem;
           text-transform: uppercase;
+
+          @media screen and (max-height: 900px) {
+            font-size: 1.4rem;
+          }
+
+          @media screen and (max-height: 700px) and (max-width: 1100px) {
+            font-size: 1.2rem;
+          }
 
           // @media screen and (max-width: 1100px) {
           //   font-size: 1.2rem;
