@@ -14,7 +14,7 @@ export default class DesktopAppView {
   // Setup ---------------------------------------------------------------------
 
   constructor() {
-    window.GUI = new dat.GUI();
+    // window.GUI = new dat.GUI();
 
     console.info('desktop application initializing');
     this.el = document.getElementById('application');

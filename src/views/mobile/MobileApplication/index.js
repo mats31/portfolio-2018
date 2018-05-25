@@ -12,8 +12,8 @@ export default class MobileAppView {
   // Setup ---------------------------------------------------------------------
 
   constructor() {
-    window.GUI = new dat.GUI();
-    window.GUI.destroy();
+    // window.GUI = new dat.GUI();
+    // window.GUI.destroy();
 
     console.info('mobile application initializing');
     this.el = document.getElementById('application');
