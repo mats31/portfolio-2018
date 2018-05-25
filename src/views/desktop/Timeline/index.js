@@ -551,7 +551,7 @@ export default class TimelineView {
     if (States.OS === 'MAC') {
       delay = event.deltaMode === 1 ? 1250 : 500;
     } else {
-      delay = 1000;
+      delay = event.deltaMode === 1 ? 1050 : 1150;
     }
 
     clearTimeout(this._scrollWheelTimeout);
