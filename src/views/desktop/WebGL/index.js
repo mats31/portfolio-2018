@@ -355,18 +355,22 @@ export default class WebGL {
         if (event.deltaMode === 1) {
           baseDeltaY = event.deltaY * 30;
           delay = 1200;
-          range = 500;
+          range = 120;
+          console.log(1);
         } else if (event.deltaY % 1 !== 0) {
           delay = 800;
+          console.log(2);
         }
       } else if (event.deltaMode === 1) {
+        console.log(1);
         baseDeltaY = event.deltaY * 45;
-        delay = 2500;
-        range = 2000;
+        delay = 1000;
+        range = 5000;
       } else {
+        console.log(2);
         baseDeltaY = event.deltaY * 15;
         range = 300;
-        delay = 1500;
+        delay = 1200;
       }
 
       // if (this._previousDeltaY === baseDeltaY) {

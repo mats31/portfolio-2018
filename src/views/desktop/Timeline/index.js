@@ -533,7 +533,7 @@ export default class TimelineView {
   }
 
   @autobind
-  _onScrollWheel() {
+  _onScrollWheel(event) {
     this.scroll();
 
     // console.log(this._startScroll);
@@ -545,6 +545,14 @@ export default class TimelineView {
 
     this._startScroll = true;
     this._updateTimelineNeedsUpdate = true;
+
+    let delay = 500;
+
+    if (States.OS === 'MAC') {
+      delay = event.deltaMode === 1 ? 1250 : 500;
+    } else {
+      delay = 1000;
+    }
 
     clearTimeout(this._scrollWheelTimeout);
     this._scrollWheelTimeout = setTimeout(() => {
@@ -570,7 +578,7 @@ export default class TimelineView {
         this.hide();
       }
 
-    }, 500);
+    }, delay);
   }
 
   @autobind
