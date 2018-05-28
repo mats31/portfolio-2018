@@ -337,9 +337,7 @@ export default class WebGL {
   }
 
   @autobind
-  _onScroll(event) {
-    console.log(1);
-  }
+  _onScroll(event) {}
 
   @autobind
   _onScrollWheel(event) {

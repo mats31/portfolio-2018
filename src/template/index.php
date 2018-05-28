@@ -8,36 +8,36 @@
 <html lang="en">
 
   <head>
-    <title>Mathis Biabiany - Artist & Creative Technologist</title>
+    <title>Mathis Biabiany - Creative Technologist & Artist</title>
 
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 
-    <meta name="description" content="Worldwide freelance artist & creative technologist">
-    <meta name="keywords" content="developer,creative,technologist,artist,javascript,webgl">
+    <meta name="description" content="Creative technologist at Resn & Worldwide freelance artist">
+    <meta name="keywords" content="developer,creative,technologist,artist,javascript,webgl,freelance">
 
     <base href="/" >
 
     <!-- Facebook meta -->
-    <meta property="og:title" content="Mathis Biabiany - Artist & Creative Technologist"/>
+    <meta property="og:title" content="Mathis Biabiany - Creative Technologist & Artist"/>
     <meta property="og:image" content="http://www.mathis-biabiany.fr/images/share/facebook.jpg"/>
     <meta property="og:url" content="http://www.mathis-biabiany.fr"/>
     <meta property="og:site_name" content="Mathis Biabiany"/>
-    <meta property="og:description" content="Worldwide freelance artist & creative technologist"/>
+    <meta property="og:description" content="Creative technologist at Resn & Worldwide freelance artist"/>
 
     <!-- Twitter meta -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@MathisBiabiany">
     <meta name="twitter:creator" content="@MathisBiabiany">
-    <meta name="twitter:title" content="Mathis Biabiany - Artist & Creative Technologist">
-    <meta name="twitter:description" content="Worldwide freelance artist & creative technologist">
+    <meta name="twitter:title" content="Mathis Biabiany - Creative Technologist & Artist">
+    <meta name="twitter:description" content="Creative technologist at Resn & Worldwide freelance artist">
     <meta name="twitter:image" content="http://www.mathis-biabiany.fr/images/share/twitter.jpg">
     <meta name="twitter:image:src" content="http://www.mathis-biabiany.fr/images/share/twitter.jpg">
 
     <!-- GOOGLE + Share -->
-    <meta itemprop="name" content="Mathis Biabiany - Artist & Creative Technologist">
-    <meta itemprop="description" content="Worldwide freelance artist & creative technologist">
+    <meta itemprop="name" content="Mathis Biabiany - Creative Technologist & Artist">
+    <meta itemprop="description" content="Creative technologist at Resn & Worldwide freelance artist">
     <meta itemprop="image" content="http://www.mathis-biabiany.fr/images/share/facebook.jpg">
 
     <!-- Favicons -->
@@ -82,6 +82,17 @@
         }
       }
     </style>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119960130-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-119960130-1');
+    </script>
+
 
   </head>
 

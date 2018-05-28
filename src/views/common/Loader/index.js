@@ -152,12 +152,12 @@ export default class LoaderView {
       const average = sum / this._values.length;
 
       if (average > 22.22222222) {
-        console.log('low mode');
-        console.log('average: ', average);
+        // console.log('low mode');
+        // console.log('average: ', average);
         Signals.onSetLowMode.dispatch();
       } else {
-        console.log('high mode');
-        console.log('average: ', average);
+        // console.log('high mode');
+        // console.log('average: ', average);
         Signals.onSetHighMode.dispatch();
       }
 

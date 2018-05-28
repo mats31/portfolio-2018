@@ -35,8 +35,6 @@ export default class DesktopScrollView {
   // Events --------------------------------------------------------------------
 
   @autobind
-  _onScroll(event) {
-    console.log(1);
-  }
+  _onScroll(event) {}
 
 }

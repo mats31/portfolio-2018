@@ -118,10 +118,7 @@ export default class MobileUIHome {
     this._scroll.resize();
   }
 
-  resize(vw, vh) {
-    console.log('width: ', vw);
-    console.log('height: ', vh);
-  }
+  resize(vw, vh) {}
 
   // Update --------------------------------------------------------------------
   update() {
