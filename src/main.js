@@ -28,7 +28,10 @@ class Main {
       'font-weight: bold',
     ].join(';');
 
-    console.log('%c Life is over 9000 ❤️. Vie sur vous 🖖', styles);
+    console.log('%c Big thanks to Célia for helping with the previews 😘', styles);
+    console.log('%c Thanks Lionel for the de... wireframes 😘', styles);
+    console.log('%c Life is over 9000 ❤️.', styles);
+    console.log('%c Vie sur vous 🖖', styles);
 
     this._loader = this._setupLoader();
     Signals.onAssetsLoaded.add(this.onAssetsLoaded);
