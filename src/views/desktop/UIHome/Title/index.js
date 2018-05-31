@@ -35,7 +35,7 @@ export default class DesktopTitleView {
   _onClick() {
     const lastRouteName = States.router.getLastRouteResolved().name;
 
-    if (lastRouteName === pages.ABOUT) {
+    if (lastRouteName !== pages.HOME) {
       States.router.navigateTo(pages.HOME);
     } else {
       States.router.navigateTo(pages.ABOUT);
