@@ -74,7 +74,7 @@ export default class WebGL {
 
     // this._controls = new OrbitControls(this._camera);
 
-    this._renderer = new THREE.WebGLRenderer();
+    this._renderer = States.global.renderer = new THREE.WebGLRenderer();
     this._renderer.setSize( width, height );
     this._renderer.setClearColor( 0x000000 );
 

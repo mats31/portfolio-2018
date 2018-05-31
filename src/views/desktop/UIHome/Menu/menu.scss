@@ -2,23 +2,35 @@
   display: none;
   font-size: 2rem;
   color: white;
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0);
-  top: 6rem;
 }
-  .UIHome__menuItem {
-    cursor: pointer;
-    opacity: 0.5;
-    transition: opacity 0.2s;
-    display: inline;
 
-    &:hover {
-      opacity: 0.75;
-    }
-
-    &.is-active {
-      cursor: inherit;
-      opacity: 1;
-    }
+  .UIHome__menuTop {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+    top: 6rem;
   }
+
+    .UIHome__menuItem {
+      cursor: pointer;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+      display: inline;
+
+      &:hover {
+        opacity: 0.75;
+      }
+
+      &.is-active {
+        cursor: inherit;
+        opacity: 1;
+      }
+    }
+
+    .UIHome__menuAbout {
+      position: absolute;
+      left: 5.1rem;
+      top: calc(100vh - 6rem);
+
+      font-size: 1.6rem;
+    }

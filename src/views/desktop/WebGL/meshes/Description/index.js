@@ -38,6 +38,7 @@ export default class Description extends THREE.Object3D {
     this._texture = States.resources.getTexture(id).media;
     this._texture.minFilter = THREE.LinearFilter;
     this._texture.magFilter = THREE.LinearFilter;
+    this._texture.anisotropy = States.global.renderer.capabilities.getMaxAnisotropy();
 
     this._maskTexture = new THREE.Texture(this._mask.getTexture());
     this._maskTexture.minFilter = THREE.LinearFilter;
@@ -74,6 +75,7 @@ export default class Description extends THREE.Object3D {
     this._texture = States.resources.getTexture(`${project.id}-description`).media;
     this._texture.minFilter = THREE.LinearFilter;
     this._texture.magFilter = THREE.LinearFilter;
+    this._texture.anisotropy = States.global.renderer.capabilities.getMaxAnisotropy();
     this._texture.needsUpdate = true;
 
     this._material.uniforms.tDiffuse.value = this._texture;

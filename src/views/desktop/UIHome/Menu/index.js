@@ -17,6 +17,7 @@ export default class DesktopNetworksView {
     this._ui = {
       works: this._el.querySelector('.js-UIHome__menuWorks'),
       experiments: this._el.querySelector('.js-UIHome__menuExperiments'),
+      about: this._el.querySelector('.js-UIHome__menuAbout'),
     };
 
     this._addEvents();
@@ -25,6 +26,7 @@ export default class DesktopNetworksView {
   _addEvents() {
     this._ui.works.addEventListener('click', this._onWorksClick);
     this._ui.experiments.addEventListener('click', this._onExperimentsClick);
+    this._ui.about.addEventListener('click', this._onAboutClick);
     Signals.onApplicationStart.add(this._start);
   }
 
@@ -73,5 +75,10 @@ export default class DesktopNetworksView {
   @autobind
   _onExperimentsClick() {
     States.router.navigateTo(pages.EXPERIMENT);
+  }
+
+  @autobind
+  _onAboutClick() {
+    States.router.navigateTo(pages.ABOUT);
   }
 }

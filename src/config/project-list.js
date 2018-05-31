@@ -117,7 +117,7 @@ const projectList = {
       link: 'Website offline',
       role: '<div>Creative Developer</div>',
       technologies: '<div>WebGL</div><div>ThreeJS</div>',
-      clients: '<div>Adidas</div>',
+      clients: '<div>L\'Usine</div>',
       awards: '<div><a href="https://www.awwwards.com/sites/adidas-originals-nmd" target="_blank">Awwwards - SOTD</a></div><div><a href="https://thefwa.com/cases/adidas-originals-nmd" target="_blank">FWA - SOTD</a></div><div><a href="https://www.cssdesignawards.com/sites/adidas-nmd/30520/" target="_blank">CSSDesignAwards - SOTD</a></div>',
       medias: [
         { type: 'image', url: 'images/projects/lusine/1.jpg' },

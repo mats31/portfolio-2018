@@ -22,6 +22,8 @@ export default class PostProcessing extends AbstractPostProcessing {
   }
 
   resize() {
+    this._setSize(window.innerWidth, window.innerHeight);
+
     this._scrollPass.resize();
   }
 }
