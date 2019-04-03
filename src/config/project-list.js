@@ -143,8 +143,8 @@ const projectList = {
       medias: [
         { type: 'image', url: 'images/projects/nordy/1.jpg' },
         { type: 'image', url: 'images/projects/nordy/2.jpg' },
-        { type: 'video', url: 'images/projects/nordy/3.mp4' },
-        { type: 'video', url: 'images/projects/nordy/4.mp4' },
+        { type: 'video', url: 'videos/projects/nordy/3.mp4' },
+        { type: 'video', url: 'videos/projects/nordy/4.mp4' },
       ],
     },
     {
@@ -161,8 +161,8 @@ const projectList = {
       medias: [
         { type: 'image', url: 'images/projects/olouen/1.jpg' },
         { type: 'image', url: 'images/projects/olouen/2.jpg' },
-        { type: 'video', url: 'images/projects/olouen/3.mp4' },
-        { type: 'video', url: 'images/projects/olouen/4.mp4' },
+        { type: 'video', url: 'videos/projects/olouen/3.mp4' },
+        { type: 'video', url: 'videos/projects/olouen/4.mp4' },
       ],
     },
   ],
