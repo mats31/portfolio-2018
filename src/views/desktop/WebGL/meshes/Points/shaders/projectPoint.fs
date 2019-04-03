@@ -36,14 +36,22 @@ void main() {
   vec2 st6 = vec2( (vCoordinates.x + 1024.) / 2048., ( vCoordinates.y + 512. ) / 2048.);
   vec4 diffuse6 = texture2D(tDiffuse, st6);
 
+  vec2 st7 = vec2( (vCoordinates.x + 1536.) / 2048., ( vCoordinates.y + 512. ) / 2048.);
+  vec4 diffuse7 = texture2D(tDiffuse, st7);
 
-  vec4 diffuse = diffuse0 * ( 1. - smoothstep(0.,1.,u_progress) + smoothstep( 6., 7., u_progress) ) +
+  vec2 st8 = vec2(vCoordinates.x / 2048., ( vCoordinates.y + 1024. ) / 2048.);
+  vec4 diffuse8 = texture2D(tDiffuse, st8);
+
+
+  vec4 diffuse = diffuse0 * ( 1. - smoothstep(0.,1.,u_progress) + smoothstep( 8., 9., u_progress) ) +
                diffuse1 * ( smoothstep(0.,1.,u_progress) - smoothstep(1.,2.,u_progress) ) +
                diffuse2 * ( smoothstep(1.,2.,u_progress) - smoothstep(2.,3.,u_progress) ) +
                diffuse3 * ( smoothstep(2.,3.,u_progress) - smoothstep(3., 4., u_progress) ) +
                diffuse4 * ( smoothstep(3.,4.,u_progress) - smoothstep(4., 5., u_progress) ) +
                diffuse5 * ( smoothstep(4.,5.,u_progress) - smoothstep(5., 6., u_progress) ) +
-               diffuse6 * ( smoothstep(5.,6.,u_progress) - smoothstep(6., 7., u_progress) );
+               diffuse6 * ( smoothstep(5.,6.,u_progress) - smoothstep(6., 7., u_progress) ) + 
+               diffuse7 * ( smoothstep(6.,7.,u_progress) - smoothstep(7., 8., u_progress) ) +
+               diffuse8 * ( smoothstep(7.,8.,u_progress) - smoothstep(8., 9., u_progress) );
 
   vec3 color = diffuse.rgb;
 

@@ -46,6 +46,8 @@ const ressources = {
     { id: 'tsuki8-description', url: 'textures/descriptions/tsuki8-description.png' },
     { id: 'celia-description', url: 'textures/descriptions/celia-description.png' },
     { id: 'lusine-description', url: 'textures/descriptions/lusine-description.png' },
+    { id: 'nordy-description', url: 'textures/descriptions/nordy-description.png' },
+    { id: 'olouen-description', url: 'textures/descriptions/olouen-description.png' },
 
     { id: 'displacement', url: 'textures/cloud-displacement.png' },
   ],
